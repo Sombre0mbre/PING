@@ -45,6 +45,7 @@ public class ProjectImplementation implements Project {
      */
     @Override
     public Optional<Feature> getFeature(Feature.Type featureType) {
+        // No features are implemented for now
         return Optional.empty();
     }
 }
