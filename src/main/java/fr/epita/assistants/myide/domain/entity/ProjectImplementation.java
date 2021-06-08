@@ -1,9 +1,24 @@
 package fr.epita.assistants.myide.domain.entity;
 
+import javax.validation.constraints.NotNull;
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
 public class ProjectImplementation implements Project {
+    Node rootNode;
+    Set<Aspect> aspects;
+
+    public ProjectImplementation(Node rootNode) {
+        this.rootNode = rootNode;
+        this.aspects = new HashSet<>();
+    }
+
+    public ProjectImplementation(Node rootNode, Set<Aspect> aspects) {
+        this.rootNode = rootNode;
+        this.aspects = aspects;
+    }
+
     /**
      * @return The root node of the project.
      */

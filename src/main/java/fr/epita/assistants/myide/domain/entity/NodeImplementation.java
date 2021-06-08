@@ -2,15 +2,32 @@ package fr.epita.assistants.myide.domain.entity;
 
 import javax.validation.constraints.NotNull;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 
 public class NodeImplementation implements Node {
+    Path path;
+    Node.Type type;
+    List<Node> children;
+
+    public NodeImplementation(@NotNull Path path, @NotNull Node.Type type) {
+        this.path = path;
+        this.type = type;
+        this.children = new ArrayList<>();
+    }
+
+    public NodeImplementation(@NotNull Path path, @NotNull Type type, @NotNull List<Node> children) {
+        this.path = path;
+        this.type = type;
+        this.children = children;
+    }
+
     /**
      * @return The Node path.
      */
     @Override
     public Path getPath() {
-        throw new UnsupportedOperationException("FIXME");
+        return path;
     }
 
     /**
@@ -18,7 +35,7 @@ public class NodeImplementation implements Node {
      */
     @Override
     public Type getType() {
-        throw new UnsupportedOperationException("FIXME");
+        return type;
     }
 
     /**
@@ -29,6 +46,6 @@ public class NodeImplementation implements Node {
      */
     @Override
     public List<@NotNull Node> getChildren() {
-        throw new UnsupportedOperationException("FIXME");
+        return children;
     }
 }

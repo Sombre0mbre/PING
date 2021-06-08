@@ -1,11 +1,12 @@
 package fr.epita.assistants.myide.domain.service;
 
-import fr.epita.assistants.myide.domain.entity.Feature;
-import fr.epita.assistants.myide.domain.entity.Project;
+import fr.epita.assistants.myide.domain.entity.*;
 
+import java.nio.file.Files;
 import java.nio.file.Path;
 
 public class ProjectServiceImplementation implements ProjectService {
+
     /**
      * Load a {@link Project} from a path.
      *
@@ -14,7 +15,11 @@ public class ProjectServiceImplementation implements ProjectService {
      */
     @Override
     public Project load(Path root) {
-        throw new UnsupportedOperationException("FIXME");
+        if (!Files.isDirectory(root)) {
+            throw new IllegalArgumentException("root is not a folder");
+        }
+        Node n = new NodeImplementation(root, Node.Types.FOLDER);
+        return new ProjectImplementation(n);
     }
 
     /**
