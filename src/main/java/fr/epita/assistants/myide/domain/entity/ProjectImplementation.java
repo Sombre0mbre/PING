@@ -45,6 +45,6 @@ public class ProjectImplementation implements Project {
      */
     @Override
     public Optional<Feature> getFeature(Feature.Type featureType) {
-        throw new UnsupportedOperationException("FIXME");
+        return Optional.empty();
     }
 }
