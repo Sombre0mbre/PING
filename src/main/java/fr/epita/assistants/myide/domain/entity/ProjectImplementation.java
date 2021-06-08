@@ -24,7 +24,7 @@ public class ProjectImplementation implements Project {
      */
     @Override
     public Node getRootNode() {
-        throw new UnsupportedOperationException("FIXME");
+        return rootNode;
     }
 
     /**
@@ -32,7 +32,7 @@ public class ProjectImplementation implements Project {
      */
     @Override
     public Set<Aspect> getAspects() {
-        throw new UnsupportedOperationException("FIXME");
+        return aspects;
     }
 
     /**
