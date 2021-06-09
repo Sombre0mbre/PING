@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 public class ProjectServiceImplementation implements ProjectService {
+    NodeService nodeService = new NodeServiceImplementation();
 
     /**
      * Load a {@link Project} from a path.
@@ -25,14 +26,17 @@ public class ProjectServiceImplementation implements ProjectService {
     /**
      * Execute the given feature on the given project.
      *
-     * @param project     Project for which the features is executed.
      * @param featureType Type of the feature to execute.
      * @param params      Parameters given to the features.
      * @return Execution report of the feature.
      */
     @Override
     public Feature.ExecutionReport execute(Project project, Feature.Type featureType, Object... params) {
-        throw new UnsupportedOperationException("FIXME");
+        var featureOptional = project.getFeature(featureType);
+        if (featureOptional.isEmpty()) {
+            throw new IllegalArgumentException("Feature unimplemented or does not exists");
+        }
+        return featureOptional.get().execute(project, params);
     }
 
     /**
@@ -40,6 +44,7 @@ public class ProjectServiceImplementation implements ProjectService {
      */
     @Override
     public NodeService getNodeService() {
-        throw new UnsupportedOperationException("FIXME");
+        return nodeService;
     }
 }
+

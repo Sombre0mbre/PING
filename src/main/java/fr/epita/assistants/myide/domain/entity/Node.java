@@ -35,12 +35,12 @@ public interface Node {
         return getType().equals(Types.FOLDER);
     }
 
-    interface Type {
-
-    }
-
     enum Types implements Type {
         FILE,
         FOLDER
+    }
+
+    interface Type {
+
     }
 }

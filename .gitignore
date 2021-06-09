@@ -29,3 +29,5 @@ hs_err_pid*
 .settings/
 ping-ref.iml
 
+# Compile
+target/

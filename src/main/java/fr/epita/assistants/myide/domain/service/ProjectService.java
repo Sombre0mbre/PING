@@ -4,8 +4,8 @@ import fr.epita.assistants.myide.domain.entity.Feature;
 import fr.epita.assistants.myide.domain.entity.Project;
 import fr.epita.assistants.utils.Given;
 
-import java.nio.file.Path;
 import javax.validation.constraints.NotNull;
+import java.nio.file.Path;
 
 /**
  * You will handle your projects through this service.
@@ -25,14 +25,14 @@ public interface ProjectService {
     /**
      * Execute the given feature on the given project.
      *
-     * @param project Project for which the features is executed.
+     * @param project     Project for which the features is executed.
      * @param featureType Type of the feature to execute.
-     * @param params Parameters given to the features.
+     * @param params      Parameters given to the features.
      * @return Execution report of the feature.
      */
     @NotNull Feature.ExecutionReport execute(@NotNull final Project project,
-                                    @NotNull final Feature.Type featureType,
-                                    final Object... params);
+                                             @NotNull final Feature.Type featureType,
+                                             final Object... params);
 
     /**
      * @return The {@link NodeService} associated with your {@link ProjectService}

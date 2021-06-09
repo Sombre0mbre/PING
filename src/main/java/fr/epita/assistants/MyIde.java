@@ -26,7 +26,7 @@ public class MyIde {
      * must be stored. Might be useful for the search feature.
      */
     public static record Configuration(Path indexFile,
-                                       Path tempFolder) {}
+                                       Path tempFolder) {
+    }
 
-    ;
 }

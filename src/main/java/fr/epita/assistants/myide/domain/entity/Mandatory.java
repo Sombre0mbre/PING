@@ -11,7 +11,8 @@ import fr.epita.assistants.utils.Given;
  * You can add any feature you like (without modifying this file,
  * for obvious reasons).
  */
-@Given(overridden = true) public enum Mandatory {
+@Given(overridden = true)
+public enum Mandatory {
     ;
 
     public enum Aspects implements Aspect.Type {
@@ -42,7 +43,7 @@ import fr.epita.assistants.utils.Given;
             /**
              * Fulltext search over project files.
              */
-            SEARCH;
+            SEARCH
         }
 
         /**

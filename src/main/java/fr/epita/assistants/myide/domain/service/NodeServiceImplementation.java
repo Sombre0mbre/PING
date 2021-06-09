@@ -2,6 +2,7 @@ package fr.epita.assistants.myide.domain.service;
 
 
 import fr.epita.assistants.myide.domain.entity.Node;
+import fr.epita.assistants.myide.domain.entity.NodeImplementation;
 
 public class NodeServiceImplementation implements NodeService {
     /**
@@ -41,7 +42,16 @@ public class NodeServiceImplementation implements NodeService {
      */
     @Override
     public Node create(Node folder, String name, Node.Type type) {
-        throw new UnsupportedOperationException("FIXME");
+        if (folder.getType() != Node.Types.FOLDER)
+            throw new IllegalArgumentException("folder node <" + folder.getPath() + "> is not a folder!");
+        var childPath = folder.getPath().resolve(name);
+        try {
+            if (!childPath.toFile().createNewFile())
+                throw new IllegalStateException();
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Could not create node: It could already exists");
+        }
+        return new NodeImplementation(childPath, type);
     }
 
     /**

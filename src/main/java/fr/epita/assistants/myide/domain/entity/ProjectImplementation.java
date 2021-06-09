@@ -1,6 +1,5 @@
 package fr.epita.assistants.myide.domain.entity;
 
-import javax.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;

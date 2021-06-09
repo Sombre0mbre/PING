@@ -9,7 +9,7 @@ public interface Feature {
 
     /**
      * @param project {@link Project} on which the feature is executed.
-     * @param params Parameters given to the features.
+     * @param params  Parameters given to the features.
      * @return {@link ExecutionReport}
      */
     @NotNull ExecutionReport execute(final Project project, final Object... params);
@@ -23,5 +23,6 @@ public interface Feature {
         boolean isSuccess();
     }
 
-    interface Type {}
+    interface Type {
+    }
 }

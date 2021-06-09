@@ -17,7 +17,9 @@ public interface Aspect {
     /**
      * @return The list of features associated with the Aspect.
      */
-    default @NotNull List<Feature> getFeatureList() { return Collections.emptyList(); }
+    default @NotNull List<Feature> getFeatureList() {
+        return Collections.emptyList();
+    }
 
     interface Type {
 
