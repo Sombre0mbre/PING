@@ -3,7 +3,6 @@ package fr.epita.assistants.myide.domain.entity.features.git;
 import fr.epita.assistants.myide.domain.entity.Feature;
 import fr.epita.assistants.myide.domain.entity.Mandatory;
 import fr.epita.assistants.myide.domain.entity.Project;
-import org.eclipse.jgit.api.AddCommand;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.lib.Repository;
@@ -20,15 +19,26 @@ public class AddImplementation implements Feature {
      * @return {@link ExecutionReport}
      */
     @Override
-    public ExecutionReport execute(Project project, Object... params) throws GitAPIException, IOException {
+    public ExecutionReport execute(Project project, Object... params) {
         FileRepositoryBuilder builder = new FileRepositoryBuilder();
-        Repository repository = builder.setGitDir(new File(String.valueOf(project.getRootNode().getPath())))
-                .readEnvironment() // scan environment GIT_* variables
-                .findGitDir() // scan up the file system tree
-                .build();
+        Repository repository = null;
+        try {
+            repository = builder.setGitDir(new File(String.valueOf(project.getRootNode().getPath())))
+                    .readEnvironment()
+                    .findGitDir()
+                    .build();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        assert repository != null;
         Git git = new Git(repository);
-        git.add().addFilepattern(Arrays.toString(params)).call();
-        
+        try {
+            git.add().addFilepattern(Arrays.toString(params)).call();
+        } catch (GitAPIException e) {
+            e.printStackTrace();
+        }
+
         throw new UnsupportedOperationException("FIXME");
         /*
         int returnCode = exec("mvn", "compile");
