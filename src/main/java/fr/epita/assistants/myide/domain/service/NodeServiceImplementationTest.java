@@ -1,13 +1,10 @@
 package fr.epita.assistants.myide.domain.service;
 
 import fr.epita.assistants.myide.domain.entity.Node;
-import fr.epita.assistants.myide.domain.entity.NodeImplementation;
 import fr.epita.assistants.myide.domain.entity.Project;
-import fr.epita.assistants.myide.domain.entity.ProjectImplementation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -61,10 +58,6 @@ class NodeServiceImplementationTest {
 
     @Test
     void delete() {
-    }
-
-    @Test
-    void testMove() {
     }
 
 }

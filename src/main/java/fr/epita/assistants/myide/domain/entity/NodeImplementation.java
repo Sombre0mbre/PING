@@ -11,18 +11,6 @@ public class NodeImplementation implements Node {
     List<Node> children;
     Node parentNode;
 
-    public void setPath(Path path) {
-        this.path = path;
-    }
-
-    public Node getParentNode() {
-        return parentNode;
-    }
-
-    public void setParentNode(Node parentNode) {
-        this.parentNode = parentNode;
-    }
-
     public NodeImplementation(@NotNull Path path, @NotNull Node.Type type, Node parentNode) {
         this.path = path;
         this.type = type;
@@ -37,12 +25,24 @@ public class NodeImplementation implements Node {
         this.parentNode = parentNode;
     }
 
+    public Node getParentNode() {
+        return parentNode;
+    }
+
+    public void setParentNode(Node parentNode) {
+        this.parentNode = parentNode;
+    }
+
     /**
      * @return The Node path.
      */
     @Override
     public Path getPath() {
         return path;
+    }
+
+    public void setPath(Path path) {
+        this.path = path;
     }
 
     /**
