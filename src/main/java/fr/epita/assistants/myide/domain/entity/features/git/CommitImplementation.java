@@ -1,9 +1,12 @@
-package fr.epita.assistants.myide.domain.entity;
+package fr.epita.assistants.myide.domain.entity.features.git;
 
-public class FeatureImplementation implements Feature {
-    Feature.Type type;
+import fr.epita.assistants.myide.domain.entity.Feature;
+import fr.epita.assistants.myide.domain.entity.Project;
 
-    public FeatureImplementation(Type type) {
+public class CommitImplementation implements Feature {
+    Type type;
+
+    public CommitImplementation(Type type) {
         this.type = type;
     }
 
@@ -15,6 +18,10 @@ public class FeatureImplementation implements Feature {
     @Override
     public ExecutionReport execute(Project project, Object... params) {
         throw new UnsupportedOperationException("FIXME");
+        /*
+        int returnCode = exec("mvn", "compile");
+        return () -> (returnCode == 0);
+        */
     }
 
     /**
