@@ -31,3 +31,5 @@ ping-ref.iml
 
 # Compile
 target/
+/.classpath
+/.factorypath

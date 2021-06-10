@@ -1,7 +1,9 @@
-package fr.epita.assistants.myide.domain.service;
+package myide.domain.service;
 
 import fr.epita.assistants.myide.domain.entity.Node;
 import fr.epita.assistants.myide.domain.entity.Project;
+import fr.epita.assistants.myide.domain.service.ProjectService;
+import fr.epita.assistants.myide.domain.service.ProjectServiceImplementation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
