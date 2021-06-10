@@ -1,15 +1,10 @@
 package fr.epita.assistants.myide.domain.entity.features.any;
 
 import fr.epita.assistants.myide.domain.entity.Feature;
+import fr.epita.assistants.myide.domain.entity.Mandatory;
 import fr.epita.assistants.myide.domain.entity.Project;
 
 public class DistImplementation implements Feature {
-    Type type;
-
-    public DistImplementation(Type type) {
-        this.type = type;
-    }
-
     /**
      * @param project {@link Project} on which the feature is executed.
      * @param params  Parameters given to the features.
@@ -29,6 +24,6 @@ public class DistImplementation implements Feature {
      */
     @Override
     public Type type() {
-        return type;
+        return Mandatory.Features.Any.DIST;
     }
 }

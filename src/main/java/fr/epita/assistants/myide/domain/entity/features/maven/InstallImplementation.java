@@ -1,14 +1,10 @@
 package fr.epita.assistants.myide.domain.entity.features.maven;
 
 import fr.epita.assistants.myide.domain.entity.Feature;
+import fr.epita.assistants.myide.domain.entity.Mandatory;
 import fr.epita.assistants.myide.domain.entity.Project;
 
 public class InstallImplementation implements Feature {
-    Type type;
-
-    public InstallImplementation(Type type) {
-        this.type = type;
-    }
 
     /**
      * @param project {@link Project} on which the feature is executed.
@@ -29,6 +25,7 @@ public class InstallImplementation implements Feature {
      */
     @Override
     public Type type() {
-        return type;
+        return Mandatory.Features.Maven.INSTALL;
+
     }
 }

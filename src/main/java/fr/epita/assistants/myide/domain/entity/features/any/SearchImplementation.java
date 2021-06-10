@@ -1,14 +1,10 @@
 package fr.epita.assistants.myide.domain.entity.features.any;
 
 import fr.epita.assistants.myide.domain.entity.Feature;
+import fr.epita.assistants.myide.domain.entity.Mandatory;
 import fr.epita.assistants.myide.domain.entity.Project;
 
 public class SearchImplementation implements Feature {
-    Type type;
-
-    public SearchImplementation(Type type) {
-        this.type = type;
-    }
 
     /**
      * @param project {@link Project} on which the feature is executed.
@@ -29,6 +25,6 @@ public class SearchImplementation implements Feature {
      */
     @Override
     public Type type() {
-        return type;
+        return Mandatory.Features.Any.SEARCH;
     }
 }
