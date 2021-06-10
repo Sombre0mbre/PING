@@ -3,6 +3,9 @@ package fr.epita.assistants.myide.domain.service;
 
 import fr.epita.assistants.myide.domain.entity.Node;
 import fr.epita.assistants.myide.domain.entity.NodeImplementation;
+import org.apache.commons.io.FileUtils;
+
+import java.nio.file.Files;
 
 public class NodeServiceImplementation implements NodeService {
     /**
@@ -64,6 +67,14 @@ public class NodeServiceImplementation implements NodeService {
      */
     @Override
     public Node move(Node nodeToMove, Node destinationFolder) {
-        throw new UnsupportedOperationException("FIXME");
+        if (destinationFolder.getType() != Node.Types.FOLDER)
+            throw new IllegalArgumentException("dest folder <" + destinationFolder.getPath() + "> is not a folder!");
+        var nodeFile = nodeToMove.getPath().toFile();
+        try {
+            FileUtils.moveToDirectory(nodeFile, destinationFolder.getPath().toFile(), false);
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Could not move directory");
+        }
+        throw new UnsupportedOperationException("Not finished");
     }
 }
