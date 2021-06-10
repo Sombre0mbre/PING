@@ -49,12 +49,18 @@ public class NodeServiceImplementation implements NodeService {
             throw new IllegalArgumentException("folder node <" + folder.getPath() + "> is not a folder!");
         var childPath = folder.getPath().resolve(name);
         try {
-            if (!childPath.toFile().createNewFile())
-                throw new IllegalStateException();
+            if (type == Node.Types.FILE) {
+                Files.createFile(childPath);
+            } else if (type == Node.Types.FOLDER) {
+                Files.createDirectory(childPath);
+            } else
+                throw new IllegalStateException("Unknown type");
         } catch (Exception e) {
             throw new IllegalArgumentException("Could not create node: It could already exists");
         }
-        return new NodeImplementation(childPath, type);
+        var res = new NodeImplementation(childPath, type, folder);
+        folder.getChildren().add(res);
+        return res;
     }
 
     /**
@@ -75,6 +81,10 @@ public class NodeServiceImplementation implements NodeService {
         } catch (Exception e) {
             throw new IllegalArgumentException("Could not move directory");
         }
-        throw new UnsupportedOperationException("Not finished");
+        var nodeTemp = (NodeImplementation) nodeToMove;
+        nodeTemp.setPath(nodeFile.toPath());
+        nodeTemp.getParentNode().getChildren().remove(nodeTemp);
+        nodeTemp.setParentNode(destinationFolder);
+        return nodeTemp;
     }
 }

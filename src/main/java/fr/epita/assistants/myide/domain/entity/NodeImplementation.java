@@ -9,17 +9,32 @@ public class NodeImplementation implements Node {
     Path path;
     Node.Type type;
     List<Node> children;
+    Node parentNode;
 
-    public NodeImplementation(@NotNull Path path, @NotNull Node.Type type) {
+    public void setPath(Path path) {
+        this.path = path;
+    }
+
+    public Node getParentNode() {
+        return parentNode;
+    }
+
+    public void setParentNode(Node parentNode) {
+        this.parentNode = parentNode;
+    }
+
+    public NodeImplementation(@NotNull Path path, @NotNull Node.Type type, Node parentNode) {
         this.path = path;
         this.type = type;
         this.children = new ArrayList<>();
+        this.parentNode = parentNode;
     }
 
-    public NodeImplementation(@NotNull Path path, @NotNull Type type, @NotNull List<Node> children) {
+    public NodeImplementation(@NotNull Path path, @NotNull Type type, Node parentNode, @NotNull List<Node> children) {
         this.path = path;
         this.type = type;
         this.children = children;
+        this.parentNode = parentNode;
     }
 
     /**
@@ -47,5 +62,13 @@ public class NodeImplementation implements Node {
     @Override
     public List<@NotNull Node> getChildren() {
         return children;
+    }
+
+    @Override
+    public String toString() {
+        return "NodeImplementation{" +
+                "path=" + path +
+                ", type=" + type +
+                '}';
     }
 }

@@ -19,7 +19,7 @@ public class ProjectServiceImplementation implements ProjectService {
         if (!Files.isDirectory(root)) {
             throw new IllegalArgumentException("root is not a folder");
         }
-        Node n = new NodeImplementation(root, Node.Types.FOLDER);
+        Node n = new NodeImplementation(root, Node.Types.FOLDER, null);
         return new ProjectImplementation(n);
     }
 
