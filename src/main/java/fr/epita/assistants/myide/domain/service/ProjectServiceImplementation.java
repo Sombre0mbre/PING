@@ -66,15 +66,15 @@ public class ProjectServiceImplementation implements ProjectService {
         File gitFile = root.resolve(".git/").toFile();
         if (gitFile.exists() && gitFile.isDirectory()) {
             FileRepositoryBuilder builder = new FileRepositoryBuilder();
-            builder.setMustExist(true);
-            Repository repository;
-            try {
-                repository = builder
-                        .readEnvironment()
-                        .findGitDir()
-                        .build();
-                aspects.add(new GitAspect(new Git(repository)));
-            } catch (IOException ignored) {
+            builder.findGitDir(gitFile);
+            if (builder.getGitDir() != null) {
+                Repository repository;
+                try {
+                    repository = builder.build();
+                    aspects.add(new GitAspect(new Git(repository)));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }
 

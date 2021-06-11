@@ -1,6 +1,7 @@
 package fr.epita.assistants.myide.domain.service;
 
 import fr.epita.assistants.myide.domain.entity.Aspect;
+import fr.epita.assistants.myide.domain.entity.Mandatory;
 import fr.epita.assistants.myide.domain.entity.aspects.AnyAspect;
 import fr.epita.assistants.myide.domain.entity.aspects.GitAspect;
 import org.junit.jupiter.api.AfterEach;
@@ -67,6 +68,8 @@ class ProjectServiceImplementationTest {
         var tmp = project.getAspects().stream().map(Aspect::getClass).collect(Collectors.toSet());
         assert tmp.contains(AnyAspect.class);
         assert tmp.contains(GitAspect.class);
+
+        project.getFeature(Mandatory.Features.Git.PULL).get().execute(project);
     }
 
     @Test
