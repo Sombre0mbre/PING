@@ -22,11 +22,13 @@ public class AddImplementation extends GitFeature {
 
         try {
             git.add().addFilepattern(Arrays.toString(params)).call();
+            return () -> true;
         } catch (GitAPIException e) {
             e.printStackTrace();
+            return () -> false;
         }
 
-        throw new UnsupportedOperationException("FIXME");
+        //throw new UnsupportedOperationException("FIXME");
         /*
         int returnCode = exec("mvn", "compile");
         return () -> (returnCode == 0);
