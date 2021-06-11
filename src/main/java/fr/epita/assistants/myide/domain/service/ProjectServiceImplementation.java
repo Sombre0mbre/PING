@@ -5,6 +5,7 @@ import fr.epita.assistants.myide.domain.entity.*;
 import fr.epita.assistants.myide.domain.entity.aspects.AnyAspect;
 import fr.epita.assistants.myide.domain.entity.aspects.GitAspect;
 import fr.epita.assistants.myide.domain.entity.aspects.MavenAspect;
+import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.lib.RepositoryCache;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
@@ -19,7 +20,7 @@ import java.util.HashSet;
 public class ProjectServiceImplementation implements ProjectService {
     NodeServiceImplementation nodeService = new NodeServiceImplementation(this);
 
-    MyIde.Configuration configuration = null;
+    MyIde.Configuration configuration;
 
     public ProjectServiceImplementation() {
         File folder = new File(".myIde");
@@ -62,19 +63,12 @@ public class ProjectServiceImplementation implements ProjectService {
             }
         }*/
         // TODO
-        FileRepositoryBuilder builder = new FileRepositoryBuilder();
-        builder.setGitDir(root.toFile());
-
-
-        Repository repository;
         try {
-            repository = builder.build();
-            if( repository.getObjectDatabase().exists() )
-                aspects.add(new GitAspect(repository));
-        } catch (IOException ignored) {
+            Git git = Git.open(root.resolve(".git").toFile());
+            aspects.add(new GitAspect(git));
+        } catch (Exception ignored) {
+
         }
-
-
 
 
         return new ProjectImplementation(n, aspects);

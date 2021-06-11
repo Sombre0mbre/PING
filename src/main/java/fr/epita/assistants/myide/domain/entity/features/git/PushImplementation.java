@@ -2,12 +2,13 @@ package fr.epita.assistants.myide.domain.entity.features.git;
 
 import fr.epita.assistants.myide.domain.entity.Mandatory;
 import fr.epita.assistants.myide.domain.entity.Project;
+import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.lib.Repository;
 
 public class PushImplementation extends GitFeature {
-    public PushImplementation(Repository repository) {
-        super(repository);
+    public PushImplementation(Git git) {
+        super(git);
     }
 
     /**
