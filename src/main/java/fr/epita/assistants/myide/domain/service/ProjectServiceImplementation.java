@@ -2,11 +2,12 @@ package fr.epita.assistants.myide.domain.service;
 
 import fr.epita.assistants.MyIde;
 import fr.epita.assistants.myide.domain.entity.*;
+import fr.epita.assistants.myide.domain.entity.aspects.AnyAspect;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Set;
 
 public class ProjectServiceImplementation implements ProjectService {
     NodeService nodeService = new NodeServiceImplementation(this);
@@ -18,27 +19,10 @@ public class ProjectServiceImplementation implements ProjectService {
         File file = new File(folder, "index");
 
         configuration = new MyIde.Configuration(file.toPath(), folder.toPath());
-        writeConfig(configuration);
     }
 
     public ProjectServiceImplementation(MyIde.Configuration configuration) {
         this.configuration = configuration;
-        writeConfig(configuration);
-    }
-
-    private void writeConfig(MyIde.Configuration configuration) {
-        // Create files/folder if not exists
-        var file = configuration.indexFile().toFile();
-        var folder = configuration.tempFolder().toFile();
-        /* try {
-            if (!folder.exists() || !folder.isDirectory())
-                Files.createDirectory(folder.toPath()).toFile();
-            file.createNewFile();
-        } catch (Exception ignored) {
-        }
-         */
-        // Generate indexes for search
-        // TODO
     }
 
     /**
@@ -53,7 +37,11 @@ public class ProjectServiceImplementation implements ProjectService {
             throw new IllegalArgumentException("root is not a folder");
         }
         Node n = new NodeImplementation(root, Node.Types.FOLDER, null);
-        return new ProjectImplementation(n);
+        // Build cache for search
+        // TODO
+        // Detect Git and Maven and add it to aspects
+        // TODO
+        return new ProjectImplementation(n, Set.of(new AnyAspect()));
     }
 
     /**

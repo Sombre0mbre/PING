@@ -10,7 +10,6 @@ import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 
 public class PullImplementation implements Feature {
 

@@ -1,6 +1,7 @@
 package fr.epita.assistants.myide.domain.entity;
 
-import java.util.HashSet;
+import fr.epita.assistants.myide.domain.entity.aspects.AnyAspect;
+
 import java.util.Optional;
 import java.util.Set;
 
@@ -10,7 +11,7 @@ public class ProjectImplementation implements Project {
 
     public ProjectImplementation(Node rootNode) {
         this.rootNode = rootNode;
-        this.aspects = new HashSet<>();
+        this.aspects = Set.of(new AnyAspect());
     }
 
     public ProjectImplementation(Node rootNode, Set<Aspect> aspects) {
@@ -44,7 +45,12 @@ public class ProjectImplementation implements Project {
      */
     @Override
     public Optional<Feature> getFeature(Feature.Type featureType) {
-        // No features are implemented for now
+        for (var aspect : aspects) {
+            for (var i : aspect.getFeatureList()) {
+                if (i.type() == featureType)
+                    return Optional.of(i);
+            }
+        }
         return Optional.empty();
     }
 }
