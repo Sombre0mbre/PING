@@ -63,15 +63,17 @@ public class ProjectServiceImplementation implements ProjectService {
         }*/
         // TODO
         FileRepositoryBuilder builder = new FileRepositoryBuilder();
-        builder.findGitDir(root.toFile());
-        if (builder.getGitDir() != null) {
-            Repository repository;
-            try {
-                repository = builder.build();
+        builder.setGitDir(root.toFile());
+
+
+        Repository repository;
+        try {
+            repository = builder.build();
+            if( repository.getObjectDatabase().exists() )
                 aspects.add(new GitAspect(repository));
-            } catch (IOException ignored) {
-            }
+        } catch (IOException ignored) {
         }
+
 
 
 
