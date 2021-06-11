@@ -3,10 +3,18 @@ package fr.epita.assistants.myide.domain.service;
 import fr.epita.assistants.MyIde;
 import fr.epita.assistants.myide.domain.entity.*;
 import fr.epita.assistants.myide.domain.entity.aspects.AnyAspect;
+import fr.epita.assistants.myide.domain.entity.aspects.GitAspect;
+import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.api.errors.GitAPIException;
+import org.eclipse.jgit.lib.Repository;
+import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Set;
 
 public class ProjectServiceImplementation implements ProjectService {
@@ -37,10 +45,25 @@ public class ProjectServiceImplementation implements ProjectService {
             throw new IllegalArgumentException("root is not a folder");
         }
         Node n = new NodeImplementation(root, Node.Types.FOLDER, null);
+
+        var aspects = new HashSet<>();
+        aspects.add(new AnyAspect());
+
         // Build cache for search
         // TODO
         // Detect Git and Maven and add it to aspects
         // TODO
+        FileRepositoryBuilder builder = new FileRepositoryBuilder();
+        Repository repository = null;
+        try {
+            repository = builder.setGitDir(new File(String.valueOf(root)))
+                    .readEnvironment()
+                    .findGitDir()
+                    .build();
+            aspects.add(new GitAspect(repository));
+        } catch (IOException ignored) {
+        }
+
         return new ProjectImplementation(n, Set.of(new AnyAspect()));
     }
 

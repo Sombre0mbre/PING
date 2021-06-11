@@ -12,7 +12,11 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 
-public class AddImplementation implements Feature {
+public class AddImplementation extends GitFeature {
+    public AddImplementation(Repository repository) {
+        super(repository);
+    }
+
     /**
      * @param project {@link Project} on which the feature is executed.
      * @param params  Parameters given to the features.
@@ -20,19 +24,7 @@ public class AddImplementation implements Feature {
      */
     @Override
     public ExecutionReport execute(Project project, Object... params) {
-        FileRepositoryBuilder builder = new FileRepositoryBuilder();
-        Repository repository = null;
-        try {
-            repository = builder.setGitDir(new File(String.valueOf(project.getRootNode().getPath())))
-                    .readEnvironment()
-                    .findGitDir()
-                    .build();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
-        assert repository != null;
-        Git git = new Git(repository);
         try {
             git.add().addFilepattern(Arrays.toString(params)).call();
         } catch (GitAPIException e) {

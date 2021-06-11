@@ -7,10 +7,17 @@ import fr.epita.assistants.myide.domain.entity.features.git.AddImplementation;
 import fr.epita.assistants.myide.domain.entity.features.git.CommitImplementation;
 import fr.epita.assistants.myide.domain.entity.features.git.PullImplementation;
 import fr.epita.assistants.myide.domain.entity.features.git.PushImplementation;
+import org.eclipse.jgit.lib.Repository;
 
 import java.util.List;
 
 public class GitAspect implements Aspect {
+
+    final Repository repository;
+
+    public GitAspect(Repository repository) {
+        this.repository = repository;
+    }
 
     @Override
     public List<Feature> getFeatureList() {

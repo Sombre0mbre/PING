@@ -11,7 +11,11 @@ import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import java.io.File;
 import java.io.IOException;
 
-public class PullImplementation implements Feature {
+public class PullImplementation extends GitFeature {
+
+    public PullImplementation(Repository repository) {
+        super(repository);
+    }
 
     /**
      * @param project {@link Project} on which the feature is executed.
@@ -20,20 +24,7 @@ public class PullImplementation implements Feature {
      */
     @Override
     public ExecutionReport execute(Project project, Object... params) {
-        FileRepositoryBuilder builder = new FileRepositoryBuilder();
-        Repository repository = null;
-        try {
-            repository = builder.setGitDir(new File(String.valueOf(project.getRootNode().getPath())))
-                    .readEnvironment()
-                    .findGitDir()
-                    .build();
-        } catch (IOException e) {
-            e.printStackTrace();
-            return () -> false;
-        }
 
-        assert repository != null;
-        Git git = new Git(repository);
         try {
             git.pull().call();
             return () -> true;

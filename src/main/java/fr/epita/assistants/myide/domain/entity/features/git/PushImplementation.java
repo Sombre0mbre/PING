@@ -11,7 +11,11 @@ import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import java.io.File;
 import java.io.IOException;
 
-public class PushImplementation implements Feature {
+public class PushImplementation extends GitFeature {
+    public PushImplementation(Repository repository) {
+        super(repository);
+    }
+
     /**
      * @param project {@link Project} on which the feature is executed.
      * @param params  Parameters given to the features.
@@ -19,20 +23,7 @@ public class PushImplementation implements Feature {
      */
     @Override
     public ExecutionReport execute(Project project, Object... params) {
-        FileRepositoryBuilder builder = new FileRepositoryBuilder();
-        Repository repository = null;
-        try {
-            repository = builder.setGitDir(new File(String.valueOf(project.getRootNode().getPath())))
-                    .readEnvironment()
-                    .findGitDir()
-                    .build();
-        } catch (IOException e) {
-            e.printStackTrace();
-            return () -> false;
-        }
 
-        assert repository != null;
-        Git git = new Git(repository);
         try {
             git.push().call();
             return () -> true;
