@@ -4,6 +4,7 @@ import fr.epita.assistants.myide.domain.entity.Feature;
 import fr.epita.assistants.myide.domain.entity.Mandatory;
 import fr.epita.assistants.myide.domain.entity.Project;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 
@@ -16,8 +17,8 @@ public class ExecImplementation implements Feature {
      */
     @Override
     public ExecutionReport execute(Project project, Object... params) {
-        ProcessBuilder pb = new ProcessBuilder("mvn", "exec", Arrays.toString(params))
-            .directory(project.getRootNode().getPath().toFile());
+        ProcessBuilder pb = new ProcessBuilder("mvn", "exec", Arrays.toString(params));
+        pb.directory(new File(project.getRootNode().getPath().toString()));
         try {
             Process process = pb.start();
             process.waitFor();
