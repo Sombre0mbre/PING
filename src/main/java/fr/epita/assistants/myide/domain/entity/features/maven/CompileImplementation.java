@@ -35,11 +35,6 @@ public class CompileImplementation implements Feature {
             e.printStackTrace();
             return () -> false;
         }
-        //throw new UnsupportedOperationException("FIXME");
-        /*
-        int returnCode = exec("mvn", "compile");
-        return () -> (returnCode == 0);
-        */
     }
 
     /**

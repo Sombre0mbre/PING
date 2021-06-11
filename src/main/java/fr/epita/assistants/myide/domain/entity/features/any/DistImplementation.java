@@ -13,10 +13,6 @@ public class DistImplementation implements Feature {
     @Override
     public ExecutionReport execute(Project project, Object... params) {
         throw new UnsupportedOperationException("FIXME");
-        /*
-        int returnCode = exec("mvn", "compile");
-        return () -> (returnCode == 0);
-        */
     }
 
     /**

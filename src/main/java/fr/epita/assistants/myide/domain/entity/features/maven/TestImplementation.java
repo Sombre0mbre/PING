@@ -27,19 +27,10 @@ public class TestImplementation implements Feature {
             Process process = pb.start();
             process.waitFor();
             return () -> (process.exitValue() == 0);
-            /*if (process.exitValue() == 0)
-                return () -> true;
-            else
-                return () -> false;*/
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
             return () -> false;
         }
-        //throw new UnsupportedOperationException("FIXME");
-        /*
-        int returnCode = exec("mvn", "compile");
-        return () -> (returnCode == 0);
-        */
     }
 
     /**
