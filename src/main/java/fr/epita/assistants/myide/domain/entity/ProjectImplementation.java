@@ -4,6 +4,7 @@ import fr.epita.assistants.myide.domain.entity.aspects.AnyAspect;
 
 import java.util.Optional;
 import java.util.Set;
+import java.util.StringJoiner;
 
 public class ProjectImplementation implements Project {
     Node rootNode;
@@ -52,5 +53,15 @@ public class ProjectImplementation implements Project {
             }
         }
         return Optional.empty();
+    }
+
+    @Override
+    public String toString() {
+        var array = new StringJoiner(", ", "[ ", " ]");
+        aspects.forEach((n) -> array.add(n.toString()));
+        return "ProjectImplementation{\n" +
+                "\trootNode=" + rootNode +
+                ", \n\taspects=" + array +
+                "\n}";
     }
 }
