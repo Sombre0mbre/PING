@@ -19,7 +19,7 @@ public class NodeServiceImplementation implements NodeService {
         this.projectService = projectService;
     }
 
-    public void updateChildren(@NotNull Node n) {
+    public void generateChildren(@NotNull Node n) {
         if (n.isFile())
             return;
         var list = n.getPath().toFile().listFiles();
@@ -35,7 +35,7 @@ public class NodeServiceImplementation implements NodeService {
                 continue;
             var child = new NodeImplementation(i.toPath(), type, n);
             n.getChildren().add(child);
-            updateChildren(child);
+            generateChildren(child);
         }
     }
 
@@ -134,8 +134,6 @@ public class NodeServiceImplementation implements NodeService {
      */
     @Override
     public Node move(Node nodeToMove, Node destinationFolder) {
-        throw new UnsupportedOperationException(nodeToMove + " -> " + destinationFolder);
-        /*
         if (destinationFolder == null)
             throw new UnsupportedOperationException("dest is null: " + nodeToMove + " -> " + null);
         if (destinationFolder.getType() != Node.Types.FOLDER)
@@ -162,7 +160,5 @@ public class NodeServiceImplementation implements NodeService {
         nodeTemp.setParentNode(destinationFolder);
         destinationFolder.getChildren().add(nodeTemp);
         return nodeTemp;
-
-         */
     }
 }
