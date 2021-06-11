@@ -1,6 +1,8 @@
 package fr.epita.assistants.myide.domain.service;
 
+import fr.epita.assistants.myide.domain.entity.Aspect;
 import fr.epita.assistants.myide.domain.entity.aspects.AnyAspect;
+import fr.epita.assistants.myide.domain.entity.aspects.GitAspect;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -8,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.stream.Collectors;
 
 class ProjectServiceImplementationTest {
 
@@ -42,7 +45,27 @@ class ProjectServiceImplementationTest {
         assert project.getRootNode().getChildren().get(0).getChildren().size() == 10;
         assert project.getAspects().size() == 1;
         assert project.getAspects().stream().toList().get(0).getClass().equals(AnyAspect.class);
+    }
 
+    @Test
+    void loadGitFolder() throws IOException, InterruptedException {
+        var pb = new ProcessBuilder("git", "init");
+        var root = Files.createTempDirectory("IDE_TEST_GIT_");
+        pb.directory(root.toFile());
+        pb.start().waitFor();
+
+        var service = new ProjectServiceImplementation();
+        var project = service.load(root);
+
+        System.out.println();
+        System.out.println("--- Project is ---");
+        System.out.println(project);
+        System.out.println("------------------");
+
+        assert project.getAspects().size() == 2;
+        var tmp = project.getAspects().stream().map(Aspect::getClass).collect(Collectors.toSet());
+        assert tmp.contains(AnyAspect.class);
+        assert tmp.contains(GitAspect.class);
     }
 
     @Test
