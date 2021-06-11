@@ -113,6 +113,9 @@ public class NodeServiceImplementation implements NodeService {
      */
     @Override
     public Node move(Node nodeToMove, Node destinationFolder) {
+        System.err.println(nodeToMove + " -> " + destinationFolder);
+        return nodeToMove;
+        /*
         if (destinationFolder == null)
             throw new UnsupportedOperationException("dest is null: " + nodeToMove + " -> " + null);
         if (destinationFolder.getType() != Node.Types.FOLDER)
@@ -139,5 +142,7 @@ public class NodeServiceImplementation implements NodeService {
         nodeTemp.setParentNode(destinationFolder);
         destinationFolder.getChildren().add(nodeTemp);
         return nodeTemp;
+
+         */
     }
 }
