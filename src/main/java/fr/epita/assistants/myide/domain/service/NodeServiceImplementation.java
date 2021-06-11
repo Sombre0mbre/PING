@@ -5,6 +5,8 @@ import fr.epita.assistants.myide.domain.entity.Node;
 import fr.epita.assistants.myide.domain.entity.NodeImplementation;
 import org.apache.commons.io.FileUtils;
 
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
 public class NodeServiceImplementation implements NodeService {
@@ -20,7 +22,19 @@ public class NodeServiceImplementation implements NodeService {
      */
     @Override
     public Node update(Node node, int from, int to, byte[] insertedContent) {
-        throw new UnsupportedOperationException("FIXME");
+        if (!node.isFile())
+            throw new IllegalArgumentException("Node is not a file!");
+        try {
+            var reader = Files.readString(node.getPath());
+            var file = new BufferedOutputStream(new FileOutputStream(node.getPath().toFile()));
+            file.write(reader.substring(0, from + 1).getBytes());
+            file.write(insertedContent);
+            file.write(reader.substring(to).getBytes());
+            file.close();
+        } catch (Exception e) {
+            throw new UnsupportedOperationException("Could not write to file");
+        }
+        return node;
     }
 
     /**
@@ -41,7 +55,6 @@ public class NodeServiceImplementation implements NodeService {
                 parent.getChildren().remove(node);
             return true;
         } catch (Exception e) {
-            e.printStackTrace();
             return false;
         }
     }
@@ -68,7 +81,7 @@ public class NodeServiceImplementation implements NodeService {
             } else
                 throw new IllegalStateException("Unknown type");
         } catch (Exception e) {
-            throw new IllegalArgumentException("Could not create node: It could already exists");
+            throw new UnsupportedOperationException("Could not create node: It could already exists");
         }
         var res = new NodeImplementation(childPath, type, folder);
         folder.getChildren().add(res);
@@ -91,7 +104,7 @@ public class NodeServiceImplementation implements NodeService {
         try {
             FileUtils.moveToDirectory(nodeFile, destinationFolder.getPath().toFile(), false);
         } catch (Exception e) {
-            throw new IllegalArgumentException("Could not move directory");
+            throw new UnsupportedOperationException("Could not move directory");
         }
         var nodeTemp = (NodeImplementation) nodeToMove;
         nodeTemp.setPath(nodeFile.toPath());
