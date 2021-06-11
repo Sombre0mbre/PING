@@ -1,7 +1,6 @@
 package fr.epita.assistants.myide.domain.entity.features.git;
 
 import fr.epita.assistants.myide.domain.entity.Feature;
-import fr.epita.assistants.myide.domain.entity.Project;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.lib.Repository;
 
