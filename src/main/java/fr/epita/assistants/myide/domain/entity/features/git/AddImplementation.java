@@ -21,13 +21,15 @@ public class AddImplementation extends GitFeature {
     @Override
     public ExecutionReport execute(Project project, Object... params) {
 
-        try {
-            git.add().addFilepattern(Arrays.toString(params)).call();
-            return () -> true;
-        } catch (GitAPIException e) {
-            e.printStackTrace();
-            return () -> false;
+        for(var pattern : params) {
+            try {
+                git.add().addFilepattern((String) pattern).call();
+            } catch (GitAPIException e) {
+                e.printStackTrace();
+                return () -> false;
+            }
         }
+        return () -> true;
 
         //throw new UnsupportedOperationException("FIXME");
         /*
