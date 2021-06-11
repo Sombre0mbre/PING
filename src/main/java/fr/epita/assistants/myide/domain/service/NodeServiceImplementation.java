@@ -113,7 +113,7 @@ public class NodeServiceImplementation implements NodeService {
      */
     @Override
     public Node move(Node nodeToMove, Node destinationFolder) {
-        System.err.println(nodeToMove + " -> " + destinationFolder);
+        throw new UnsupportedOperationException(nodeToMove + " -> " + destinationFolder));
         return nodeToMove;
         /*
         if (destinationFolder == null)
