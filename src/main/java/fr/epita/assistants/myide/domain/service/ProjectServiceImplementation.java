@@ -62,18 +62,19 @@ public class ProjectServiceImplementation implements ProjectService {
             }
         }*/
         // TODO
-        if (RepositoryCache.FileKey.isGitRepository(root.toFile(), FS.DETECTED)) {
-            FileRepositoryBuilder builder = new FileRepositoryBuilder();
-            Repository repository = null;
-            try {
-                repository = builder.setGitDir(new File(String.valueOf(root)))
-                        .readEnvironment()
-                        .findGitDir()
-                        .build();
-                aspects.add(new GitAspect(repository));
-            } catch (IOException ignored) {
-            }
+        //if (RepositoryCache.FileKey.isGitRepository(root.toFile(), FS.DETECTED)) {
+        FileRepositoryBuilder builder = new FileRepositoryBuilder();
+        builder.setMustExist(true);
+        Repository repository = null;
+        try {
+            repository = builder.setGitDir(new File(String.valueOf(root)))
+                    .readEnvironment()
+                    .findGitDir()
+                    .build();
+            aspects.add(new GitAspect(repository));
+        } catch (IOException ignored) {
         }
+        //}
 
 
 
