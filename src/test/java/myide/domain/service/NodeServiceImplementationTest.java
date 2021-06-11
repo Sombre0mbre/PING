@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Objects;
 
 class NodeServiceImplementationTest {
     ProjectService projectService = new ProjectServiceImplementation();
@@ -51,15 +52,49 @@ class NodeServiceImplementationTest {
 
     @Test
     void move() {
+        final var nodeService = projectService.getNodeService();
 
+        assert project.getRootNode().getChildren().size() == 0;
+        var dir1 = nodeService.create(project.getRootNode(), "tempDir1", Node.Types.FOLDER);
+        var dir2 = nodeService.create(project.getRootNode(), "tempDir2", Node.Types.FOLDER);
+
+        var file = nodeService.create(dir1, "hello", Node.Types.FILE);
+
+        assert Objects.requireNonNull(dir1.getPath().toFile().listFiles()).length == 1;
+        assert Objects.requireNonNull(dir2.getPath().toFile().listFiles()).length == 0;
+        assert dir1.getChildren().size() == 1;
+        assert dir2.getChildren().size() == 0;
+
+        nodeService.move(file, dir2);
+
+        assert dir1.getChildren().size() == 0;
+        assert dir2.getChildren().size() == 1;
+        assert Objects.requireNonNull(dir1.getPath().toFile().listFiles()).length == 0;
+        assert Objects.requireNonNull(dir2.getPath().toFile().listFiles()).length == 1;
     }
 
     @Test
     void update() {
+
     }
 
     @Test
     void delete() {
+        final var nodeService = projectService.getNodeService();
+
+        assert project.getRootNode().getChildren().size() == 0;
+        var dir = nodeService.create(project.getRootNode(), "tempDir", Node.Types.FOLDER);
+        nodeService.create(dir, "tempFile1", Node.Types.FILE);
+
+        var file = nodeService.create(project.getRootNode(), "tempFile2", Node.Types.FILE);
+        assert Objects.requireNonNull(dir.getPath().toFile().listFiles()).length == 1;
+        assert dir.getChildren().size() == 1;
+        assert Objects.requireNonNull(project.getRootNode().getPath().toFile().listFiles()).length == 2;
+        assert project.getRootNode().getChildren().size() == 2;
+        nodeService.delete(dir);
+        nodeService.delete(file);
+        assert Objects.requireNonNull(project.getRootNode().getPath().toFile().listFiles()).length == 0;
+        assert project.getRootNode().getChildren().size() == 0;
     }
 
 }

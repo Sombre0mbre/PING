@@ -5,6 +5,7 @@ import fr.epita.assistants.myide.domain.entity.Node;
 import fr.epita.assistants.myide.domain.entity.NodeImplementation;
 import org.apache.commons.io.FileUtils;
 
+import java.io.IOException;
 import java.nio.file.Files;
 
 public class NodeServiceImplementation implements NodeService {
@@ -31,7 +32,19 @@ public class NodeServiceImplementation implements NodeService {
      */
     @Override
     public boolean delete(Node node) {
-        throw new UnsupportedOperationException("FIXME");
+        try {
+            if (node.isFolder())
+                FileUtils.deleteDirectory(node.getPath().toFile());
+            else if (node.isFile())
+                Files.delete(node.getPath());
+            var parent = ((NodeImplementation) node).getParentNode();
+            if (parent != null)
+                parent.getChildren().remove(node);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     /**
@@ -45,7 +58,7 @@ public class NodeServiceImplementation implements NodeService {
      */
     @Override
     public Node create(Node folder, String name, Node.Type type) {
-        if (folder.getType() != Node.Types.FOLDER)
+        if (!folder.isFolder())
             throw new IllegalArgumentException("folder node <" + folder.getPath() + "> is not a folder!");
         var childPath = folder.getPath().resolve(name);
         try {
@@ -83,8 +96,11 @@ public class NodeServiceImplementation implements NodeService {
         }
         var nodeTemp = (NodeImplementation) nodeToMove;
         nodeTemp.setPath(nodeFile.toPath());
-        nodeTemp.getParentNode().getChildren().remove(nodeTemp);
+        var parentNode = nodeTemp.getParentNode();
+        if (parentNode != null)
+            parentNode.getChildren().remove(nodeTemp);
         nodeTemp.setParentNode(destinationFolder);
+        destinationFolder.getChildren().add(nodeTemp);
         return nodeTemp;
     }
 }
