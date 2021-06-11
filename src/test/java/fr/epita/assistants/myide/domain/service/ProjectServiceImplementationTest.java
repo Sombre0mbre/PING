@@ -2,6 +2,7 @@ package fr.epita.assistants.myide.domain.service;
 
 import fr.epita.assistants.myide.domain.entity.Aspect;
 import fr.epita.assistants.myide.domain.entity.Mandatory;
+import fr.epita.assistants.myide.domain.entity.Project;
 import fr.epita.assistants.myide.domain.entity.aspects.AnyAspect;
 import fr.epita.assistants.myide.domain.entity.aspects.GitAspect;
 import org.junit.jupiter.api.AfterEach;
@@ -48,8 +49,7 @@ class ProjectServiceImplementationTest {
         assert project.getAspects().stream().toList().get(0).getClass().equals(AnyAspect.class);
     }
 
-    @Test
-    void loadGitFolder() throws IOException, InterruptedException {
+    private Project setUpGit() throws IOException, InterruptedException {
         var pb = new ProcessBuilder("git", "init");
         var root = Files.createTempDirectory("IDE_TEST_GIT_");
         pb.directory(root.toFile());
@@ -57,7 +57,12 @@ class ProjectServiceImplementationTest {
         var proc = pb.start();
         proc.waitFor();
         var service = new ProjectServiceImplementation();
-        var project = service.load(root);
+        return service.load(root);
+    }
+
+    @Test
+    void loadGitFolder() throws IOException, InterruptedException {
+        var project = setUpGit();
 
         System.out.println();
         System.out.println("--- Project is ---");
@@ -69,10 +74,11 @@ class ProjectServiceImplementationTest {
         assert tmp.contains(AnyAspect.class);
         assert tmp.contains(GitAspect.class);
 
-        project.getFeature(Mandatory.Features.Git.PULL).get().execute(project);
     }
 
     @Test
-    void execute() {
+    void execute() throws IOException, InterruptedException{
+        var project = setUpGit();
+        project.getFeature(Mandatory.Features.Git.PULL).get().execute(project);
     }
 }
