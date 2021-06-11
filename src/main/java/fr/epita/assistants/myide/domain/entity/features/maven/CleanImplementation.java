@@ -3,6 +3,7 @@ package fr.epita.assistants.myide.domain.entity.features.maven;
 import fr.epita.assistants.myide.domain.entity.Feature;
 import fr.epita.assistants.myide.domain.entity.Mandatory;
 import fr.epita.assistants.myide.domain.entity.Project;
+import fr.epita.assistants.myide.domain.entity.features.ProcessFeature;
 
 import java.io.File;
 import java.io.IOException;
@@ -10,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class CleanImplementation implements Feature {
+public class CleanImplementation implements ProcessFeature {
     /**
      * @param project {@link Project} on which the feature is executed.
      * @param params  Parameters given to the features.
@@ -19,26 +20,9 @@ public class CleanImplementation implements Feature {
     @Override
     public ExecutionReport execute(Project project, Object... params) {
         var param = new ArrayList<>(List.of("mvn", "clean"));
+
         Arrays.stream(params).forEach((e) -> param.add(e.toString()));
-        param.addAll(Arrays.stream((String[]) params).toList());
-        ProcessBuilder pb = new ProcessBuilder(param);
-        pb.directory(new File(project.getRootNode().getPath().toString()));
-        try {
-            Process process = pb.start();
-            process.waitFor();
-            if (process.exitValue() == 0)
-                return () -> true;
-            else
-                return () -> false;
-        } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
-            return () -> false;
-        }
-        //throw new UnsupportedOperationException("FIXME");
-        /*
-        int returnCode = exec("mvn", "compile");
-        return () -> (returnCode == 0);
-        */
+        return this.executeProcess(project, param);
     }
 
     /**
