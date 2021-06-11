@@ -22,8 +22,8 @@ public class GitAspect implements Aspect {
     @Override
     public List<Feature> getFeatureList() {
         return List.of(
-                new AddImplementation(), new CommitImplementation(),
-                new PullImplementation(), new PushImplementation()
+                new AddImplementation(repository), new CommitImplementation(repository),
+                new PullImplementation(repository), new PushImplementation(repository)
         );
     }
 
