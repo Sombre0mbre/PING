@@ -5,7 +5,6 @@ import fr.epita.assistants.myide.domain.entity.Node;
 import fr.epita.assistants.myide.domain.entity.NodeImplementation;
 import org.apache.commons.io.FileUtils;
 
-import java.io.IOException;
 import java.nio.file.Files;
 
 public class NodeServiceImplementation implements NodeService {
