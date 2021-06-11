@@ -49,16 +49,16 @@ public class ProjectServiceImplementation implements ProjectService {
         // Build cache for search
         // TODO
         // Detect Git and Maven and add it to aspects
-        /*File pom = new File("pom.xml");
+        File pom = new File(root.toString(), "pom.xml");
         if (pom.exists())
-            aspects.add(new MavenAspect());*/
-        File[] root_contents = root.toFile().listFiles();
+            aspects.add(new MavenAspect());
+        /*File[] root_contents = root.toFile().listFiles();
         for (var content : root_contents) {
             if (content.getName() == "pom.xml") {
                 aspects.add(new MavenAspect());
                 break;
             }
-        }
+        }*/
         // TODO
         FileRepositoryBuilder builder = new FileRepositoryBuilder();
         Repository repository = null;
