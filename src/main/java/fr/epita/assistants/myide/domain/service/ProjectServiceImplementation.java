@@ -64,10 +64,9 @@ public class ProjectServiceImplementation implements ProjectService {
         }*/
         // TODO
         try {
-            Git git = Git.open(root.resolve(".git").toFile());
+            Git git = Git.open(root.toFile());
             aspects.add(new GitAspect(git));
         } catch (Exception ignored) {
-
         }
 
 

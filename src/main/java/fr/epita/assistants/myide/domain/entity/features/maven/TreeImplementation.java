@@ -6,6 +6,9 @@ import fr.epita.assistants.myide.domain.entity.Project;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class TreeImplementation implements Feature {
 
@@ -16,7 +19,9 @@ public class TreeImplementation implements Feature {
      */
     @Override
     public ExecutionReport execute(Project project, Object... params) {
-        ProcessBuilder pb = new ProcessBuilder("mvn", "dependency:tree", params.toString());
+        var param = new ArrayList<>(List.of("mvn", "dependency:tree"));
+        Arrays.stream(params).forEach((e) -> param.add(e.toString()));
+        ProcessBuilder pb = new ProcessBuilder(param);
         pb.directory(new File(project.getRootNode().getPath().toString()));
         try {
             Process process = pb.start();

@@ -4,8 +4,10 @@ import fr.epita.assistants.myide.domain.entity.Feature;
 import fr.epita.assistants.myide.domain.entity.Mandatory;
 import fr.epita.assistants.myide.domain.entity.Project;
 
-import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class TestImplementation implements Feature {
 
@@ -16,7 +18,10 @@ public class TestImplementation implements Feature {
      */
     @Override
     public ExecutionReport execute(Project project, Object... params) {
-        ProcessBuilder pb = new ProcessBuilder("mvn", "test", params.toString());
+        var param = new ArrayList<>(List.of("mvn", "test"));
+
+        Arrays.stream(params).forEach((e) -> param.add(e.toString()));
+        ProcessBuilder pb = new ProcessBuilder(param);
         pb.directory(project.getRootNode().getPath().toFile());
         try {
             Process process = pb.start();

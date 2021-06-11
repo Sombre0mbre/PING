@@ -6,6 +6,9 @@ import fr.epita.assistants.myide.domain.entity.Project;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class PackageImplementation implements Feature {
     /**
@@ -15,7 +18,10 @@ public class PackageImplementation implements Feature {
      */
     @Override
     public ExecutionReport execute(Project project, Object... params) {
-        ProcessBuilder pb = new ProcessBuilder("mvn", "package", params.toString());
+        var param = new ArrayList<>(List.of("mvn", "package"));
+
+        Arrays.stream(params).forEach((e) -> param.add(e.toString()));
+        ProcessBuilder pb = new ProcessBuilder(param);
         pb.directory(new File(project.getRootNode().getPath().toString()));
         try {
             Process process = pb.start();
