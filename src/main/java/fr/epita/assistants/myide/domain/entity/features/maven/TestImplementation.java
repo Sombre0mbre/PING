@@ -17,11 +17,11 @@ public class TestImplementation implements Feature {
     @Override
     public ExecutionReport execute(Project project, Object... params) {
         ProcessBuilder pb = new ProcessBuilder("mvn", "test", params.toString());
-        pb.directory(new File(project.getRootNode().getPath().toString()));
+        pb.directory(project.getRootNode().getPath().toFile());
         try {
             Process process = pb.start();
             process.waitFor();
-            return () -> true;
+            return () -> (process.exitValue() == 0);
             /*if (process.exitValue() == 0)
                 return () -> true;
             else
