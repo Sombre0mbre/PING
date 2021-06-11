@@ -52,8 +52,9 @@ class ProjectServiceImplementationTest {
         var pb = new ProcessBuilder("git", "init");
         var root = Files.createTempDirectory("IDE_TEST_GIT_");
         pb.directory(root.toFile());
-        pb.start().waitFor();
-
+        pb.inheritIO();
+        var proc = pb.start();
+        proc.waitFor();
         var service = new ProjectServiceImplementation();
         var project = service.load(root);
 
