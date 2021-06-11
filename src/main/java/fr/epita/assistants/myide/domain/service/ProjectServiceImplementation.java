@@ -6,7 +6,9 @@ import fr.epita.assistants.myide.domain.entity.aspects.AnyAspect;
 import fr.epita.assistants.myide.domain.entity.aspects.GitAspect;
 import fr.epita.assistants.myide.domain.entity.aspects.MavenAspect;
 import org.eclipse.jgit.lib.Repository;
+import org.eclipse.jgit.lib.RepositoryCache;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
+import org.eclipse.jgit.util.FS;
 
 import java.io.File;
 import java.io.IOException;
@@ -60,16 +62,20 @@ public class ProjectServiceImplementation implements ProjectService {
             }
         }*/
         // TODO
-        FileRepositoryBuilder builder = new FileRepositoryBuilder();
-        Repository repository = null;
-        try {
-            repository = builder.setGitDir(new File(String.valueOf(root)))
-                    .readEnvironment()
-                    .findGitDir()
-                    .build();
-            aspects.add(new GitAspect(repository));
-        } catch (IOException ignored) {
+        if (RepositoryCache.FileKey.isGitRepository(root.toFile(), FS.DETECTED)) {
+            FileRepositoryBuilder builder = new FileRepositoryBuilder();
+            Repository repository = null;
+            try {
+                repository = builder.setGitDir(new File(String.valueOf(root)))
+                        .readEnvironment()
+                        .findGitDir()
+                        .build();
+                aspects.add(new GitAspect(repository));
+            } catch (IOException ignored) {
+            }
         }
+
+
 
         return new ProjectImplementation(n, aspects);
     }
