@@ -13,10 +13,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashSet;
-import java.util.Set;
 
 public class ProjectServiceImplementation implements ProjectService {
-    NodeService nodeService = new NodeServiceImplementation(this);
+    NodeServiceImplementation nodeService = new NodeServiceImplementation(this);
 
     MyIde.Configuration configuration = null;
 
@@ -43,7 +42,7 @@ public class ProjectServiceImplementation implements ProjectService {
             throw new IllegalArgumentException("root is not a folder");
         }
         Node n = new NodeImplementation(root, Node.Types.FOLDER, null);
-
+        nodeService.generateChildren(n);
         var aspects = new HashSet<Aspect>();
         aspects.add(new AnyAspect());
 

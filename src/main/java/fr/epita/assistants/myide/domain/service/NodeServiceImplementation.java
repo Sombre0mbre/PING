@@ -5,6 +5,7 @@ import fr.epita.assistants.myide.domain.entity.Node;
 import fr.epita.assistants.myide.domain.entity.NodeImplementation;
 import org.apache.commons.io.FileUtils;
 
+import javax.validation.constraints.NotNull;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -16,6 +17,26 @@ public class NodeServiceImplementation implements NodeService {
 
     public NodeServiceImplementation(ProjectServiceImplementation projectService) {
         this.projectService = projectService;
+    }
+
+    public void generateChildren(@NotNull Node n) {
+        if (n.isFile())
+            return;
+        var list = n.getPath().toFile().listFiles();
+        if (list == null)
+            return;
+        for (var i : list) {
+            Node.Type type;
+            if (i.isDirectory())
+                type = Node.Types.FOLDER;
+            else if (i.isFile())
+                type = Node.Types.FILE;
+            else
+                continue;
+            var child = new NodeImplementation(i.toPath(), type, n);
+            n.getChildren().add(child);
+            generateChildren(child);
+        }
     }
 
     /**
@@ -113,9 +134,6 @@ public class NodeServiceImplementation implements NodeService {
      */
     @Override
     public Node move(Node nodeToMove, Node destinationFolder) {
-        throw new UnsupportedOperationException(nodeToMove + " -> " + destinationFolder));
-        return nodeToMove;
-        /*
         if (destinationFolder == null)
             throw new UnsupportedOperationException("dest is null: " + nodeToMove + " -> " + null);
         if (destinationFolder.getType() != Node.Types.FOLDER)
@@ -142,7 +160,5 @@ public class NodeServiceImplementation implements NodeService {
         nodeTemp.setParentNode(destinationFolder);
         destinationFolder.getChildren().add(nodeTemp);
         return nodeTemp;
-
-         */
     }
 }
