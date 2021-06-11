@@ -17,7 +17,7 @@ public class TreeImplementation implements Feature {
      */
     @Override
     public ExecutionReport execute(Project project, Object... params) {
-        ProcessBuilder pb = new ProcessBuilder("mvn", "dependency:tree", Arrays.toString(params));
+        ProcessBuilder pb = new ProcessBuilder("mvn", "dependency:tree", params.toString());
         pb.directory(new File(project.getRootNode().getPath().toString()));
         try {
             Process process = pb.start();

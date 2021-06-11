@@ -17,7 +17,7 @@ public class ExecImplementation implements Feature {
      */
     @Override
     public ExecutionReport execute(Project project, Object... params) {
-        ProcessBuilder pb = new ProcessBuilder("mvn", "exec", Arrays.toString(params));
+        ProcessBuilder pb = new ProcessBuilder("mvn", "exec", params.toString());
         pb.directory(new File(project.getRootNode().getPath().toString()));
         try {
             Process process = pb.start();

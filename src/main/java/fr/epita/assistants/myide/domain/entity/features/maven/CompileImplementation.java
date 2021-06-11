@@ -17,7 +17,7 @@ public class CompileImplementation implements Feature {
      */
     @Override
     public ExecutionReport execute(Project project, Object... params) {
-        ProcessBuilder pb = new ProcessBuilder("mvn", "compile", Arrays.toString(params));
+        ProcessBuilder pb = new ProcessBuilder("mvn", "compile", params.toString());
         pb.directory(new File(project.getRootNode().getPath().toString()));
         try {
             Process process = pb.start();
