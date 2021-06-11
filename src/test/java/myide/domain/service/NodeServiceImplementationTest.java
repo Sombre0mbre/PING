@@ -71,6 +71,10 @@ class NodeServiceImplementationTest {
         assert dir2.getChildren().size() == 1;
         assert Objects.requireNonNull(dir1.getPath().toFile().listFiles()).length == 0;
         assert Objects.requireNonNull(dir2.getPath().toFile().listFiles()).length == 1;
+
+
+        file = nodeService.create(dir1, "hello", Node.Types.FILE);
+        nodeService.move(file, null);
     }
 
     @Test

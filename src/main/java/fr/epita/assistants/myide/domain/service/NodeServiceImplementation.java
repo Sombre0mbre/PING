@@ -98,7 +98,8 @@ public class NodeServiceImplementation implements NodeService {
             throw new UnsupportedOperationException("Could not create node: It could already exists");
         }
         var res = new NodeImplementation(childPath, type, folder);
-        folder.getChildren().add(res);
+        if (folder != null)
+            folder.getChildren().add(res);
         return res;
     }
 
@@ -112,16 +113,26 @@ public class NodeServiceImplementation implements NodeService {
      */
     @Override
     public Node move(Node nodeToMove, Node destinationFolder) {
+        if (destinationFolder == null)
+            throw new UnsupportedOperationException("dest is null: " + nodeToMove + " -> " + null);
         if (destinationFolder.getType() != Node.Types.FOLDER)
             throw new IllegalArgumentException("dest folder <" + destinationFolder.getPath() + "> is not a folder!");
-        var nodeFile = nodeToMove.getPath().toFile();
+        var nodeFile = nodeToMove.getPath();
+        var nodeTemp = (NodeImplementation) nodeToMove;
         try {
-            FileUtils.moveToDirectory(nodeFile, destinationFolder.getPath().toFile(), false);
+            if (nodeToMove.isFolder()) {
+                var fold = Files.createDirectory(destinationFolder.getPath().resolve(nodeToMove.getPath()));
+                ((NodeImplementation) nodeToMove).setPath(fold);
+                for (var i : nodeToMove.getChildren()) {
+                    move(i, nodeToMove);
+                }
+            } else {
+                FileUtils.moveToDirectory(nodeToMove.getPath().toFile(), destinationFolder.getPath().toFile(), false);
+            }
+
         } catch (Exception e) {
             throw new UnsupportedOperationException("Could not move directory");
         }
-        var nodeTemp = (NodeImplementation) nodeToMove;
-        nodeTemp.setPath(nodeFile.toPath());
         var parentNode = nodeTemp.getParentNode();
         if (parentNode != null)
             parentNode.getChildren().remove(nodeTemp);
