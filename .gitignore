@@ -28,7 +28,7 @@ hs_err_pid*
 .project
 .settings/
 ping-ref.iml
-
+.myIde/
 # Compile
 target/
 /.classpath

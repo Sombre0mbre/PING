@@ -1,12 +1,44 @@
 package fr.epita.assistants.myide.domain.service;
 
+import fr.epita.assistants.MyIde;
 import fr.epita.assistants.myide.domain.entity.*;
 
+import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
 public class ProjectServiceImplementation implements ProjectService {
     NodeService nodeService = new NodeServiceImplementation();
+
+    MyIde.Configuration configuration = null;
+
+    public ProjectServiceImplementation() {
+        File folder = new File(".myIde");
+        File file = new File(folder, "index");
+
+        configuration = new MyIde.Configuration(file.toPath(), folder.toPath());
+        writeConfig(configuration);
+    }
+
+    public ProjectServiceImplementation(MyIde.Configuration configuration) {
+        this.configuration = configuration;
+        writeConfig(configuration);
+    }
+
+    private void writeConfig(MyIde.Configuration configuration) {
+        // Create files/folder if not exists
+        var file = configuration.indexFile().toFile();
+        var folder = configuration.tempFolder().toFile();
+        try {
+            if (!folder.exists() || !folder.isDirectory())
+                Files.createDirectory(new File(".myIde").toPath()).toFile();
+            file.createNewFile();
+        } catch (Exception ignored) {
+        }
+        // Generate indexes for search
+        // TODO
+    }
 
     /**
      * Load a {@link Project} from a path.
