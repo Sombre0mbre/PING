@@ -16,12 +16,12 @@ public class CompileImplementation implements Feature {
      */
     @Override
     public ExecutionReport execute(Project project, Object... params) {
-        ProcessBuilder pb = new ProcessBuilder("mvn", "compile", Arrays.toString(params));
-        pb.directory(project.getRootNode().getPath().toFile());
+        ProcessBuilder pb = new ProcessBuilder("mvn", "compile", Arrays.toString(params))
+                .directory(project.getRootNode().getPath().toFile());
         try {
             Process process = pb.start();
-            int exitCode = process.waitFor();
-            if (exitCode == 0)
+            process.waitFor();
+            if (process.exitValue() == 0)
                 return () -> true;
             else
                 return () -> false;
