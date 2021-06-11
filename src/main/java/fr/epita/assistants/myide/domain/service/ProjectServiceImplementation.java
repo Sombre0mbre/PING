@@ -68,7 +68,7 @@ public class ProjectServiceImplementation implements ProjectService {
             FileRepositoryBuilder builder = new FileRepositoryBuilder();
             Repository repository;
             try {
-                repository = builder.setGitDir(new File(String.valueOf(root)))
+                repository = builder.setGitDir(root.resolve(".git").toFile())
                         .readEnvironment()
                         .findGitDir()
                         .build();
