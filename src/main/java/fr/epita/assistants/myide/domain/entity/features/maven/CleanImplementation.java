@@ -4,6 +4,9 @@ import fr.epita.assistants.myide.domain.entity.Feature;
 import fr.epita.assistants.myide.domain.entity.Mandatory;
 import fr.epita.assistants.myide.domain.entity.Project;
 
+import java.io.IOException;
+import java.util.Arrays;
+
 public class CleanImplementation implements Feature {
     /**
      * @param project {@link Project} on which the feature is executed.
@@ -12,7 +15,20 @@ public class CleanImplementation implements Feature {
      */
     @Override
     public ExecutionReport execute(Project project, Object... params) {
-        throw new UnsupportedOperationException("FIXME");
+        ProcessBuilder pb = new ProcessBuilder("mvn", "clean", Arrays.toString(params));
+        pb.directory(project.getRootNode().getPath().toFile());
+        try {
+            Process process = pb.start();
+            int exitCode = process.waitFor();
+            if (exitCode == 0)
+                return () -> true;
+            else
+                return () -> false;
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+            return () -> false;
+        }
+        //throw new UnsupportedOperationException("FIXME");
         /*
         int returnCode = exec("mvn", "compile");
         return () -> (returnCode == 0);
