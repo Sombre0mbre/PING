@@ -44,7 +44,7 @@ public class ProjectServiceImplementation implements ProjectService {
         }
         Node n = new NodeImplementation(root, Node.Types.FOLDER, null);
 
-        var aspects = new HashSet<>();
+        var aspects = new HashSet<Aspect>();
         aspects.add(new AnyAspect());
 
         // Build cache for search
@@ -65,7 +65,7 @@ public class ProjectServiceImplementation implements ProjectService {
         } catch (IOException ignored) {
         }
 
-        return new ProjectImplementation(n, Set.of(new AnyAspect()));
+        return new ProjectImplementation(n, aspects);
     }
 
     /**
