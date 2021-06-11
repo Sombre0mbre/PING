@@ -73,8 +73,6 @@ class NodeServiceImplementationTest {
         assert Objects.requireNonNull(dir2.getPath().toFile().listFiles()).length == 1;
 
 
-        file = nodeService.create(dir1, "hello", Node.Types.FILE);
-        nodeService.move(file, null);
     }
 
     @Test

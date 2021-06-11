@@ -39,6 +39,15 @@ public class NodeServiceImplementation implements NodeService {
         }
     }
 
+    public void updateChildrenPath(@NotNull Node n) {
+        if (n.isFile())
+            return;
+        for (var i : n.getChildren()) {
+            ((NodeImplementation) i).setPath(n.getPath().resolve(i.getPath().getFileName()));
+            updateChildrenPath(i);
+        }
+    }
+
     /**
      * Update the content in the range [from, to[.
      *
@@ -134,23 +143,16 @@ public class NodeServiceImplementation implements NodeService {
      */
     @Override
     public Node move(Node nodeToMove, Node destinationFolder) {
-        if (destinationFolder == null)
-            throw new UnsupportedOperationException("dest is null: " + nodeToMove + " -> " + null);
+        if (nodeToMove == null || destinationFolder == null)
+            throw new IllegalArgumentException("move between null: " + nodeToMove + " -> " + destinationFolder);
         if (destinationFolder.getType() != Node.Types.FOLDER)
             throw new IllegalArgumentException("dest folder <" + destinationFolder.getPath() + "> is not a folder!");
-        var nodeFile = nodeToMove.getPath();
         var nodeTemp = (NodeImplementation) nodeToMove;
         try {
-            if (nodeToMove.isFolder()) {
-                var fold = Files.createDirectory(destinationFolder.getPath().resolve(nodeToMove.getPath()));
-                ((NodeImplementation) nodeToMove).setPath(fold);
-                for (var i : nodeToMove.getChildren()) {
-                    move(i, nodeToMove);
-                }
-            } else {
-                FileUtils.moveToDirectory(nodeToMove.getPath().toFile(), destinationFolder.getPath().toFile(), false);
-            }
-
+            var name = nodeTemp.getPath().getFileName();
+            FileUtils.moveToDirectory(nodeTemp.getPath().toFile(), destinationFolder.getPath().toFile(), false);
+            nodeTemp.setPath(destinationFolder.getPath().resolve(name));
+            updateChildrenPath(nodeTemp);
         } catch (Exception e) {
             throw new UnsupportedOperationException("Could not move directory");
         }
