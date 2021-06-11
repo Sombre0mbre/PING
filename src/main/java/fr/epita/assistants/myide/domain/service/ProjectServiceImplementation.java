@@ -9,7 +9,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 public class ProjectServiceImplementation implements ProjectService {
-    NodeService nodeService = new NodeServiceImplementation();
+    NodeService nodeService = new NodeServiceImplementation(this);
 
     MyIde.Configuration configuration = null;
 
@@ -30,12 +30,13 @@ public class ProjectServiceImplementation implements ProjectService {
         // Create files/folder if not exists
         var file = configuration.indexFile().toFile();
         var folder = configuration.tempFolder().toFile();
-        try {
+        /* try {
             if (!folder.exists() || !folder.isDirectory())
-                Files.createDirectory(new File(".myIde").toPath()).toFile();
+                Files.createDirectory(folder.toPath()).toFile();
             file.createNewFile();
         } catch (Exception ignored) {
         }
+         */
         // Generate indexes for search
         // TODO
     }

@@ -8,8 +8,15 @@ import org.apache.commons.io.FileUtils;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
 
 public class NodeServiceImplementation implements NodeService {
+    ProjectServiceImplementation projectService;
+
+    public NodeServiceImplementation(ProjectServiceImplementation projectService) {
+        this.projectService = projectService;
+    }
+
     /**
      * Update the content in the range [from, to[.
      *
@@ -70,9 +77,15 @@ public class NodeServiceImplementation implements NodeService {
      */
     @Override
     public Node create(Node folder, String name, Node.Type type) {
-        if (!folder.isFolder())
-            throw new IllegalArgumentException("folder node <" + folder.getPath() + "> is not a folder!");
-        var childPath = folder.getPath().resolve(name);
+        Path childPath;
+        if (folder != null) {
+            if (!folder.isFolder())
+                throw new IllegalArgumentException("folder node <" + folder.getPath() + "> is not a folder!");
+            childPath = folder.getPath().resolve(name);
+        } else {
+            childPath = new File(name).toPath();
+        }
+
         try {
             if (type == Node.Types.FILE) {
                 Files.createFile(childPath);
