@@ -4,7 +4,6 @@ import fr.epita.assistants.myide.domain.entity.Mandatory;
 import fr.epita.assistants.myide.domain.entity.Project;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
-import org.eclipse.jgit.lib.Repository;
 
 public class PushImplementation extends GitFeature {
     public PushImplementation(Git git) {
@@ -26,11 +25,6 @@ public class PushImplementation extends GitFeature {
             e.printStackTrace();
             return () -> false;
         }
-        //throw new UnsupportedOperationException("FIXME");
-        /*
-        int returnCode = exec("mvn", "compile");
-        return () -> (returnCode == 0);
-        */
     }
 
     /**

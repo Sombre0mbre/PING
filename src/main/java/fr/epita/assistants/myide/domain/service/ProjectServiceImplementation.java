@@ -7,9 +7,7 @@ import fr.epita.assistants.myide.domain.entity.aspects.GitAspect;
 import fr.epita.assistants.myide.domain.entity.aspects.MavenAspect;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.lib.Repository;
-import org.eclipse.jgit.lib.RepositoryCache;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
-import org.eclipse.jgit.util.FS;
 
 import java.io.File;
 import java.io.IOException;
