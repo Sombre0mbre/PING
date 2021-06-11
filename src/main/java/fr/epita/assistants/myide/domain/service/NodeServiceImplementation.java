@@ -65,7 +65,7 @@ public class NodeServiceImplementation implements NodeService {
         try {
             var reader = Files.readString(node.getPath());
             var file = new BufferedOutputStream(new FileOutputStream(node.getPath().toFile()));
-            file.write(reader.substring(0, from + 1).getBytes());
+            file.write(reader.substring(0, from).getBytes());
             file.write(insertedContent);
             file.write(reader.substring(to).getBytes());
             file.close();
