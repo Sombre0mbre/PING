@@ -4,6 +4,7 @@ import fr.epita.assistants.MyIde;
 import fr.epita.assistants.myide.domain.entity.*;
 import fr.epita.assistants.myide.domain.entity.aspects.AnyAspect;
 import fr.epita.assistants.myide.domain.entity.aspects.GitAspect;
+import fr.epita.assistants.myide.domain.entity.aspects.MavenAspect;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 
@@ -49,6 +50,9 @@ public class ProjectServiceImplementation implements ProjectService {
         // Build cache for search
         // TODO
         // Detect Git and Maven and add it to aspects
+        File pom = new File("pom.xml");
+        if (pom.exists())
+            aspects.add(new MavenAspect());
         // TODO
         FileRepositoryBuilder builder = new FileRepositoryBuilder();
         Repository repository = null;
