@@ -19,37 +19,22 @@ public class DistImplementation implements Feature {
     private void zipDirContent(Path rootPath, File dir, ArchiveOutputStream archive) throws IOException {
         if (!dir.isDirectory())
             return;
-        StringBuilder pathStr = new StringBuilder(rootPath.relativize(dir.toPath()).toString());
-        if (!pathStr.toString().endsWith("/"))
-            pathStr.append("/");
 
-        var entry = new ZipArchiveEntry(pathStr.toString());
-        archive.putArchiveEntry(entry);
+        archive.putArchiveEntry(new ZipArchiveEntry(getName(rootPath, dir)));
         archive.closeArchiveEntry();
 
-
-
         for (var i : Objects.requireNonNull(dir.listFiles())) {
-            pathStr = new StringBuilder(rootPath.relativize(i.toPath()).toString());
-            if (i.isDirectory()) {
-                if (!pathStr.toString().endsWith("/"))
-                    pathStr.append("/");
+            archive.putArchiveEntry(new ZipArchiveEntry(getName(rootPath, i)));
 
-                entry = new ZipArchiveEntry(pathStr.toString());
-                archive.putArchiveEntry(entry);
-                archive.closeArchiveEntry();
-
-                zipDirContent(rootPath, i, archive);
-            } else {
-                entry = new ZipArchiveEntry(pathStr.toString());
-                archive.putArchiveEntry(entry);
+            if (i.isFile()) {
                 BufferedInputStream input = new BufferedInputStream(new FileInputStream(i));
-
                 IOUtils.copy(input, archive);
                 input.close();
-
-                archive.closeArchiveEntry();
             }
+
+            archive.closeArchiveEntry();
+
+            zipDirContent(rootPath, i, archive);
         }
     }
 
