@@ -5,6 +5,7 @@ import fr.epita.assistants.myide.domain.entity.Mandatory;
 import fr.epita.assistants.myide.domain.entity.Project;
 import org.apache.commons.io.FileUtils;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
@@ -12,10 +13,29 @@ import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.HashSet;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 
 public class CleanupImplementation implements Feature {
+    private void cleanup(File file, Set<String> toDelete) throws IOException {
+        if (!file.isDirectory())
+            return;
+        var files = file.listFiles();
+        if (files == null)
+            return;
+        for (var i : files) {
+            if (i.isDirectory()) {
+                cleanup(i, toDelete);
+                if (toDelete.contains(i.getName()))
+                    FileUtils.deleteDirectory(i);
+            } else if (i.isFile()) {
+                if (toDelete.contains(i.getName()))
+                    Files.delete(i.toPath());
+            }
+        }
+    }
+
     /**
      * @param project {@link Project} on which the feature is executed.
      * @param params  Parameters given to the features.
@@ -28,19 +48,7 @@ public class CleanupImplementation implements Feature {
             return () -> false;
         try {
             var lines = new HashSet<>(Files.readAllLines(ideIgnore));
-
-            Files.walkFileTree(project.getRootNode().getPath(), new SimpleFileVisitor<>() {
-                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-                    if (lines.contains(file.getFileName().toString())) {
-                        if (file.toFile().isDirectory()) {
-                            FileUtils.deleteDirectory(file.toFile());
-                        } else {
-                            Files.delete(file);
-                        }
-                    }
-                    return FileVisitResult.CONTINUE;
-                }
-            });
+            cleanup(project.getRootNode().getPath().toFile(), lines);
 
             return () -> true;
         } catch (IOException e) {
