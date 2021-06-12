@@ -21,7 +21,10 @@ public class AddImplementation extends GitFeature {
     public ExecutionReport execute(Project project, Object... params) {
 
         try {
-            git.add().addFilepattern(Arrays.toString(params)).call();
+            var add = git.add();
+            for (var param : params)
+                    add.addFilepattern(param.toString());
+            add.call();
             return () -> true;
         } catch (GitAPIException e) {
             e.printStackTrace();
