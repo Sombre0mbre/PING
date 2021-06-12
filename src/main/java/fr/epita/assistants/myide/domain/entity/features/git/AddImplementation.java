@@ -5,8 +5,6 @@ import fr.epita.assistants.myide.domain.entity.Project;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 
-import java.util.Arrays;
-
 public class AddImplementation extends GitFeature {
     public AddImplementation(Git git) {
         super(git);
@@ -23,7 +21,7 @@ public class AddImplementation extends GitFeature {
         try {
             var add = git.add();
             for (var param : params)
-                    add.addFilepattern(param.toString());
+                add.addFilepattern(param.toString());
             add.call();
             return () -> true;
         } catch (GitAPIException e) {

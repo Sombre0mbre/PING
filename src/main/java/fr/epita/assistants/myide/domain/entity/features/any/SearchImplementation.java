@@ -1,33 +1,19 @@
 package fr.epita.assistants.myide.domain.entity.features.any;
 
-import com.google.common.io.Files;
 import fr.epita.assistants.MyIde;
-import fr.epita.assistants.myide.domain.entity.*;
-import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.analysis.standard.StandardAnalyzer;
+import fr.epita.assistants.myide.domain.entity.Feature;
+import fr.epita.assistants.myide.domain.entity.Mandatory;
+import fr.epita.assistants.myide.domain.entity.Node;
+import fr.epita.assistants.myide.domain.entity.Project;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.StringField;
 import org.apache.lucene.document.TextField;
-import org.apache.lucene.index.DirectoryReader;
-import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
-import org.apache.lucene.index.IndexWriterConfig;
-import org.apache.lucene.queryparser.classic.QueryParser;
-import org.apache.lucene.search.IndexSearcher;
-import org.apache.lucene.search.Query;
-import org.apache.lucene.search.TopDocs;
-import org.apache.lucene.store.Directory;
-import org.apache.lucene.store.FSDirectory;
 
 import javax.validation.constraints.NotNull;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Arrays;
 
 public class SearchImplementation implements Feature {
 
@@ -49,7 +35,7 @@ public class SearchImplementation implements Feature {
                 var document = new Document();
 
                 document.add(new TextField("contents", fileReader));
-                document.add( new StringField("path", file.getPath(), Field.Store.YES));
+                document.add(new StringField("path", file.getPath(), Field.Store.YES));
                 document.add(new StringField("filename", file.getName(), Field.Store.YES));
 
                 writer.addDocument(document);

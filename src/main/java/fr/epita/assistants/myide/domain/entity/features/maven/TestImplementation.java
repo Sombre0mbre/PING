@@ -1,11 +1,9 @@
 package fr.epita.assistants.myide.domain.entity.features.maven;
 
-import fr.epita.assistants.myide.domain.entity.Feature;
 import fr.epita.assistants.myide.domain.entity.Mandatory;
 import fr.epita.assistants.myide.domain.entity.Project;
 import fr.epita.assistants.myide.domain.entity.features.ProcessFeature;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
