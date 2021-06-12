@@ -70,8 +70,7 @@ public class ProjectServiceImplementation implements ProjectService {
                         .readEnvironment()
                         .findGitDir()
                         .build();
-                if (repository.getObjectDatabase().exists())
-                    aspects.add(new GitAspect(new Git(repository)));
+                aspects.add(new GitAspect(new Git(repository)));
             } catch (IOException ignored) {
             }
         }
