@@ -1,9 +1,7 @@
-package myide.domain.service;
+package fr.epita.assistants.myide.domain.service;
 
 import fr.epita.assistants.myide.domain.entity.Node;
 import fr.epita.assistants.myide.domain.entity.Project;
-import fr.epita.assistants.myide.domain.service.ProjectService;
-import fr.epita.assistants.myide.domain.service.ProjectServiceImplementation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -12,7 +10,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Objects;
 
-class NodeServiceImplementationTest {
+public class NodeServiceImplementationTest {
     ProjectService projectService = new ProjectServiceImplementation();
     Project project = null;
 

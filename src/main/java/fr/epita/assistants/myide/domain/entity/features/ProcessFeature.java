@@ -8,10 +8,11 @@ import java.util.List;
 
 public interface ProcessFeature extends Feature {
     default ExecutionReport executeProcess(Project project, List<String> args) {
-        ProcessBuilder pb = new ProcessBuilder(args);
-        pb.directory(project.getRootNode().getPath().toFile());
         try {
-            Process process = pb.start();
+            var pb = new ProcessBuilder(args)
+                    .directory(project.getRootNode().getPath().toFile());
+            var process = pb.start();
+
             return () -> {
                 try {
                     process.waitFor();
@@ -21,9 +22,9 @@ public interface ProcessFeature extends Feature {
                     return false;
                 }
             };
+
         } catch (IOException e) {
             return () -> false;
         }
-
     }
 }
