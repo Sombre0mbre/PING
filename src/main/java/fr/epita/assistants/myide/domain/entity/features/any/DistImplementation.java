@@ -7,49 +7,37 @@ import org.apache.commons.compress.archivers.ArchiveException;
 import org.apache.commons.compress.archivers.ArchiveOutputStream;
 import org.apache.commons.compress.archivers.ArchiveStreamFactory;
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
 import java.io.*;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Objects;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
 
 public class DistImplementation implements Feature {
+
+
     private void zipDirContent(Path rootPath, File dir, ArchiveOutputStream archive) throws IOException {
         if (!dir.isDirectory())
             return;
 
-        var pathStr = new StringBuilder(rootPath.relativize(dir.toPath()).toString());
-        if (!pathStr.toString().endsWith("/"))
-                pathStr.append("/");
-
-        archive.putArchiveEntry(new ZipArchiveEntry(pathStr.toString()));
+        archive.putArchiveEntry(new ZipArchiveEntry(getName(rootPath, dir)));
         archive.closeArchiveEntry();
 
         for (var i : Objects.requireNonNull(dir.listFiles())) {
-            pathStr = new StringBuilder(rootPath.relativize(i.toPath()).toString());
-            if (i.isDirectory()) {
-                if (!pathStr.toString().endsWith("/"))
-                    pathStr.append("/");
+            archive.putArchiveEntry(new ZipArchiveEntry(getName(rootPath, dir)));
 
-                archive.putArchiveEntry(new ZipArchiveEntry(pathStr.toString()));
-                archive.closeArchiveEntry();
-
-                zipDirContent(rootPath, i, archive);
-            } else {
-                archive.putArchiveEntry(new ZipArchiveEntry(pathStr.toString()));
+            if (i.isFile()) {
                 BufferedInputStream input = new BufferedInputStream(new FileInputStream(i));
-
                 IOUtils.copy(input, archive);
                 input.close();
-
-                archive.closeArchiveEntry();
             }
+
+            archive.closeArchiveEntry();
+
+            zipDirContent(rootPath, i, archive);
         }
     }
+
 
 
     private String getName(Path rootPath, File i) {
