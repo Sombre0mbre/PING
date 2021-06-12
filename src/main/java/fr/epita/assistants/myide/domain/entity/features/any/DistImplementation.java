@@ -10,6 +10,7 @@ import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 import org.apache.commons.io.IOUtils;
 
 import java.io.*;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Objects;
 
@@ -26,11 +27,8 @@ public class DistImplementation implements Feature {
         for (var i : Objects.requireNonNull(dir.listFiles())) {
             archive.putArchiveEntry(new ZipArchiveEntry(getName(rootPath, i)));
 
-            if (i.isFile()) {
-                BufferedInputStream input = new BufferedInputStream(new FileInputStream(i));
-                IOUtils.copy(input, archive);
-                input.close();
-            }
+            if (i.isFile())
+                Files.copy(i.toPath(), archive);
 
             archive.closeArchiveEntry();
 

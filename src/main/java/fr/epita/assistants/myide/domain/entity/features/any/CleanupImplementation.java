@@ -26,7 +26,6 @@ public class CleanupImplementation implements Feature {
                     FileUtils.deleteDirectory(i);
                 else if (i.isFile())
                     Files.delete(i.toPath());
-
             }
         }
     }
