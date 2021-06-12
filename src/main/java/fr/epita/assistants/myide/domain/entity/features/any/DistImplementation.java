@@ -24,13 +24,12 @@ public class DistImplementation implements Feature {
      */
     @Override
     public ExecutionReport execute(Project project, Object... params) {
-        /*
+
         var cleanup = new CleanupImplementation();
         var got = cleanup.execute(project);
         if (!got.isSuccess())
             return got;
 
-         */
 
         var rootPath = project.getRootNode().getPath();
         var name = params.length > 0 ?
