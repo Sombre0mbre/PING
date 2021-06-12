@@ -45,7 +45,7 @@ public class ProjectServiceImplementation implements ProjectService {
         Node n = new NodeImplementation(root, Node.Types.FOLDER, null);
         nodeService.generateChildren(n);
         var aspects = new HashSet<Aspect>();
-        aspects.add(new AnyAspect());
+        aspects.add(new AnyAspect(configuration));
 
         // Build cache for search
         // TODO

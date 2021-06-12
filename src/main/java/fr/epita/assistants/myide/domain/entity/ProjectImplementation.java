@@ -1,5 +1,6 @@
 package fr.epita.assistants.myide.domain.entity;
 
+import fr.epita.assistants.MyIde;
 import fr.epita.assistants.myide.domain.entity.aspects.AnyAspect;
 
 import java.util.Optional;
@@ -10,9 +11,9 @@ public class ProjectImplementation implements Project {
     Node rootNode;
     Set<Aspect> aspects;
 
-    public ProjectImplementation(Node rootNode) {
+    public ProjectImplementation(Node rootNode, MyIde.Configuration configuration) {
         this.rootNode = rootNode;
-        this.aspects = Set.of(new AnyAspect());
+        this.aspects = Set.of(new AnyAspect(configuration));
     }
 
     public ProjectImplementation(Node rootNode, Set<Aspect> aspects) {
