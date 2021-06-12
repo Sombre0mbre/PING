@@ -35,7 +35,7 @@ public class DistImplementation implements Feature {
         var rootPath = project.getRootNode().getPath();
         var name = params.length > 0 ?
                 params[0].toString() :
-                project.getRootNode().getPath().getFileName().toString();
+                project.getRootNode().getPath().getFileName().toString() + ".zip";
         var zipPath = project.getRootNode().getPath().resolve(name);
         try {
             var outputStream = new FileOutputStream(zipPath.toFile());

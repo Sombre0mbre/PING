@@ -31,4 +31,11 @@ public class AnyAspect implements Aspect {
     public Type getType() {
         return Mandatory.Aspects.ANY;
     }
+
+    @Override
+    public String toString() {
+        return "AnyAspect{" +
+                "configuration=" + configuration +
+                '}';
+    }
 }

@@ -25,4 +25,9 @@ public class MavenAspect implements Aspect {
     public Type getType() {
         return Mandatory.Aspects.MAVEN;
     }
+
+    @Override
+    public String toString() {
+        return "MavenAspect{}";
+    }
 }

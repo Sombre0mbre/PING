@@ -67,8 +67,8 @@ public class NodeImplementation implements Node {
     @Override
     public String toString() {
         return "NodeImplementation{" +
-                "path=" + path +
-                ", type=" + type +
-                '}';
+                "path=<" + path +
+                ">, type=<" + type +
+                ">}";
     }
 }

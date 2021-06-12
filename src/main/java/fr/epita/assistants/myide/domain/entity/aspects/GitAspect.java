@@ -34,4 +34,11 @@ public class GitAspect implements Aspect {
     public Type getType() {
         return Mandatory.Aspects.GIT;
     }
+
+    @Override
+    public String toString() {
+        return "GitAspect{" +
+                "git=" + git +
+                '}';
+    }
 }

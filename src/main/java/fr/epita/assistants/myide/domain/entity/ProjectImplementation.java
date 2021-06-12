@@ -62,7 +62,7 @@ public class ProjectImplementation implements Project {
         aspects.forEach((n) -> array.add(n.toString()));
         return "ProjectImplementation{\n" +
                 "\trootNode=" + rootNode +
-                ", \n\taspects=" + array +
+                ",\n\taspects=" + array +
                 "\n}";
     }
 }

@@ -13,10 +13,10 @@ class DistImplementationTest {
     @Test
     void execute() throws IOException {
         var project = new ProjectServiceImplementationTest().setUpDummy();
-        System.out.println("Root: " + project.getRootNode());
+        System.out.println(project);
         var feature = project.getFeature(Mandatory.Features.Any.DIST);
         assert feature.isPresent();
-        assert feature.get().execute(project, "test.zip").isSuccess();
+        assert feature.get().execute(project).isSuccess();
 
     }
 }
