@@ -14,11 +14,31 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.util.Objects;
 import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 public class DistImplementation implements Feature {
+    private void zipFunc(Path rootPath, File file, ZipOutputStream zipOutputStream) throws IOException {
+        if (!file.isDirectory())
+            return;
+
+        for (var i : Objects.requireNonNull(file.listFiles())) {
+            if (i.isDirectory()) {
+                zipOutputStream.putNextEntry(new ZipEntry(i.getName() + (i.getName().endsWith("/") ? "" : "/")));
+                zipOutputStream.closeEntry();
+                zipFunc(rootPath, i, zipOutputStream);
+
+            } else if (i.isFile()) {
+                zipOutputStream.putNextEntry(new ZipEntry(rootPath.relativize(i.toPath()).toString()));
+                Files.copy(i.toPath(), zipOutputStream);
+                zipOutputStream.closeEntry();
+            }
+
+        }
+    }
+
 
     /**
      * @param project {@link Project} on which the feature is executed.
@@ -42,14 +62,8 @@ public class DistImplementation implements Feature {
         try {
             var outputStream = new FileOutputStream(zipPath.toFile());
             var zipOutputStream = new ZipOutputStream(outputStream);
-            Files.walkFileTree(rootPath, new SimpleFileVisitor<>() {
-                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-                    zipOutputStream.putNextEntry(new ZipEntry(rootPath.relativize(file).toString()));
-                    Files.copy(file, zipOutputStream);
-                    zipOutputStream.closeEntry();
-                    return FileVisitResult.CONTINUE;
-                }
-            });
+
+            zipFunc(rootPath, rootPath.toFile(), zipOutputStream);
             zipOutputStream.close();
             return () -> true;
         } catch (IOException e) {

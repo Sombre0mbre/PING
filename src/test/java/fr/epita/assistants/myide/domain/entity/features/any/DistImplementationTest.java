@@ -16,6 +16,7 @@ class DistImplementationTest {
         var project = new ProjectServiceImplementationTest().setUpDummy();
         System.out.println(project);
         Files.createFile(project.getRootNode().getPath().resolve(".myideignore"));
+        Files.createDirectory(project.getRootNode().getPath().resolve("empty"));
         var feature = project.getFeature(Mandatory.Features.Any.DIST);
         assert feature.isPresent();
         assert feature.get().execute(project).isSuccess();
