@@ -22,20 +22,25 @@ public class DistImplementation implements Feature {
         if (!dir.isDirectory())
             return;
 
+        var pathStr = new StringBuilder(rootPath.relativize(dir.toPath()).toString());
+        if (!pathStr.toString().endsWith("/"))
+                pathStr.append("/");
+
+        archive.putArchiveEntry(new ZipArchiveEntry(pathStr.toString()));
+        archive.closeArchiveEntry();
+
         for (var i : Objects.requireNonNull(dir.listFiles())) {
-            StringBuilder pathStr = new StringBuilder(rootPath.relativize(i.toPath()).toString());
+            pathStr = new StringBuilder(rootPath.relativize(i.toPath()).toString());
             if (i.isDirectory()) {
                 if (!pathStr.toString().endsWith("/"))
                     pathStr.append("/");
 
-                ZipArchiveEntry entry = new ZipArchiveEntry(pathStr.toString());
-                archive.putArchiveEntry(entry);
+                archive.putArchiveEntry(new ZipArchiveEntry(pathStr.toString()));
                 archive.closeArchiveEntry();
 
                 zipDirContent(rootPath, i, archive);
             } else {
-                ZipArchiveEntry entry = new ZipArchiveEntry(pathStr.toString());
-                archive.putArchiveEntry(entry);
+                archive.putArchiveEntry(new ZipArchiveEntry(pathStr.toString()));
                 BufferedInputStream input = new BufferedInputStream(new FileInputStream(i));
 
                 IOUtils.copy(input, archive);
@@ -77,7 +82,7 @@ public class DistImplementation implements Feature {
             var outputStream = new FileOutputStream(zipPath.toFile());
             var archive = new ArchiveStreamFactory().createArchiveOutputStream(ArchiveStreamFactory.ZIP, outputStream);
 
-            zipDirContent(rootPath, rootPath.toFile(), archive);
+            zipDirContent(rootPath.getParent(), rootPath.toFile(), archive);
 
             archive.finish();
             outputStream.close();
