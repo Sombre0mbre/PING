@@ -26,7 +26,7 @@ public class DistImplementation implements Feature {
         for (var i : Objects.requireNonNull(dir.listFiles())) {
             archive.putArchiveEntry(new ZipArchiveEntry(getName(rootPath, i)));
 
-            if (i.isFile()) {
+            if (!i.isDirectory()) {
                 BufferedInputStream input = new BufferedInputStream(new FileInputStream(i));
                 IOUtils.copy(input, archive);
                 input.close();
