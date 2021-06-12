@@ -12,8 +12,8 @@ import static org.junit.jupiter.api.Assertions.*;
 class DistImplementationTest {
 
     @Test
-    void execute() throws IOException {
-        var project = new ProjectServiceImplementationTest().setUpDummy();
+    void execute() throws IOException, InterruptedException {
+        var project = new ProjectServiceImplementationTest().setUpGit();
         System.out.println(project);
         Files.createFile(project.getRootNode().getPath().resolve(".myideignore"));
         Files.createDirectory(project.getRootNode().getPath().resolve("empty"));

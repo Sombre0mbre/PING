@@ -3,39 +3,37 @@ package fr.epita.assistants.myide.domain.entity.features.any;
 import fr.epita.assistants.myide.domain.entity.Feature;
 import fr.epita.assistants.myide.domain.entity.Mandatory;
 import fr.epita.assistants.myide.domain.entity.Project;
-import org.apache.commons.io.FileUtils;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.SimpleFileVisitor;
-import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Objects;
-import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 public class DistImplementation implements Feature {
-    private void zipFunc(Path rootPath, File file, ZipOutputStream zipOutputStream) throws IOException {
-        if (!file.isDirectory())
+    private void zipDirContent(Path rootPath, File dir, ZipOutputStream zipOutputStream) throws IOException {
+        if (!dir.isDirectory())
             return;
 
-        for (var i : Objects.requireNonNull(file.listFiles())) {
+        for (var i : Objects.requireNonNull(dir.listFiles())) {
+            Path name;
             if (i.isDirectory()) {
-                zipOutputStream.putNextEntry(new ZipEntry(i.getName() + (i.getName().endsWith("/") ? "" : "/")));
-                zipOutputStream.closeEntry();
-                zipFunc(rootPath, i, zipOutputStream);
+                StringBuilder pathStr = new StringBuilder(rootPath.relativize(i.toPath()).toString());
+                if (!pathStr.toString().endsWith("/"))
+                    pathStr.append("/");
 
+                zipOutputStream.putNextEntry(new ZipEntry(pathStr.toString()));
+                zipOutputStream.closeEntry();
+
+                zipDirContent(rootPath, i, zipOutputStream);
             } else if (i.isFile()) {
                 zipOutputStream.putNextEntry(new ZipEntry(rootPath.relativize(i.toPath()).toString()));
                 Files.copy(i.toPath(), zipOutputStream);
                 zipOutputStream.closeEntry();
             }
-
         }
     }
 
@@ -63,10 +61,12 @@ public class DistImplementation implements Feature {
             var outputStream = new FileOutputStream(zipPath.toFile());
             var zipOutputStream = new ZipOutputStream(outputStream);
 
-            zipFunc(rootPath, rootPath.toFile(), zipOutputStream);
+            zipDirContent(rootPath, rootPath.toFile(), zipOutputStream);
+
             zipOutputStream.close();
             return () -> true;
         } catch (IOException e) {
+            e.printStackTrace();
             return () -> false;
         }
 

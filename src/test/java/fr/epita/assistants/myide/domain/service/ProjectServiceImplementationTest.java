@@ -35,21 +35,28 @@ public class ProjectServiceImplementationTest {
 
     public Project setUpGit() throws IOException, InterruptedException {
         var pb = new ProcessBuilder("git", "init");
-        var root = Files.createTempDirectory("IDE_TEST_GIT_");
-        pb.directory(root.toFile());
+        var dir = Files.createTempDirectory("IDE_TEST_GIT_");
+        pb.directory(dir.toFile());
         pb.inheritIO();
         var proc = pb.start();
+
+        var sub = Files.createDirectory(dir.resolve("test"));
+        for (int i = 0; i < 10; i++)
+            Files.createFile(sub.resolve("Test_" + i + ".txt"));
+
         proc.waitFor();
         var service = new ProjectServiceImplementation();
-        return service.load(root);
+        return service.load(dir);
     }
 
     public Project setUpMaven() throws IOException {
-        var root = Files.createTempDirectory("IDE_TEST_GIT_");
-        Files.createFile(root.resolve("pom.xml"));
-
+        var dir = Files.createTempDirectory("IDE_TEST_GIT_");
+        Files.createFile(dir.resolve("pom.xml"));
+        var sub = Files.createDirectory(dir.resolve("test"));
+        for (int i = 0; i < 10; i++)
+            Files.createFile(sub.resolve("Test_" + i + ".txt"));
         var service = new ProjectServiceImplementation();
-        return service.load(root);
+        return service.load(dir);
     }
 
     @Test
