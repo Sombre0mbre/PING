@@ -7,15 +7,9 @@ import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.SimpleFileVisitor;
-import java.nio.file.attribute.BasicFileAttributes;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.zip.ZipEntry;
 
 public class CleanupImplementation implements Feature {
     private void cleanup(File file, Set<String> toDelete) throws IOException {
@@ -25,13 +19,14 @@ public class CleanupImplementation implements Feature {
         if (files == null)
             return;
         for (var i : files) {
-            if (i.isDirectory()) {
-                cleanup(i, toDelete);
-                if (toDelete.contains(i.getName()))
+            cleanup(i, toDelete);
+
+            if (toDelete.contains(i.getName())) {
+                if (i.isDirectory())
                     FileUtils.deleteDirectory(i);
-            } else if (i.isFile()) {
-                if (toDelete.contains(i.getName()))
+                else if (i.isFile())
                     Files.delete(i.toPath());
+
             }
         }
     }
