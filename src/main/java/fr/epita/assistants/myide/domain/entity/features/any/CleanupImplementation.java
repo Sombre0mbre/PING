@@ -9,16 +9,15 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 public class CleanupImplementation implements Feature {
     private void cleanup(File file, Set<String> toDelete) throws IOException {
         if (!file.isDirectory())
             return;
-        var files = file.listFiles();
-        if (files == null)
-            return;
-        for (var i : files) {
+
+        for (var i : Objects.requireNonNull(file.listFiles())) {
             cleanup(i, toDelete);
 
             if (toDelete.contains(i.getName())) {

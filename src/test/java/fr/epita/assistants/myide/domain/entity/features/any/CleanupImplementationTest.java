@@ -10,8 +10,6 @@ import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
 import java.util.Objects;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class CleanupImplementationTest {
     @Test
     void execute() throws IOException {
@@ -24,7 +22,7 @@ class CleanupImplementationTest {
         var ide = project.getRootNode().getPath().resolve(".myideignore").toFile();
         Files.write(ide.toPath(), "toto.txt\n".getBytes(), StandardOpenOption.CREATE_NEW);
         assert feature.get().execute(project).isSuccess();
-        var root =project.getRootNode().getPath().toFile();
+        var root = project.getRootNode().getPath().toFile();
         for (File file : Objects.requireNonNull(root.listFiles())) {
             System.out.println(file);
         }
