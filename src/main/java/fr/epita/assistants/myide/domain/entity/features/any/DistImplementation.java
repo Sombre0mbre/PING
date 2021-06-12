@@ -24,20 +24,26 @@ public class DistImplementation implements Feature {
      */
     @Override
     public ExecutionReport execute(Project project, Object... params) {
+        /*
         var cleanup = new CleanupImplementation();
         var got = cleanup.execute(project);
         if (!got.isSuccess())
             return got;
 
+         */
+
         var rootPath = project.getRootNode().getPath();
         var name = params.length > 0 ?
                 params[0].toString() :
                 project.getRootNode().getPath().getFileName().toString();
-
+        var zipPath = project.getRootNode().getPath().resolve(name);
         try {
-            var zipOutputStream = new ZipOutputStream(new FileOutputStream(name));
+            var outputStream = new FileOutputStream(zipPath.toFile());
+            var zipOutputStream = new ZipOutputStream(outputStream);
             Files.walkFileTree(rootPath, new SimpleFileVisitor<>() {
                 public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                    if (file.equals(zipPath))
+                        return FileVisitResult.CONTINUE;
                     zipOutputStream.putNextEntry(new ZipEntry(rootPath.relativize(file).toString()));
                     Files.copy(file, zipOutputStream);
                     zipOutputStream.closeEntry();
