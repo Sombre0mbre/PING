@@ -9,12 +9,14 @@ public class Main {
         var mainFrame = new JFrame("myIDE");
         mainFrame.setContentPane(new MyIdeGui().mainPanel);
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        /*
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception e) {
             e.printStackTrace();
             System.err.println("Continuing with default value");
         }
+         */
         mainFrame.pack();
         mainFrame.setVisible(true);
     }
