@@ -27,8 +27,10 @@ public class ProjectServiceImplementationTest {
     public Project setUpDummy() throws IOException {
         var dir = Files.createTempDirectory("IDE_TEST_DUMMY_");
         var sub = Files.createDirectory(dir.resolve("test"));
-        for (int i = 0; i < 10; i++)
-            Files.createFile(sub.resolve("Test_" + i + ".txt"));
+        for (int i = 0; i < 10; i++) {
+            final var str = "Test_" + i + ".txt";
+            Files.write(sub.resolve(str), str.getBytes());
+        }
         var service = new ProjectServiceImplementation();
         return service.load(dir);
     }

@@ -23,7 +23,13 @@ public class ProjectServiceImplementation implements ProjectService {
     public ProjectServiceImplementation() {
         File folder = new File(".myIde");
         File file = new File(folder, "index");
-
+        try {
+            if (!folder.isDirectory())
+                Files.createDirectory(folder.toPath());
+            if (!file.isFile())
+                Files.createFile(file.toPath());
+        }
+        catch (Exception ignored) {}
         configuration = new MyIde.Configuration(file.toPath(), folder.toPath());
     }
 
