@@ -124,7 +124,7 @@
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>0.0.6</version>
                 <configuration>
-                    <mainClass>fr.epita.assistants.myide.domain.gui2.launch</mainClass>
+                    <mainClass>fr.epita.assistants.Main</mainClass>
                 </configuration>
             </plugin>
         </plugins>

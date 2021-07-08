@@ -1,4 +1,4 @@
-package fr.epita.assistants.myide.domain.gui2;
+package fr.epita.assistants.myide.domain.javafx;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -6,8 +6,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import java.io.File;
-import java.net.URL;
+import java.util.Objects;
 
 
 public class launch extends Application {
@@ -18,8 +17,9 @@ public class launch extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        URL url = new File("src/main/java/fr/epita/assistants/myide/domain/gui2/gui.fxml").toURI().toURL();
-        Parent root = FXMLLoader.load(url);
+
+        // IDE Window
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("fxml/gui.fxml")));
         primaryStage.setTitle("MyIDE");
         Scene scene = new Scene(root, 800, 500);
         primaryStage.setScene(scene);
