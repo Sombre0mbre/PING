@@ -9,7 +9,7 @@ import javafx.stage.Stage;
 import java.util.Objects;
 
 
-public class launch2 extends Application {
+public class ApplicationMain extends Application {
 
     public static void main(String[] args) {
         launch(args);

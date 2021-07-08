@@ -1,11 +1,7 @@
 package fr.epita.assistants;
 
 import com.formdev.flatlaf.FlatDarkLaf;
-import com.formdev.flatlaf.FlatLightLaf;
-import fr.epita.assistants.myide.domain.gui.MyIdeGui;
-import fr.epita.assistants.myide.domain.javafx.launch2;
-
-import javax.swing.*;
+import fr.epita.assistants.myide.domain.javafx.ApplicationMain;
 
 public class Main {
     public static void main(String[] args) {
@@ -23,6 +19,6 @@ public class Main {
         mainFrame.pack();
         mainFrame.setVisible(true);
         */
-        launch2.main(args);
+        ApplicationMain.main(args);
     }
 }
