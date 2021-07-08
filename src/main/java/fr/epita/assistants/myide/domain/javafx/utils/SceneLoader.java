@@ -20,7 +20,7 @@ public class SceneLoader {
         ((GuiController) fxmlLoader.getController()).setProject(project);
         stage.setScene(scene);
         stage.setResizable(true);
-        stage.setMaximized(true);
+        stage.centerOnScreen();
         stage.show();
     }
 
