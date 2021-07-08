@@ -28,7 +28,7 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Button fx:id="browseButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="82.0" text="Parcourir" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+                  <Button fx:id="browseButton" mnemonicParsing="false" onAction="#browseFiles" prefHeight="25.0" prefWidth="82.0" text="Parcourir" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
                   <TextField fx:id="projectLocationField" GridPane.hgrow="ALWAYS" />
                </children>
                <GridPane.margin>
@@ -45,13 +45,29 @@
                   <Insets left="20.0" right="20.0" top="10.0" />
                </GridPane.margin>
             </Label>
-            <Button fx:id="createProjectButton" mnemonicParsing="false" text="Créer le projet" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER">
+            <FlowPane alignment="CENTER" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER">
                <GridPane.margin>
                   <Insets bottom="20.0" left="20.0" right="20.0" top="60.0" />
                </GridPane.margin>
-               <padding>
-                  <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
-               </padding></Button>
+               <children>
+                  <Button fx:id="cancelButton" cancelButton="true" mnemonicParsing="false" onAction="#cancelAction" text="Annuler">
+                     <padding>
+                        <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                     </padding>
+                     <FlowPane.margin>
+                        <Insets left="20.0" right="20.0" />
+                     </FlowPane.margin>
+                  </Button>
+                  <Button fx:id="createProjectButton" disable="true" mnemonicParsing="false" onAction="#createNewProject" text="Créer le projet">
+                     <padding>
+                        <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                     </padding>
+                     <FlowPane.margin>
+                        <Insets left="20.0" right="20.0" />
+                     </FlowPane.margin>
+                  </Button>
+               </children>
+            </FlowPane>
             <FlowPane alignment="TOP_CENTER" columnHalignment="CENTER" hgap="5.0" vgap="5.0" GridPane.rowIndex="1">
                <children>
                   <Label text="Nom du projet">

@@ -102,7 +102,6 @@ public class SearchImplementation implements Feature {
             var writer = new IndexWriter(directory, config);
 
             generateIndexes(project.getRootNode(), writer);
-            System.out.println(writer);
 
             String fieldString;
             String queryString;
@@ -125,9 +124,7 @@ public class SearchImplementation implements Feature {
             Query query = new QueryParser(fieldString, analyzer)
                     .parse(queryString);
 
-            TopDocs topDocs = searcher.search(query, 10);
-            System.out.println(query);
-            System.out.println(topDocs.totalHits);
+            TopDocs topDocs = searcher.search(query, 1000);
 
             var res = Arrays.stream(topDocs.scoreDocs)
                     .map(scoreDoc -> {

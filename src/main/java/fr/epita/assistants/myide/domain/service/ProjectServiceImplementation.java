@@ -85,6 +85,14 @@ public class ProjectServiceImplementation implements ProjectService {
         return new ProjectImplementation(n, aspects);
     }
 
+    public Project create(Path root) throws IOException {
+        if (root.toFile().isDirectory())
+            throw new IllegalArgumentException("Path already exists");
+
+        var path = Files.createDirectory(root);
+        return load(path);
+    }
+
     /**
      * Execute the given feature on the given project.
      *
