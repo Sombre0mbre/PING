@@ -1,19 +1,26 @@
 package fr.epita.assistants.myide.domain.javafx;
 
+import com.sun.javafx.scene.SceneEventDispatcher;
 import fr.epita.assistants.myide.domain.entity.Project;
 import fr.epita.assistants.myide.domain.javafx.utils.Icons;
+import fr.epita.assistants.myide.domain.javafx.utils.SceneLoader;
+import javafx.event.ActionEvent;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 
+import java.io.IOException;
+
 public class GuiController {
     public final int treeImageHeight = 20;
 
     public AnchorPane mainAnchor;
     public TreeView<fr.epita.assistants.myide.domain.entity.Node> treeView;
+    public Button tutorialButton;
 
     Project project;
 
@@ -71,4 +78,7 @@ public class GuiController {
         System.err.println("Not implemented: open " + node);
     }
 
+    public void startTutorial(ActionEvent actionEvent) throws IOException {
+        SceneLoader.loadTutorial();
+    }
 }

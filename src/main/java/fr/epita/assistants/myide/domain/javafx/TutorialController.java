@@ -1,5 +1,7 @@
 package fr.epita.assistants.myide.domain.javafx;
 
+import fr.epita.assistants.myide.domain.javafx.utils.TutorialElement;
+import fr.epita.assistants.myide.domain.javafx.utils.TutorialArrays;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -13,31 +15,35 @@ public class TutorialController {
     public Button mavenButton;
     public TextArea tutorialText;
 
-    final String[] gitButtonsNames = {"Push", "Pull", "Add", "Commit"};
-    final String[] mavenButtonsNames = {"Compile", "Clean", "Exec", "Install", "Package", "Test", "Tree"};
-    final String[] javaButtonsNames = {"if", "Boucles", "Fonctions", "Classes"};
-
     @FXML
     public void initialize() {
         tutorialText.setText("");
+        flowPane.getChildren().clear();
+        flowPane.setHgap(20);
+
     }
 
     public void gitButtonAction(ActionEvent actionEvent) {
-
+        setFlowPaneFromArray(TutorialArrays.gitButtonsNames);
     }
 
     public void mavenButtonAction(ActionEvent actionEvent) {
+        setFlowPaneFromArray(TutorialArrays.mavenButtonsNames);
     }
 
     public void javaButtonAction(ActionEvent actionEvent) {
+        setFlowPaneFromArray(TutorialArrays.javaButtonsNames);
     }
 
-    private void setFlowPaneFromArray(String[] array) {
+    private void setFlowPaneFromArray(TutorialElement[] array) {
         flowPane.getChildren().clear();
         for (var i : array) {
-            var button = new Button(i);
+            var button = new Button(i.title);
+
+            button.setOnAction((event) -> tutorialText.setText(i.textData));
 
             flowPane.getChildren().add(button);
+
         }
     }
 

@@ -38,8 +38,11 @@
                   <Insets />
                </opaqueInsets>
             </FlowPane>
-            <FlowPane fx:id="flowPane" alignment="CENTER" minHeight="20.0" GridPane.rowIndex="1" />
-            <TextArea fx:id="tutorialText" prefHeight="200.0" prefWidth="200.0" text="Text of the tutorial" GridPane.rowIndex="2" />
+            <FlowPane fx:id="flowPane" alignment="CENTER" minHeight="40.0" GridPane.rowIndex="1">
+               <opaqueInsets>
+                  <Insets top="10.0" />
+               </opaqueInsets></FlowPane>
+            <TextArea fx:id="tutorialText" editable="false" text="Text of the tutorial" GridPane.rowIndex="2" />
          </children>
       </GridPane>
    </children>

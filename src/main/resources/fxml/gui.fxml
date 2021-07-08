@@ -51,7 +51,7 @@
               </MenuBar>
          </center>
          <right>
-            <Button mnemonicParsing="false" text="Tutorial" BorderPane.alignment="CENTER" />
+            <Button fx:id="tutorialButton" mnemonicParsing="false" onAction="#startTutorial" text="Tutorial" BorderPane.alignment="CENTER" />
          </right>
       </BorderPane>
         <SplitPane dividerPositions="0.15" prefHeight="160.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="26.0">

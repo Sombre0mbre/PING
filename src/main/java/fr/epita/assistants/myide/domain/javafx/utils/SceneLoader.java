@@ -41,4 +41,22 @@ public class SceneLoader {
         stage.setResizable(false);
         stage.show();
     }
+
+    public static void loadTutorial() throws IOException {
+        var fxmlLoader = new FXMLLoader(Objects.requireNonNull(SceneLoader.class.getClassLoader().getResource("fxml/tutorial.fxml")));
+        Parent gui = fxmlLoader.load();
+        Scene scene = new Scene(gui);
+
+        Stage newWindow = new Stage();
+        newWindow.setTitle("Second Stage");
+        newWindow.setScene(scene);
+
+        // Set position of second window, related to primary window.
+        newWindow.centerOnScreen();
+
+        newWindow.show();
+
+        newWindow.setResizable(false);
+        newWindow.show();
+    }
 }
