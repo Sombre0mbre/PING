@@ -1,19 +1,16 @@
 package fr.epita.assistants.myide.domain.javafx;
 
 import fr.epita.assistants.myide.domain.javafx.utils.SceneLoader;
-import fr.epita.assistants.myide.domain.service.ProjectService;
 import fr.epita.assistants.myide.domain.service.ProjectServiceImplementation;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.DirectoryChooser;
-import javafx.stage.PopupWindow;
 import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
 
 public class NewProjectController {
     public Button browseButton;
@@ -52,9 +49,6 @@ public class NewProjectController {
 
     public void updateCreateButton() {
         var tmp = new File(projectLocationField.getText());
-        if (tmp.isDirectory() && !projectNameField.getText().isBlank() && !tmp.toPath().resolve(projectNameField.getText()).toFile().isDirectory())
-            createProjectButton.setDisable(false);
-        else
-            createProjectButton.setDisable(true);
+        createProjectButton.setDisable(!tmp.isDirectory() || projectNameField.getText().isBlank() || tmp.toPath().resolve(projectNameField.getText()).toFile().isDirectory());
     }
 }

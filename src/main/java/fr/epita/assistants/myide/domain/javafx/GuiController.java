@@ -1,6 +1,5 @@
 package fr.epita.assistants.myide.domain.javafx;
 
-import fr.epita.assistants.myide.domain.entity.NodeImplementation;
 import fr.epita.assistants.myide.domain.entity.Project;
 import fr.epita.assistants.myide.domain.javafx.utils.Icons;
 import javafx.scene.Node;
@@ -9,9 +8,6 @@ import javafx.scene.control.TreeView;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.stage.Stage;
-
-import java.util.stream.Collectors;
 
 public class GuiController {
     public final int treeImageHeight = 20;

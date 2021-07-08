@@ -2,8 +2,6 @@ package fr.epita.assistants.myide.domain.javafx.utils;
 
 import javafx.scene.image.Image;
 
-import javax.swing.*;
-import javax.swing.text.html.ImageView;
 import java.util.Objects;
 
 public class Icons {

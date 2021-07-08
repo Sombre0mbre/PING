@@ -28,8 +28,8 @@ public class ProjectServiceImplementation implements ProjectService {
                 Files.createDirectory(folder.toPath());
             if (!file.isFile())
                 Files.createFile(file.toPath());
+        } catch (Exception ignored) {
         }
-        catch (Exception ignored) {}
         configuration = new MyIde.Configuration(file.toPath(), folder.toPath());
     }
 

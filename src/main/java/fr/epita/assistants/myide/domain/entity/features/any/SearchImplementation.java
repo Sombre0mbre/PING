@@ -1,6 +1,5 @@
 package fr.epita.assistants.myide.domain.entity.features.any;
 
-import com.fasterxml.jackson.databind.ser.impl.IndexedListSerializer;
 import fr.epita.assistants.MyIde;
 import fr.epita.assistants.myide.domain.entity.Feature;
 import fr.epita.assistants.myide.domain.entity.Mandatory;
@@ -19,22 +18,15 @@ import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TopDocs;
-import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 
 import javax.validation.constraints.NotNull;
 import java.io.FileReader;
 import java.io.IOException;
-import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
 
 public class SearchImplementation implements Feature {
-
-    interface SearchReport extends ExecutionReport {
-        List<Document> getResult();
-    }
 
     final SearchReport failedSearch = new SearchReport() {
         @Override
@@ -47,7 +39,6 @@ public class SearchImplementation implements Feature {
             return false;
         }
     };
-
     final MyIde.Configuration configuration;
 
     public SearchImplementation(MyIde.Configuration configuration) {
@@ -60,30 +51,29 @@ public class SearchImplementation implements Feature {
         var files = folder.getChildren();
 
         for (var n : files) {
-                try {
-                    var file = n.getPath().toFile();
-                    var document = new Document();
+            try {
+                var file = n.getPath().toFile();
+                var document = new Document();
 
-                    document.add(new StringField("path", file.getPath(), Field.Store.YES));
-                    document.add(new TextField("filename", file.getName(), Field.Store.YES));
+                document.add(new StringField("path", file.getPath(), Field.Store.YES));
+                document.add(new TextField("filename", file.getName(), Field.Store.YES));
 
-                    if (n.isFile()) {
-                        var fileReader = new FileReader(file);
-                        document.add(new TextField("contents", fileReader));
+                if (n.isFile()) {
+                    var fileReader = new FileReader(file);
+                    document.add(new TextField("contents", fileReader));
 
-                        writer.addDocument(document);
-                        fileReader.close();
-                    }
-                    else {
-                        writer.addDocument(document);
-                    }
-
-
-                } catch (IOException e) {
-                    System.err.println("Failed indexing for " + n.getPath());
-                    continue;
+                    writer.addDocument(document);
+                    fileReader.close();
+                } else {
+                    writer.addDocument(document);
                 }
-                generateIndexes(n, writer);
+
+
+            } catch (IOException e) {
+                System.err.println("Failed indexing for " + n.getPath());
+                continue;
+            }
+            generateIndexes(n, writer);
 
         }
     }
@@ -159,5 +149,9 @@ public class SearchImplementation implements Feature {
     @Override
     public Type type() {
         return Mandatory.Features.Any.SEARCH;
+    }
+
+    interface SearchReport extends ExecutionReport {
+        List<Document> getResult();
     }
 }

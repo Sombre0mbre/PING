@@ -1,16 +1,14 @@
 package fr.epita.assistants.myide.domain.gui;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class MyIdeGui {
+    public JPanel mainPanel;
     private JButton ouvrirButton;
     private JButton tutorielButton;
     private JButton gitButton;
     private JTree tree1;
     private JTextArea textArea1;
-    public JPanel mainPanel;
     private JButton mavenButton;
     private JButton autresButton;
     private JButton enregistrerButton;
