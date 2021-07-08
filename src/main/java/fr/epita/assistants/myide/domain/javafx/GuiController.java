@@ -7,27 +7,28 @@ import javafx.scene.Node;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import java.util.stream.Collectors;
 
 public class GuiController {
+    public final int treeImageHeight = 20;
 
     public AnchorPane mainAnchor;
     public TreeView<fr.epita.assistants.myide.domain.entity.Node> treeView;
 
-    public final int treeImageHeight = 20;
-
-
     Project project;
 
+
+    // Project management {
     public void setProject(Project project) {
         this.project = project;
         updateTree();
     }
 
-    private void updateTree() {
+    public void updateTree() {
         final var node = project.getRootNode();
 
         var root = new TreeItem<>(node);
@@ -62,4 +63,16 @@ public class GuiController {
 
         return imageView;
     }
+    // } End of project management
+
+
+    public void treeSelectClickEvent(MouseEvent mouseEvent) {
+        var node = treeView.getSelectionModel().getSelectedItem().getValue();
+        if (node.isFolder())
+            return;
+
+        // TODO - Load node into the textView
+        System.err.println("Not implemented: open " + node);
+    }
+
 }
