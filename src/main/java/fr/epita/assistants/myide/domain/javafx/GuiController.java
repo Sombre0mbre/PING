@@ -7,6 +7,8 @@ import javafx.scene.control.TreeView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
+import java.util.stream.Collectors;
+
 public class GuiController {
 
     public AnchorPane mainAnchor;
@@ -16,22 +18,26 @@ public class GuiController {
 
     public void setProject(Project project) {
         this.project = project;
+        updateTree();
     }
 
-    // the initialize method is automatically invoked by the FXMLLoader - it's magic
-    public void initialize() {
-        loadTreeItems("initial 1", "initial 2", "initial 3");
-    }
-
-    // loads some strings into the tree in the application UI.
-    public void loadTreeItems(String... rootItems) {
-        TreeItem<String> root = new TreeItem<String>("Root Node", getIcon());
+    private void updateTree() {
+        TreeItem<String> root = new TreeItem<>(project.getRootNode().getPath().getFileName().toString(), getIcon());
         root.setExpanded(true);
-        for (String itemString: rootItems) {
-            root.getChildren().add(new TreeItem<String>(itemString));
-        }
+        updateTreeSub(project.getRootNode(), root);
 
         treeView.setRoot(root);
+    }
+
+    private void updateTreeSub(fr.epita.assistants.myide.domain.entity.Node node, TreeItem<String> root) {
+        for (var child : node.getChildren()) {
+            final var childTree = new TreeItem<>(child.getPath().getFileName().toString());
+            root.getChildren().add(childTree);
+            if (child.isFolder()) {
+                updateTreeSub(child, childTree);
+            }
+
+        }
     }
 
     private Node getIcon() {
