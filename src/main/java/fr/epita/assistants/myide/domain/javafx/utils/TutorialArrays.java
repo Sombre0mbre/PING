@@ -1,13 +1,13 @@
 package fr.epita.assistants.myide.domain.javafx.utils;
 
 public class TutorialArrays {
-    public final static TutorialElement[] gitButtonsNames = {
+    public final static TutorialElement[] gitElements = {
             new TutorialElement("Push", "Description 1"),
             new TutorialElement("Add", "Description 2"),
             new TutorialElement("Commit", "Description 3")
     };
 
-    public final static TutorialElement[] mavenButtonsNames = {
+    public final static TutorialElement[] mavenElements = {
             new TutorialElement("Compile", "Description 4"),
             new TutorialElement("Clean", "Description 5"),
             new TutorialElement("Exec", "Description 6"),
@@ -16,7 +16,7 @@ public class TutorialArrays {
             new TutorialElement("Tree", "Description 9"),
     };
 
-    public final static TutorialElement[] javaButtonsNames = {
+    public final static TutorialElement[] javaElements = {
             new TutorialElement("Conditions", "Description 10"),
             new TutorialElement("Boucles", "Description 11"),
             new TutorialElement("Fonctions", "Description 12"),

@@ -1,7 +1,7 @@
 package fr.epita.assistants.myide.domain.javafx;
 
-import fr.epita.assistants.myide.domain.javafx.utils.TutorialElement;
 import fr.epita.assistants.myide.domain.javafx.utils.TutorialArrays;
+import fr.epita.assistants.myide.domain.javafx.utils.TutorialElement;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -24,15 +24,15 @@ public class TutorialController {
     }
 
     public void gitButtonAction(ActionEvent actionEvent) {
-        setFlowPaneFromArray(TutorialArrays.gitButtonsNames);
+        setFlowPaneFromArray(TutorialArrays.gitElements);
     }
 
     public void mavenButtonAction(ActionEvent actionEvent) {
-        setFlowPaneFromArray(TutorialArrays.mavenButtonsNames);
+        setFlowPaneFromArray(TutorialArrays.mavenElements);
     }
 
     public void javaButtonAction(ActionEvent actionEvent) {
-        setFlowPaneFromArray(TutorialArrays.javaButtonsNames);
+        setFlowPaneFromArray(TutorialArrays.javaElements);
     }
 
     private void setFlowPaneFromArray(TutorialElement[] array) {

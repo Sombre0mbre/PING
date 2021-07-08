@@ -1,6 +1,5 @@
 package fr.epita.assistants.myide.domain.javafx;
 
-import com.sun.javafx.scene.SceneEventDispatcher;
 import fr.epita.assistants.myide.domain.entity.Project;
 import fr.epita.assistants.myide.domain.javafx.utils.Icons;
 import fr.epita.assistants.myide.domain.javafx.utils.SceneLoader;
