@@ -1,5 +1,6 @@
 package fr.epita.assistants.myide.domain.javafx;
 
+import fr.epita.assistants.myide.domain.entity.NodeImplementation;
 import fr.epita.assistants.myide.domain.entity.Project;
 import fr.epita.assistants.myide.domain.javafx.utils.Icons;
 import javafx.scene.Node;
@@ -14,7 +15,7 @@ import java.util.stream.Collectors;
 public class GuiController {
 
     public AnchorPane mainAnchor;
-    public TreeView<String> treeView;
+    public TreeView<fr.epita.assistants.myide.domain.entity.Node> treeView;
 
     public final int treeImageHeight = 20;
 
@@ -29,16 +30,16 @@ public class GuiController {
     private void updateTree() {
         final var node = project.getRootNode();
 
-        TreeItem<String> root = new TreeItem<>(node.getPath().getFileName().toString(), getIcon(node));
+        var root = new TreeItem<>(node);
         root.setExpanded(true);
         updateTreeSub(node, root);
 
         treeView.setRoot(root);
     }
 
-    private void updateTreeSub(fr.epita.assistants.myide.domain.entity.Node node, TreeItem<String> root) {
+    private void updateTreeSub(fr.epita.assistants.myide.domain.entity.Node node, TreeItem<fr.epita.assistants.myide.domain.entity.Node> root) {
         for (var child : node.getChildren()) {
-            final var childTree = new TreeItem<>(child.getPath().getFileName().toString(), getIcon(child));
+            final var childTree = new TreeItem<>(child, getIcon(child));
 
             root.getChildren().add(childTree);
             if (child.isFolder()) {
