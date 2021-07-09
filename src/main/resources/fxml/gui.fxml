@@ -86,11 +86,11 @@
                         </MenuButton>
                         <MenuButton fx:id="otherButton" layoutX="58.0" layoutY="10.0" mnemonicParsing="false" text="Autres">
                            <items>
-                              <MenuItem fx:id="changeProject" mnemonicParsing="false" text="Changer de projet" />
-                              <MenuItem fx:id="themeMode" mnemonicParsing="false" text="Mode clair/sombre" />
-                              <MenuItem mnemonicParsing="false" text="Rechercher" />
-                              <MenuItem mnemonicParsing="false" text="Nettoyer" />
-                              <MenuItem mnemonicParsing="false" text="Dist" />
+                              <MenuItem fx:id="changeProject" mnemonicParsing="false" onAction="#changeProject" text="Changer de projet" />
+                              <MenuItem fx:id="themeMode" mnemonicParsing="false" onAction="#changeTheme" text="Mode clair/sombre" />
+                              <MenuItem mnemonicParsing="false" onAction="#search" text="Rechercher" />
+                              <MenuItem mnemonicParsing="false" onAction="#cleanup" text="Nettoyer" />
+                              <MenuItem mnemonicParsing="false" onAction="#dist" text="Dist" />
                            </items>
                         </MenuButton>
                      </children>

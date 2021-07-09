@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.util.Objects;
 
 public class SceneLoader {
+
     public static void loadGui(@NotNull Stage stage, @Nullable Project project) throws IOException {
         var fxmlLoader = new FXMLLoader(Objects.requireNonNull(SceneLoader.class.getClassLoader().getResource("fxml/gui.fxml")));
         Parent gui = fxmlLoader.load();
@@ -39,6 +40,7 @@ public class SceneLoader {
         Scene scene = new Scene(gui);
         stage.setScene(scene);
         stage.setResizable(false);
+        stage.centerOnScreen();
         stage.show();
     }
 

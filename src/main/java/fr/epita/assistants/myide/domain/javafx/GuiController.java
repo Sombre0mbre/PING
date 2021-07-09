@@ -1,5 +1,7 @@
 package fr.epita.assistants.myide.domain.javafx;
 
+import fr.epita.assistants.myide.domain.entity.Feature;
+import fr.epita.assistants.myide.domain.entity.Mandatory;
 import fr.epita.assistants.myide.domain.entity.Project;
 import fr.epita.assistants.myide.domain.javafx.utils.Icons;
 import fr.epita.assistants.myide.domain.javafx.utils.SceneLoader;
@@ -10,6 +12,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 
@@ -122,6 +125,40 @@ public class GuiController {
     }
 
     private void saveTab(Tab tab) {
+        // TODO
+    }
+
+    public void changeProject(ActionEvent actionEvent) throws IOException {
+        SceneLoader.loadStartup((Stage) tabPane.getScene().getWindow());
+    }
+
+    public void changeTheme(ActionEvent actionEvent) {
+        // TODO
+    }
+
+    public void search(ActionEvent actionEvent) {
+        // TODO
+    }
+
+    public void cleanup(ActionEvent actionEvent) {
+        var got = project.getFeature(Mandatory.Features.Any.CLEANUP);
+        if (got.isEmpty())
+            return;
+        var report = got.get().execute(project);
+
+        showResult(report);
+    }
+
+    public void dist(ActionEvent actionEvent) {
+        var got = project.getFeature(Mandatory.Features.Any.DIST);
+        if (got.isEmpty())
+            return;
+        var report = got.get().execute(project);
+
+        showResult(report);
+    }
+
+    private void showResult(Feature.ExecutionReport report) {
         // TODO
     }
 }
