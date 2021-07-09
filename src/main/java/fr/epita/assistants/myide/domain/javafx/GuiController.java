@@ -105,6 +105,11 @@ public class GuiController {
         // Then get parent node
         // Then
         // service.create(parentNode, filename, fr.epita.assistants.myide.domain.entity.Node.Types.FILE);
+        //
+        // Add to file:
+        // public class <filename> {
+        //
+        // }
     }
 
     public void saveFile(ActionEvent actionEvent) {
