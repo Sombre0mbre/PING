@@ -3,10 +3,6 @@ package fr.epita.assistants.myide.domain.javafx.utils;
 public class TutorialArrays {
     public final static TutorialElement[] gitElements = {
             new TutorialElement(
-                    "Push",
-                    "Description 1"
-            ),
-            new TutorialElement(
                     "Add",
                     """
                             La commande Add est utilisée pour ajouter des fichiers au dépôt.
@@ -24,17 +20,39 @@ public class TutorialArrays {
                                                         
                             git commit –m “Description du commit”
                             """
+            ),
+            new TutorialElement(
+                    "Push",
+                    """
+                            La commande Push permet d’envoyer sur le dépôt toutes les modifications
+                            que vous avez enregistrées localement, soit tout ce que vous avez Commit.
+                            """
+            ),
+            new TutorialElement(
+                    "Pull",
+                    """
+                            La commande Pull permet de fusionner toutes les modifications présentes
+                            sur le dépôt distant, c’est-à-dire tout ce que vos camardes ont pu Push sur le dépôt,
+                            dans le répertoire de travail local, autrement dit sur votre ordinateur.
+                            """
             )
     };
 
     public final static TutorialElement[] mavenElements = {
             new TutorialElement(
                     "Compile",
-                    "Description 4"
+                    """
+                            La commande Compile permet de compiler tout le code source,
+                            c’est à dire qu’elle va transformer le code que vous venez d’écrire
+                            en un programme exécutable par un ordinateur.
+                            """
             ),
             new TutorialElement(
                     "Clean",
-                    "Description 5"
+                    """
+                            La commande Clean permet d’effacer tous les fichiers
+                            ou dossiers générés durant la création (le build) d’un projet.
+                            """
             ),
             new TutorialElement(
                     "Exec",
@@ -42,15 +60,30 @@ public class TutorialArrays {
             ),
             new TutorialElement(
                     "Install",
-                    "Description 7"
+                    """
+                            La commande Install permet de partager le livrable (le package)
+                            pour d’autres projets en local, c’est-à-dire sur le même ordinateur.
+                            """
+            ),
+            new TutorialElement(
+                    "Package",
+                    """
+                            La commande Package permet d’assembler le code compilé en un livrable,
+                            c’est-à-dire en un format qui peut être distribué (jar, war, …).
+                            """
             ),
             new TutorialElement(
                     "Test",
-                    "Description 8"
+                    """
+                            La commande Test permet de lancer les tests unitaires.
+                            """
             ),
             new TutorialElement(
                     "Tree",
-                    "Description 9"
+                    """
+                            La commande Tree permet d’afficher l’arbre des dépendances du projet,
+                            avec le format de votre choix : text, DOT, GraphML, etc.
+                            """
             )
     };
 
