@@ -66,7 +66,7 @@
                   </FlowPane>
                   <FlowPane alignment="CENTER" hgap="10.0" prefWrapLength="10.0" vgap="10.0" GridPane.columnIndex="1">
                      <children>
-                        <MenuButton mnemonicParsing="false" text="Git">
+                        <MenuButton fx:id="gitButton" mnemonicParsing="false" text="Git">
                            <items>
                                       <MenuItem fx:id="gitAdd" mnemonicParsing="false" text="Add" />
                                       <MenuItem fx:id="gitCommit" mnemonicParsing="false" text="Commit" />
@@ -74,7 +74,7 @@
                                       <MenuItem fx:id="gitPull" mnemonicParsing="false" text="Pull" />
                            </items>
                         </MenuButton>
-                        <MenuButton layoutX="10.0" layoutY="10.0" mnemonicParsing="false" text="Maven">
+                        <MenuButton fx:id="mavenButton" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" text="Maven">
                            <items>
                                       <MenuItem fx:id="mvnPackage" mnemonicParsing="false" text="Package" />
                                       <MenuItem fx:id="mvnInstall" mnemonicParsing="false" text="Install" />
@@ -84,11 +84,12 @@
                                       <MenuItem fx:id="mvnTree" mnemonicParsing="false" text="Tree" />
                            </items>
                         </MenuButton>
-                        <MenuButton layoutX="58.0" layoutY="10.0" mnemonicParsing="false" text="Autres">
+                        <MenuButton fx:id="otherButton" layoutX="58.0" layoutY="10.0" mnemonicParsing="false" text="Autres">
                            <items>
                               <MenuItem fx:id="changeProject" mnemonicParsing="false" text="Changer de projet" />
-                              <MenuItem mnemonicParsing="false" text="Cleanup" />
-                              <MenuItem mnemonicParsing="false" text="Search" />
+                              <MenuItem fx:id="themeMode" mnemonicParsing="false" text="Mode clair/sombre" />
+                              <MenuItem mnemonicParsing="false" text="Rechercher" />
+                              <MenuItem mnemonicParsing="false" text="Nettoyer" />
                               <MenuItem mnemonicParsing="false" text="Dist" />
                            </items>
                         </MenuButton>
@@ -102,9 +103,9 @@
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </GridPane.margin>
                      <children>
-                        <Button mnemonicParsing="false" text="Nouveau" />
-                        <Button mnemonicParsing="false" text="Enregistrer" />
-                        <Button mnemonicParsing="false" text="Enregistrer tout" />
+                        <Button fx:id="newButton" mnemonicParsing="false" onAction="#newFile" text="Nouveau" />
+                        <Button fx:id="saveButton" mnemonicParsing="false" onAction="#saveFile" text="Enregistrer" />
+                        <Button fx:id="saveAllButton" mnemonicParsing="false" onAction="#saveAllFiles" text="Enregistrer tout" />
                      </children>
                   </FlowPane>
                </children>

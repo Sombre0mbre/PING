@@ -84,8 +84,6 @@ public class GuiController {
             return;
         }
 
-        // TODO - Load node into the textView
-        System.err.println("Not implemented: open " + node);
         var tab = new Tab(node.getPath().getFileName().toString(), new TextArea(service.getContent(node)));
 
         tab.setUserData(node);
@@ -97,5 +95,33 @@ public class GuiController {
 
     public void startTutorial(ActionEvent actionEvent) throws IOException {
         SceneLoader.loadTutorial();
+    }
+
+    public void newFile(ActionEvent actionEvent) {
+        // TODO - Add file chooser to create file
+        // Then get parent node
+        // Then
+        // service.create(parentNode, filename, fr.epita.assistants.myide.domain.entity.Node.Types.FILE);
+    }
+
+    public void saveFile(ActionEvent actionEvent) {
+        var selected = tabPane.getSelectionModel().getSelectedItem();
+        saveTab(selected);
+        setEdited(selected, false);
+    }
+
+    public void saveAllFiles(ActionEvent actionEvent) {
+        for (var tab : tabPane.getTabs()) {
+            saveTab(tab);
+            setEdited(tab, false);
+        }
+    }
+
+    private void setEdited(Tab tab, boolean edited) {
+        // TODO
+    }
+
+    private void saveTab(Tab tab) {
+        // TODO
     }
 }
