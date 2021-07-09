@@ -1,14 +1,9 @@
 package fr.epita.assistants.myide.domain.javafx;
 
-import fr.epita.assistants.myide.domain.entity.Feature;
-import fr.epita.assistants.myide.domain.entity.Mandatory;
-import fr.epita.assistants.myide.domain.entity.NodeImplementation;
-import fr.epita.assistants.myide.domain.entity.Project;
+import fr.epita.assistants.myide.domain.entity.*;
 import fr.epita.assistants.myide.domain.javafx.utils.Icons;
 import fr.epita.assistants.myide.domain.javafx.utils.SceneLoader;
 import fr.epita.assistants.myide.domain.service.NodeServiceImplementation;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.scene.control.*;
@@ -22,6 +17,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.stream.Collectors;
 
 public class GuiController {
     public final int treeImageHeight = 20;
@@ -30,6 +26,9 @@ public class GuiController {
     public TreeView<fr.epita.assistants.myide.domain.entity.Node> treeView;
     public Button tutorialButton;
     public TabPane tabPane;
+    public MenuButton gitButton;
+    public MenuButton mavenButton;
+    public MenuButton otherButton;
     Project project;
 
     public void initialize() {
@@ -40,14 +39,24 @@ public class GuiController {
     public void setup(Project project) {
         this.project = project;
 
+        // Enabling features
+        final var aspects = project.getAspects().stream().map(Aspect::getType).collect(Collectors.toSet());
+        if (!aspects.contains(Mandatory.Aspects.GIT))
+            gitButton.setDisable(true);
+        if (!aspects.contains(Mandatory.Aspects.MAVEN))
+            mavenButton.setDisable(true);
+
+        // Shortcuts
         var save = new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN);
         var tutorial = new KeyCodeCombination(KeyCode.T, KeyCombination.CONTROL_DOWN);
 
-        Runnable saveRunnable = ()-> saveFile(null);
-        Runnable tutorialRunnable = ()-> startTutorial(null);
+        Runnable saveRunnable = () -> saveFile(null);
+        Runnable tutorialRunnable = () -> startTutorial(null);
 
         tabPane.getScene().getAccelerators().put(save, saveRunnable);
         tabPane.getScene().getAccelerators().put(tutorial, tutorialRunnable);
+
+        // Tree generation from nodes
         updateTree();
     }
 
@@ -191,6 +200,47 @@ public class GuiController {
     }
 
     private void showResult(Feature.ExecutionReport report) {
+        // TODO
+    }
+
+
+    public void gitAddEvent(ActionEvent actionEvent) {
+        // TODO
+    }
+
+    public void gitCommitEvent(ActionEvent actionEvent) {
+        // TODO
+    }
+
+    public void gitPushEvent(ActionEvent actionEvent) {
+        // TODO
+    }
+
+    public void gitPullEvent(ActionEvent actionEvent) {
+        // TODO
+    }
+
+    public void mvnPackageEvent(ActionEvent actionEvent) {
+        // TODO
+    }
+
+    public void mvnInstallEvent(ActionEvent actionEvent) {
+        // TODO
+    }
+
+    public void mvnExecEvent(ActionEvent actionEvent) {
+        // TODO
+    }
+
+    public void mvnCleanEvent(ActionEvent actionEvent) {
+        // TODO
+    }
+
+    public void mvnTestEvent(ActionEvent actionEvent) {
+        // TODO
+    }
+
+    public void mvnTreeEvent(ActionEvent actionEvent) {
         // TODO
     }
 }
