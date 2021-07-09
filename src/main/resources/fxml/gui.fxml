@@ -68,20 +68,20 @@
                      <children>
                         <MenuButton fx:id="gitButton" mnemonicParsing="false" text="Git">
                            <items>
-                                      <MenuItem fx:id="gitAdd" mnemonicParsing="false" text="Add" />
-                                      <MenuItem fx:id="gitCommit" mnemonicParsing="false" text="Commit" />
-                                      <MenuItem fx:id="gitPush" mnemonicParsing="false" text="Push" />
-                                      <MenuItem fx:id="gitPull" mnemonicParsing="false" text="Pull" />
+                                      <MenuItem fx:id="gitAdd" mnemonicParsing="false" onAction="#gitAddEvent" text="Add" />
+                                      <MenuItem fx:id="gitCommit" mnemonicParsing="false" onAction="#gitCommitEvent" text="Commit" />
+                                      <MenuItem fx:id="gitPush" mnemonicParsing="false" onAction="#gitPushEvent" text="Push" />
+                                      <MenuItem fx:id="gitPull" mnemonicParsing="false" onAction="#gitPullEvent" text="Pull" />
                            </items>
                         </MenuButton>
                         <MenuButton fx:id="mavenButton" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" text="Maven">
                            <items>
-                                      <MenuItem fx:id="mvnPackage" mnemonicParsing="false" text="Package" />
-                                      <MenuItem fx:id="mvnInstall" mnemonicParsing="false" text="Install" />
-                                      <MenuItem fx:id="mvnExec" mnemonicParsing="false" text="Exec" />
-                                      <MenuItem fx:id="mvnClean" mnemonicParsing="false" text="Clean" />
-                                      <MenuItem fx:id="mvnTest" mnemonicParsing="false" text="Test" />
-                                      <MenuItem fx:id="mvnTree" mnemonicParsing="false" text="Tree" />
+                                      <MenuItem fx:id="mvnPackage" mnemonicParsing="false" onAction="#mvnPackageEvent" text="Package" />
+                                      <MenuItem fx:id="mvnInstall" mnemonicParsing="false" onAction="#mvnInstallEvent" text="Install" />
+                                      <MenuItem fx:id="mvnExec" mnemonicParsing="false" onAction="#mvnExecEvent" text="Exec" />
+                                      <MenuItem fx:id="mvnClean" mnemonicParsing="false" onAction="#mvnCleanEvent" text="Clean" />
+                                      <MenuItem fx:id="mvnTest" mnemonicParsing="false" onAction="#mvnTestEvent" text="Test" />
+                                      <MenuItem fx:id="mvnTree" mnemonicParsing="false" onAction="#mvnTreeEvent" text="Tree" />
                            </items>
                         </MenuButton>
                         <MenuButton fx:id="otherButton" layoutX="58.0" layoutY="10.0" mnemonicParsing="false" text="Autres">
