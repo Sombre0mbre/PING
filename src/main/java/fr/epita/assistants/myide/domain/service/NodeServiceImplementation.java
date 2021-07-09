@@ -12,6 +12,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 
 public class NodeServiceImplementation implements NodeService {
     public void generateChildren(@NotNull Node n) {
@@ -49,6 +50,18 @@ public class NodeServiceImplementation implements NodeService {
         } catch (IOException e) {
             throw new UnsupportedOperationException("Could not read node");
         }
+    }
+
+
+    public Node setText(Node node, byte[] content) {
+        if (!node.isFile())
+            throw new IllegalArgumentException("Node is not a file!");
+        try {
+            Files.write(node.getPath(), content, StandardOpenOption.WRITE);
+        } catch (IOException e) {
+            throw new UnsupportedOperationException("Could not write to node");
+        }
+        return node;
     }
 
     /**

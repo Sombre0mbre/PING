@@ -2,10 +2,13 @@ package fr.epita.assistants.myide.domain.javafx;
 
 import fr.epita.assistants.myide.domain.entity.Feature;
 import fr.epita.assistants.myide.domain.entity.Mandatory;
+import fr.epita.assistants.myide.domain.entity.NodeImplementation;
 import fr.epita.assistants.myide.domain.entity.Project;
 import fr.epita.assistants.myide.domain.javafx.utils.Icons;
 import fr.epita.assistants.myide.domain.javafx.utils.SceneLoader;
 import fr.epita.assistants.myide.domain.service.NodeServiceImplementation;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.scene.control.*;
@@ -18,6 +21,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 public class GuiController {
     public final int treeImageHeight = 20;
@@ -84,7 +88,7 @@ public class GuiController {
     // } End of project management
 
 
-    public void treeSelectClickEvent(MouseEvent mouseEvent) {
+    public void treeOpenEvent(MouseEvent mouseEvent) {
         var selected = treeView.getSelectionModel().getSelectedItem();
         if (selected == null)
             return;
@@ -99,7 +103,10 @@ public class GuiController {
             return;
         }
 
-        var tab = new Tab(node.getPath().getFileName().toString(), new TextArea(service.getContent(node)));
+        var text = new TextArea(service.getContent(node));
+        var tab = new Tab(node.getPath().getFileName().toString(), text);
+
+        text.textProperty().addListener((observable, oldValue, newValue) -> setEdited(tab, true));
 
         tab.setUserData(node);
 
@@ -139,14 +146,18 @@ public class GuiController {
     }
 
     private void setEdited(Tab tab, boolean edited) {
-        // TODO
+        final var node = (NodeImplementation) tab.getUserData();
+
+        tab.setText(edited ? "⚫ " + node.toString() : node.toString());
     }
 
     private void saveTab(Tab tab) {
         if (tab == null)
             return;
         System.out.println("Saving tab: " + tab.getText());
-        // TODO
+
+        var node = (NodeImplementation) tab.getUserData();
+        service.setText(node, ((TextArea) tab.getContent()).getText().getBytes(StandardCharsets.UTF_8));
     }
 
     public void changeProject(ActionEvent actionEvent) throws IOException {
