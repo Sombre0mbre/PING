@@ -13,6 +13,7 @@ import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.PopupWindow;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -200,47 +201,69 @@ public class GuiController {
     }
 
     private void showResult(Feature.ExecutionReport report) {
-        // TODO
+        Alert alert;
+        if (report == null || report.isSuccess()) {
+            alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setHeaderText(null);
+            alert.setContentText("L'action a été exectuée avec succès!");
+
+        } else {
+            alert = new Alert(Alert.AlertType.ERROR);
+
+            alert.setHeaderText(null);
+            alert.setContentText("Impossible d'effectuer l'action demandée !");
+        }
+        alert.showAndWait();
     }
 
 
     public void gitAddEvent(ActionEvent actionEvent) {
         // TODO
+        // showResult(report);
     }
 
     public void gitCommitEvent(ActionEvent actionEvent) {
         // TODO
+        // showResult(report);
     }
 
     public void gitPushEvent(ActionEvent actionEvent) {
         // TODO
+        // showResult(report);
     }
 
     public void gitPullEvent(ActionEvent actionEvent) {
         // TODO
+        // showResult(report);
     }
 
     public void mvnPackageEvent(ActionEvent actionEvent) {
         // TODO
+        // showResult(report);
     }
 
     public void mvnInstallEvent(ActionEvent actionEvent) {
         // TODO
+        // showResult(report);
     }
 
     public void mvnExecEvent(ActionEvent actionEvent) {
         // TODO
+        // showResult(report);
     }
 
     public void mvnCleanEvent(ActionEvent actionEvent) {
         // TODO
+        // showResult(report);
     }
 
     public void mvnTestEvent(ActionEvent actionEvent) {
         // TODO
+        // showResult(report);
     }
 
     public void mvnTreeEvent(ActionEvent actionEvent) {
         // TODO
+        // showResult(report);
     }
 }
