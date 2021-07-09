@@ -101,7 +101,7 @@ public class GuiController {
     }
 
     public void newFile(ActionEvent actionEvent) {
-        // TODO - Add file chooser to create file
+        // TODO - new window to choose where to create file
         // Then get parent node
         // Then
         // service.create(parentNode, filename, fr.epita.assistants.myide.domain.entity.Node.Types.FILE);
