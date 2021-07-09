@@ -16,7 +16,7 @@ import java.nio.file.Path;
 import java.util.HashSet;
 
 public class ProjectServiceImplementation implements ProjectService {
-    NodeServiceImplementation nodeService = new NodeServiceImplementation(this);
+    NodeServiceImplementation nodeService = new NodeServiceImplementation();
 
     MyIde.Configuration configuration;
 

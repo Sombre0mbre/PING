@@ -2,9 +2,9 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.Font?>
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1" fx:id="mainAnchor" prefHeight="720.0" prefWidth="1280.0"
-            xmlns="http://javafx.com/javafx/11.0.1" fx:controller="fr.epita.assistants.myide.domain.javafx.GuiController">
+<?import javafx.scene.text.*?>
+
+<AnchorPane fx:id="mainAnchor" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.epita.assistants.myide.domain.javafx.GuiController">
     <children>
         <BorderPane AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <center>
@@ -12,72 +12,66 @@
                     <menus>
                         <Menu mnemonicParsing="false" text="File">
                             <items>
-                                <MenuItem fx:id="fileNew" mnemonicParsing="false" text="New"/>
-                                <MenuItem fx:id="fileOpen" mnemonicParsing="false" text="Open"/>
-                                <MenuItem fx:id="fileSave" mnemonicParsing="false" text="Save"/>
+                                <MenuItem fx:id="fileNew" mnemonicParsing="false" text="New" />
+                                <MenuItem fx:id="fileOpen" mnemonicParsing="false" text="Open" />
+                                <MenuItem fx:id="fileSave" mnemonicParsing="false" text="Save" />
                             </items>
                         </Menu>
                         <Menu mnemonicParsing="false" text="Edit">
                             <items>
-                                <MenuItem mnemonicParsing="false" text="Delete"/>
+                                <MenuItem mnemonicParsing="false" text="Delete" />
                             </items>
                         </Menu>
                         <Menu mnemonicParsing="false" text="Git">
                             <items>
-                                <MenuItem fx:id="gitAdd" mnemonicParsing="false" text="Add"/>
-                                <MenuItem fx:id="gitCommit" mnemonicParsing="false" text="Commit"/>
-                                <MenuItem fx:id="gitPush" mnemonicParsing="false" text="Push"/>
-                                <MenuItem fx:id="gitPull" mnemonicParsing="false" text="Pull"/>
+                                <MenuItem fx:id="gitAdd" mnemonicParsing="false" text="Add" />
+                                <MenuItem fx:id="gitCommit" mnemonicParsing="false" text="Commit" />
+                                <MenuItem fx:id="gitPush" mnemonicParsing="false" text="Push" />
+                                <MenuItem fx:id="gitPull" mnemonicParsing="false" text="Pull" />
                             </items>
                         </Menu>
                         <Menu mnemonicParsing="false" text="Maven">
                             <items>
-                                <MenuItem fx:id="mvnPackage" mnemonicParsing="false" text="Package"/>
-                                <MenuItem fx:id="mvnInstall" mnemonicParsing="false" text="Install"/>
-                                <MenuItem fx:id="mvnExec" mnemonicParsing="false" text="Exec"/>
-                                <MenuItem fx:id="mvnClean" mnemonicParsing="false" text="Clean"/>
-                                <MenuItem fx:id="mvnTest" mnemonicParsing="false" text="Test"/>
-                                <MenuItem fx:id="mvnTree" mnemonicParsing="false" text="Tree"/>
+                                <MenuItem fx:id="mvnPackage" mnemonicParsing="false" text="Package" />
+                                <MenuItem fx:id="mvnInstall" mnemonicParsing="false" text="Install" />
+                                <MenuItem fx:id="mvnExec" mnemonicParsing="false" text="Exec" />
+                                <MenuItem fx:id="mvnClean" mnemonicParsing="false" text="Clean" />
+                                <MenuItem fx:id="mvnTest" mnemonicParsing="false" text="Test" />
+                                <MenuItem fx:id="mvnTree" mnemonicParsing="false" text="Tree" />
                             </items>
                         </Menu>
                         <Menu mnemonicParsing="false" text="Tutorial">
                             <items>
-                                <MenuItem fx:id="tutoIDE" mnemonicParsing="false" text="IDE Tutorial"/>
-                                <MenuItem fx:id="tutoGit" mnemonicParsing="false" text="Git"/>
-                                <MenuItem fx:id="tutoMaven" mnemonicParsing="false" text="Maven"/>
+                                <MenuItem fx:id="tutoIDE" mnemonicParsing="false" text="IDE Tutorial" />
+                                <MenuItem fx:id="tutoGit" mnemonicParsing="false" text="Git" />
+                                <MenuItem fx:id="tutoMaven" mnemonicParsing="false" text="Maven" />
                             </items>
                         </Menu>
                     </menus>
                 </MenuBar>
             </center>
             <right>
-                <Button fx:id="tutorialButton" mnemonicParsing="false" onAction="#startTutorial" text="Tutorial"
-                        BorderPane.alignment="CENTER"/>
+                <Button fx:id="tutorialButton" mnemonicParsing="false" onAction="#startTutorial" text="Tutorial" BorderPane.alignment="CENTER" />
             </right>
         </BorderPane>
-        <SplitPane dividerPositions="0.15" prefHeight="160.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0"
-                   AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="26.0">
+        <SplitPane dividerPositions="0.15" prefHeight="160.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="26.0">
             <items>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                     <children>
-                        <TreeView fx:id="treeView" onMouseClicked="#treeSelectClickEvent" AnchorPane.bottomAnchor="0.0"
-                                  AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"/>
+                        <TreeView fx:id="treeView" onMouseClicked="#treeSelectClickEvent" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                     </children>
                 </AnchorPane>
                 <AnchorPane minHeight="0.0" minWidth="0.0">
                     <children>
-                        <TabPane prefHeight="372.0" prefWidth="417.0" AnchorPane.bottomAnchor="0.0"
-                                 AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <TabPane fx:id="tabPane" prefHeight="372.0" prefWidth="417.0" tabClosingPolicy="ALL_TABS" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                             <tabs>
                                 <Tab text="Untitled Tab 1">
                                     <content>
                                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                             <children>
-                                                <TextArea prefHeight="341.0" prefWidth="417.0"
-                                                          AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
-                                                          AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                <TextArea prefHeight="341.0" prefWidth="417.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                                     <font>
-                                                        <Font name="Times New Roman" size="13.0"/>
+                                                        <Font name="Times New Roman" size="13.0" />
                                                     </font>
                                                 </TextArea>
                                             </children>

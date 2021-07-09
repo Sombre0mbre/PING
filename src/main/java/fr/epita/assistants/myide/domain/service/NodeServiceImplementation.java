@@ -9,16 +9,11 @@ import javax.validation.constraints.NotNull;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
 public class NodeServiceImplementation implements NodeService {
-    ProjectServiceImplementation projectService;
-
-    public NodeServiceImplementation(ProjectServiceImplementation projectService) {
-        this.projectService = projectService;
-    }
-
     public void generateChildren(@NotNull Node n) {
         if (n.isFile())
             return;
@@ -45,6 +40,14 @@ public class NodeServiceImplementation implements NodeService {
         for (var i : n.getChildren()) {
             ((NodeImplementation) i).setPath(n.getPath().resolve(i.getPath().getFileName()));
             updateChildrenPath(i);
+        }
+    }
+
+    public String getContent(Node n) {
+        try {
+            return Files.readString(n.getPath());
+        } catch (IOException e) {
+            throw new UnsupportedOperationException("Could not read node");
         }
     }
 
