@@ -8,11 +8,22 @@ public class TutorialArrays {
             ),
             new TutorialElement(
                     "Add",
-                    "Description 2"
+                    """
+                            La commande Add est utilisée pour ajouter des fichiers au dépôt.
+                            Par exemple, la commande suivante ajoutera un fichier nommé temp.txt au répertoire local :
+
+                            git add temp.txt
+                            """
             ),
             new TutorialElement(
                     "Commit",
-                    "Description 3"
+                    """
+                            La commande Commit permet de valider les changements apportés.
+                            Attention, il ne valide les changements que localement, sur votre ordinateur.
+                            Il est habituellement accompagné d’un message de description :
+                                                        
+                            git commit –m “Description du commit”
+                            """
             )
     };
 
