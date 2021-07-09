@@ -24,6 +24,7 @@ public class SceneLoader {
         }
         Scene scene = new Scene(gui);
         stage.setScene(scene);
+        assert project != null;
         ((GuiController) fxmlLoader.getController()).setup(project);
         stage.setResizable(true);
         stage.centerOnScreen();

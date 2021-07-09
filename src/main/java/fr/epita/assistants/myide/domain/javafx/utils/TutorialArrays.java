@@ -89,12 +89,33 @@ public class TutorialArrays {
 
     public final static TutorialElement[] javaElements = {
             new TutorialElement(
+                    "Types",
+                    """
+                            Un type désigne un ensemble de valeur.
+                            Pour exemple les “Int” représente tous les entiers représentables d’une machine.
+                            Ce sont donc des catégories qui permettent en outre, une meilleure gestion de la mémoire.
+                            On n'a pas besoin d’allouer plus qu'un certain montant suivant le type.
+                                                        
+                            Les types primitifs de base sont :
+                                                        
+                            Byte, short, int, long, double, boulean , float, char.
+                            """
+            ),
+            new TutorialElement(
                     "Conditions",
                     "Description 10"
             ),
             new TutorialElement(
                     "Boucles",
-                    "Description 11"
+                    """
+                            While :
+                            Le but de la boucle while est de répéter une instruction ou un ensemble d’instructions,
+                            tant qu’une condition particulière est vraie.
+                                                        
+                            For :
+                            Le but de la boucle for est le même que la boucle while, mais possède quant à elle
+                            en plus de l’expression de condition, une expression d’initialisation ainsi que d’une expression d’incrémentation.
+                            """
             ),
             new TutorialElement(
                     "Fonctions",
