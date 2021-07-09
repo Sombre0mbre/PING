@@ -14,29 +14,44 @@ import java.util.Objects;
 
 public class SceneLoader {
 
-    public static void loadGui(@NotNull Stage stage, @Nullable Project project) throws IOException {
+    public static void loadGui(@NotNull Stage stage, @Nullable Project project) {
         var fxmlLoader = new FXMLLoader(Objects.requireNonNull(SceneLoader.class.getClassLoader().getResource("fxml/gui.fxml")));
-        Parent gui = fxmlLoader.load();
+        Parent gui;
+        try {
+            gui = fxmlLoader.load();
+        } catch (IOException e) {
+            throw new UnsupportedOperationException();
+        }
         Scene scene = new Scene(gui);
-        ((GuiController) fxmlLoader.getController()).setProject(project);
         stage.setScene(scene);
+        ((GuiController) fxmlLoader.getController()).setup(project);
         stage.setResizable(true);
         stage.centerOnScreen();
         stage.show();
     }
 
-    public static void loadNewProjectScene(@NotNull Stage stage) throws IOException {
+    public static void loadNewProjectScene(@NotNull Stage stage) {
         var fxmlLoader = new FXMLLoader(Objects.requireNonNull(SceneLoader.class.getClassLoader().getResource("fxml/newProject.fxml")));
-        Parent gui = fxmlLoader.load();
+        Parent gui;
+        try {
+            gui = fxmlLoader.load();
+        } catch (IOException e) {
+            throw new UnsupportedOperationException();
+        }
         Scene scene = new Scene(gui);
         stage.setScene(scene);
         stage.setResizable(false);
         stage.show();
     }
 
-    public static void loadStartup(@NotNull Stage stage) throws IOException {
+    public static void loadStartup(@NotNull Stage stage) {
         var fxmlLoader = new FXMLLoader(Objects.requireNonNull(SceneLoader.class.getClassLoader().getResource("fxml/startup.fxml")));
-        Parent gui = fxmlLoader.load();
+        Parent gui;
+        try {
+            gui = fxmlLoader.load();
+        } catch (IOException e) {
+            throw new UnsupportedOperationException();
+        }
         Scene scene = new Scene(gui);
         stage.setScene(scene);
         stage.setResizable(false);
@@ -44,21 +59,24 @@ public class SceneLoader {
         stage.show();
     }
 
-    public static void loadTutorial() throws IOException {
+
+    private static Stage window = new Stage();
+    public static void loadTutorial() {
         var fxmlLoader = new FXMLLoader(Objects.requireNonNull(SceneLoader.class.getClassLoader().getResource("fxml/tutorial.fxml")));
-        Parent gui = fxmlLoader.load();
+        Parent gui = null;
+        try {
+            gui = fxmlLoader.load();
+        } catch (IOException e) {
+            throw new UnsupportedOperationException();
+        }
         Scene scene = new Scene(gui);
 
-        Stage newWindow = new Stage();
-        newWindow.setTitle("Second Stage");
-        newWindow.setScene(scene);
+        window.setTitle("Tutorial");
+        window.setScene(scene);
 
         // Set position of second window, related to primary window.
-        newWindow.centerOnScreen();
-
-        newWindow.show();
-
-        newWindow.setResizable(false);
-        newWindow.show();
+        window.centerOnScreen();
+        window.setResizable(false);
+        window.show();
     }
 }

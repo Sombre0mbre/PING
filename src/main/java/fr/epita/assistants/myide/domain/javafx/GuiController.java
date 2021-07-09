@@ -10,6 +10,9 @@ import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -30,8 +33,17 @@ public class GuiController {
     }
 
     // Project management {
-    public void setProject(Project project) {
+    public void setup(Project project) {
         this.project = project;
+
+        var save = new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN);
+        var tutorial = new KeyCodeCombination(KeyCode.T, KeyCombination.CONTROL_DOWN);
+
+        Runnable saveRunnable = ()-> saveFile(null);
+        Runnable tutorialRunnable = ()-> startTutorial(null);
+
+        tabPane.getScene().getAccelerators().put(save, saveRunnable);
+        tabPane.getScene().getAccelerators().put(tutorial, tutorialRunnable);
         updateTree();
     }
 
@@ -96,7 +108,8 @@ public class GuiController {
 
     }
 
-    public void startTutorial(ActionEvent actionEvent) throws IOException {
+    public void startTutorial(ActionEvent actionEvent) {
+        System.out.println("Opening tutorial");
         SceneLoader.loadTutorial();
     }
 
@@ -130,6 +143,9 @@ public class GuiController {
     }
 
     private void saveTab(Tab tab) {
+        if (tab == null)
+            return;
+        System.out.println("Saving tab: " + tab.getText());
         // TODO
     }
 
