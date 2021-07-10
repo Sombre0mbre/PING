@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
@@ -58,7 +59,14 @@
                <children>
                   <FlowPane alignment="CENTER_RIGHT" hgap="10.0" prefWrapLength="10.0" vgap="10.0" GridPane.columnIndex="2">
                      <children>
-                            <Button fx:id="tutorialButton" mnemonicParsing="false" onAction="#startTutorial" text="Tutoriel" />
+                            <Button fx:id="tutorialButton" mnemonicParsing="false" onAction="#startTutorial" text="Tutoriel">
+                           <graphic>
+                              <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../icons/tutorial.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic></Button>
                      </children>
                      <GridPane.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -73,6 +81,12 @@
                                       <MenuItem fx:id="gitPush" mnemonicParsing="false" onAction="#gitPushEvent" text="Push" />
                                       <MenuItem fx:id="gitPull" mnemonicParsing="false" onAction="#gitPullEvent" text="Pull" />
                            </items>
+                           <graphic>
+                              <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../icons/git-icon.png" />
+                                 </image></ImageView>
+                           </graphic>
                         </MenuButton>
                         <MenuButton fx:id="mavenButton" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" text="Maven">
                            <items>
@@ -83,6 +97,13 @@
                                       <MenuItem fx:id="mvnTest" mnemonicParsing="false" onAction="#mvnTestEvent" text="Test" />
                                       <MenuItem fx:id="mvnTree" mnemonicParsing="false" onAction="#mvnTreeEvent" text="Tree" />
                            </items>
+                           <graphic>
+                              <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../icons/maven.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
                         </MenuButton>
                         <MenuButton fx:id="otherButton" layoutX="58.0" layoutY="10.0" mnemonicParsing="false" text="Autres">
                            <items>

@@ -70,18 +70,18 @@ public class SceneLoader {
     }
 
 
-    private static Stage window = new Stage();
+    public static Stage tutorialWindow = new Stage();
     public static void loadTutorial() {
         Parent gui = loadFXML(SceneLoader.class.getClassLoader().getResource("fxml/tutorial.fxml")) ;
 
         Scene scene = new Scene(gui);
 
-        window.setTitle("Tutorial");
-        window.setScene(scene);
+        tutorialWindow.setTitle("Tutorial");
+        tutorialWindow.setScene(scene);
 
         // Set position of second window, related to primary window.
-        window.centerOnScreen();
-        window.setResizable(false);
-        window.show();
+        tutorialWindow.centerOnScreen();
+        tutorialWindow.setResizable(false);
+        tutorialWindow.show();
     }
 }

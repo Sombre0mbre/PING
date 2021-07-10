@@ -16,6 +16,7 @@ public class Utils {
 
     public static void setDarkMode(boolean darkMode) {
         Utils.darkMode = darkMode;
+        applyThemeMode(SceneLoader.tutorialWindow.getScene().getRoot());
     }
 
     public static void applyThemeMode(Parent parent) {
