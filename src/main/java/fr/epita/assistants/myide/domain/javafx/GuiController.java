@@ -186,7 +186,7 @@ public class GuiController {
 
 
         text.replaceText(0, 0, service.getContent(node));
-        //text.textProperty().addListener((observable, oldValue, newValue) -> setEdited(tab, true));
+        text.textProperty().addListener((observable, oldValue, newValue) -> setEdited(tab, true));
 
 
         tab.setUserData(node);
@@ -238,7 +238,9 @@ public class GuiController {
         System.out.println("Saving tab: " + tab.getText());
 
         var node = (NodeImplementation) tab.getUserData();
-        service.setText(node, ((TextArea) tab.getContent()).getText().getBytes(StandardCharsets.UTF_8));
+        final var text = ((CodeArea) ((VirtualizedScrollPane) tab.getContent()).getContent());
+
+        service.setText(node, text.getText().getBytes(StandardCharsets.UTF_8));
     }
 
     public void changeProject(ActionEvent actionEvent) throws IOException {
