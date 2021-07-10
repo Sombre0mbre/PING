@@ -61,12 +61,11 @@ public class GuiController {
         // Shortcuts
         var save = new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN);
         var tutorial = new KeyCodeCombination(KeyCode.T, KeyCombination.CONTROL_DOWN);
+        var search = new KeyCodeCombination(KeyCode.F, KeyCombination.CONTROL_DOWN);
 
-        Runnable saveRunnable = () -> saveFile(null);
-        Runnable tutorialRunnable = () -> startTutorial(null);
-
-        tabPane.getScene().getAccelerators().put(save, saveRunnable);
-        tabPane.getScene().getAccelerators().put(tutorial, tutorialRunnable);
+        tabPane.getScene().getAccelerators().put(save, () -> saveFile(null));
+        tabPane.getScene().getAccelerators().put(tutorial, () -> startTutorial(null));
+        tabPane.getScene().getAccelerators().put(search, () -> search(null));
 
         // Tree generation from nodes
         updateTree();
