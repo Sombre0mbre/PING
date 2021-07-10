@@ -178,6 +178,7 @@ public class GuiController {
         SceneLoader.loadStartup((Stage) tabPane.getScene().getWindow());
     }
 
+
     public void changeTheme(ActionEvent actionEvent) {
         Utils.setDarkMode(!Utils.isDarkMode());
         Utils.applyThemeMode(mainAnchor);
