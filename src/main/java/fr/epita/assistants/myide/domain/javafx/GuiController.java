@@ -128,6 +128,8 @@ public class GuiController {
     public void startTutorial(ActionEvent actionEvent) {
         System.out.println("Opening tutorial");
         SceneLoader.loadTutorial();
+        if (dark)
+            mainAnchor.setStyle("-fx-base: rgba(60, 60, 60, 255);");
     }
 
     public void newFile(ActionEvent actionEvent) {
@@ -174,8 +176,15 @@ public class GuiController {
         SceneLoader.loadStartup((Stage) tabPane.getScene().getWindow());
     }
 
+    boolean dark = false;
+
     public void changeTheme(ActionEvent actionEvent) {
-        // TODO
+        dark = !dark;
+        if (dark)
+            mainAnchor.setStyle("-fx-base: rgba(60, 60, 60, 255);");
+
+        else
+            mainAnchor.setStyle("");
     }
 
     public void search(ActionEvent actionEvent) {
