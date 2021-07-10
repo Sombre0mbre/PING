@@ -24,7 +24,7 @@ public class Utils {
         if (darkMode)
             parent.setStyle(style);
         else
-            parent.getStyleClass().clear();
+            parent.setStyle("-fx-base");
     }
 
     public static Scene newSceneWrapper(Parent parent) {
