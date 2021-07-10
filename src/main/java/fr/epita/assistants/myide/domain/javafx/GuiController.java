@@ -214,23 +214,21 @@ public class GuiController {
             }
         };
 
-        var loading = new Alert(Alert.AlertType.INFORMATION, "Veuillez patienter...");
-        loading.setTitle(null);
+        var loading = Utils.newAlertWrapper(Alert.AlertType.INFORMATION, "Veuillez patienter...");
         task.setOnRunning((e) -> loading.show());
         task.setOnSucceeded((e) -> {
             loading.hide();
             Alert alert;
             if (report != null && report.isSuccess()) {
-                alert = new Alert(Alert.AlertType.INFORMATION, "L'action a été exectuée avec succès!");
+                alert = Utils.newAlertWrapper(Alert.AlertType.INFORMATION, "L'action a été exectuée avec succès!");
             } else {
-                alert = new Alert(Alert.AlertType.ERROR, "Impossible d'effectuer l'action demandée !");
+                alert = Utils.newAlertWrapper(Alert.AlertType.ERROR, "Impossible d'effectuer l'action demandée !");
             }
-            alert.setHeaderText(null);
             alert.showAndWait();
         });
         task.setOnFailed((e) -> {
             loading.hide();
-            Alert alert = new Alert(Alert.AlertType.ERROR, "Impossible d'effectuer l'action demandée !");
+            Alert alert = Utils.newAlertWrapper(Alert.AlertType.ERROR, "Impossible d'effectuer l'action demandée !");
             alert.showAndWait();
         });
         new Thread(task).start();
