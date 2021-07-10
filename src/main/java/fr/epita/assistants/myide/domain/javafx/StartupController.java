@@ -14,7 +14,7 @@ public class StartupController {
     public Button newProjectButton;
     public Button openProjectButton;
 
-    public void loadExistingProject(ActionEvent actionEvent) throws IOException {
+    public void loadExistingProject(ActionEvent actionEvent) {
         final var window = ((Node) actionEvent.getSource()).getScene().getWindow();
         var chooser = new DirectoryChooser();
         var got = chooser.showDialog(window);
@@ -26,7 +26,7 @@ public class StartupController {
     }
 
 
-    public void createNewProject(ActionEvent actionEvent) throws IOException {
+    public void createNewProject(ActionEvent actionEvent) {
         final var window = ((Node) actionEvent.getSource()).getScene().getWindow();
 
         SceneLoader.loadNewProjectScene((Stage) window);

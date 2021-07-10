@@ -1,6 +1,5 @@
 package fr.epita.assistants.myide.domain.javafx;
 
-import fr.epita.assistants.myide.domain.javafx.utils.SyntaxColor;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;

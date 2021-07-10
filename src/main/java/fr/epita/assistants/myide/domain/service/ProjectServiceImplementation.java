@@ -59,13 +59,6 @@ public class ProjectServiceImplementation implements ProjectService {
         File pom = new File(root.toString(), "pom.xml");
         if (pom.exists())
             aspects.add(new MavenAspect());
-        /*File[] root_contents = root.toFile().listFiles();
-        for (var content : root_contents) {
-            if (content.getName() == "pom.xml") {
-                aspects.add(new MavenAspect());
-                break;
-            }
-        }*/
         // TODO
         File gitFile = root.resolve(".git/").toFile();
         if (gitFile.exists() && gitFile.isDirectory()) {
@@ -77,8 +70,7 @@ public class ProjectServiceImplementation implements ProjectService {
                         .findGitDir()
                         .build();
                 aspects.add(new GitAspect(new Git(repository)));
-            } catch (IOException ignored) {
-            }
+            } catch (IOException ignored) {}
         }
 
 

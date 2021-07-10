@@ -1,10 +1,11 @@
 package fr.epita.assistants.myide.domain.javafx.utils;
 
-import javafx.beans.NamedArg;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+
+import java.util.Objects;
 
 public class Utils {
     private static boolean darkMode = false;
@@ -23,9 +24,9 @@ public class Utils {
     public static void applyThemeMode(Parent parent) {
         parent.getStylesheets().clear();
         if (darkMode)
-            parent.getStylesheets().add(SceneLoader.class.getClassLoader().getResource("css/java-keywords_black.css").toExternalForm());
+            parent.getStylesheets().add(Objects.requireNonNull(SceneLoader.class.getClassLoader().getResource("css/java-keywords_black.css")).toExternalForm());
         else
-            parent.getStylesheets().add(SceneLoader.class.getClassLoader().getResource("css/java-keywords.css").toExternalForm());
+            parent.getStylesheets().add(Objects.requireNonNull(SceneLoader.class.getClassLoader().getResource("css/java-keywords.css")).toExternalForm());
     }
 
     public static Scene newSceneWrapper(Parent parent) {
