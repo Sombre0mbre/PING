@@ -5,6 +5,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 
+import java.util.Objects;
+
 public class Utils {
     private static final String style = "-fx-base: rgba(60, 63, 65, 255);";
     private static boolean darkMode = false;
@@ -22,9 +24,9 @@ public class Utils {
     public static void applyThemeMode(Parent parent) {
         parent.getStylesheets().clear();
         if (darkMode)
-            parent.getStylesheets().add(SceneLoader.class.getClassLoader().getResource("css/java-keywords_black.css").toExternalForm());
+            parent.getStylesheets().add(Objects.requireNonNull(SceneLoader.class.getClassLoader().getResource("css/java-keywords_black.css")).toExternalForm());
         else
-            parent.getStylesheets().add(SceneLoader.class.getClassLoader().getResource("css/java-keywords.css").toExternalForm());
+            parent.getStylesheets().add(Objects.requireNonNull(SceneLoader.class.getClassLoader().getResource("css/java-keywords.css")).toExternalForm());
     }
 
     public static Scene newSceneWrapper(Parent parent) {

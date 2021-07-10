@@ -168,7 +168,7 @@ public class GuiController {
 
     public void newFile(ActionEvent actionEvent) {
         // TODO - new window to choose where to create file
-        // Then get gui node
+        // Then get parent node
         // Then
         // service.create(parentNode, filename, fr.epita.assistants.myide.domain.entity.Node.Types.FILE);
         //
@@ -215,7 +215,7 @@ public class GuiController {
 
     }
 
-    public void changeProject(ActionEvent actionEvent) throws IOException {
+    public void changeProject(ActionEvent actionEvent) {
         SceneLoader.loadStartup((Stage) tabPane.getScene().getWindow());
     }
 

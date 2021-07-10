@@ -32,7 +32,7 @@ public class NewProjectController {
         SceneLoader.loadGui((Stage) ((Node) actionEvent.getSource()).getScene().getWindow(), project);
     }
 
-    public void cancelAction(ActionEvent actionEvent) throws IOException {
+    public void cancelAction(ActionEvent actionEvent) {
         SceneLoader.loadStartup((Stage) ((Node) actionEvent.getSource()).getScene().getWindow());
     }
 

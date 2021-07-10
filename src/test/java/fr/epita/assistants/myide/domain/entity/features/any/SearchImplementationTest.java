@@ -21,8 +21,6 @@ class SearchImplementationTest {
     void execute() throws IOException {
         var project = new ProjectServiceImplementationTest().setUpDummy();
         System.out.println(project);
-        //var f = project.getRootNode().getPath().resolve("RTest.txt");
-        //Files.write(f, "Hello my name is toto".getBytes(), StandardOpenOption.CREATE, StandardOpenOption.WRITE);
         printTree(project.getRootNode());
 
         var featureOpt = project.getFeature(Mandatory.Features.Any.SEARCH);
