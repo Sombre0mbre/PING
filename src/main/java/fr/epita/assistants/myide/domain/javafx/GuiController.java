@@ -26,6 +26,7 @@ import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Comparator;
 import java.util.concurrent.CompletableFuture;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -90,6 +91,7 @@ public class GuiController {
                 updateTreeSub(child, childTree);
             }
         }
+        root.getChildren().setAll(root.getChildren().sorted(Comparator.comparing(a -> a.getValue().toString().toLowerCase())));
     }
 
     private Node getIcon(fr.epita.assistants.myide.domain.entity.Node node) {
@@ -175,15 +177,9 @@ public class GuiController {
     }
 
     public void newFile(ActionEvent actionEvent) {
-        // TODO - new window to choose where to create file
-        // Then get parent node
-        // Then
-        // service.create(parentNode, filename, fr.epita.assistants.myide.domain.entity.Node.Types.FILE);
-        //
-        // Add to file:
-        // public class <filename> {
-        //
-        // }
+        SceneLoader.loadNewFile(project, this);
+        updateTree();
+        mainAnchor.getScene().getWindow().requestFocus();
     }
 
     public void saveFile(ActionEvent actionEvent) {

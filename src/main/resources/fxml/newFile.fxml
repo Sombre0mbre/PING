@@ -44,7 +44,7 @@
                     </GridPane.margin>
                <children>
                   <Button cancelButton="true" mnemonicParsing="false" onAction="#cancelAction" text="Annuler" />
-                  <Button fx:id="createButton" defaultButton="true" layoutX="262.0" layoutY="75.0" mnemonicParsing="false" onAction="#createNewProject" text="Créer le fichier" />
+                  <Button fx:id="createButton" defaultButton="true" disable="true" layoutX="262.0" layoutY="75.0" mnemonicParsing="false" onAction="#createNewFile" text="Créer le fichier" />
                </children>
                 </FlowPane>
                 <FlowPane alignment="BOTTOM_CENTER" columnHalignment="CENTER" hgap="5.0" vgap="5.0">

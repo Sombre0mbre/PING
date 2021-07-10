@@ -2,6 +2,7 @@ package fr.epita.assistants.myide.domain.javafx.utils;
 
 import fr.epita.assistants.myide.domain.entity.Project;
 import fr.epita.assistants.myide.domain.javafx.GuiController;
+import fr.epita.assistants.myide.domain.javafx.NewFileController;
 import fr.epita.assistants.myide.domain.javafx.SearchController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -93,6 +94,21 @@ public class SceneLoader {
         tutorialWindow.centerOnScreen();
         tutorialWindow.setResizable(false);
         tutorialWindow.show();
+    }
+
+    public static void loadNewFile(Project project, GuiController gui) {
+        var loadReport = loadFXML(SceneLoader.class.getClassLoader().getResource("fxml/newFile.fxml"));
+        ((NewFileController) loadReport.loader.getController()).setup(project, gui);
+
+        Scene scene = new Scene(loadReport.gui);
+
+        tutorialWindow.setTitle("Nouveau fichier");
+        tutorialWindow.setScene(scene);
+
+        // Set position of second window, related to primary window.
+        tutorialWindow.centerOnScreen();
+        tutorialWindow.setResizable(false);
+        tutorialWindow.showAndWait();
     }
 
     private record LoadReport(Parent gui, FXMLLoader loader) {

@@ -15,12 +15,15 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 
 public class NewFileController {
     public Button createButton;
     public Button browseButton;
     public TextField locationField;
     public TextField nameField;
+    private NodeServiceImplementation service = new NodeServiceImplementation();
+    private GuiController gui;
 
     Project project;
 
@@ -29,13 +32,24 @@ public class NewFileController {
         locationField.textProperty().addListener((obs, oldText, newText) -> updateCreateButton());
     }
 
-    public void setup(Project project) {
+    public void setup(Project project, GuiController guiController) {
         this.project = project;
-        locationField.textProperty().set("src/main/java/");
+        this.gui = guiController;
+
+        locationField.setText(project.getRootNode().getPath().toString());
     }
 
-    public void createNewProject(ActionEvent actionEvent) throws IOException {
-        var service = new ProjectServiceImplementation();
+    public void createNewFile(ActionEvent actionEvent) {
+        var parent = new File(locationField.getText()).toPath();
+        var n = service.createDirectories(project.getRootNode(), parent);
+
+        var name = nameField.getText();
+        if (!name.matches("[.].+$")) {
+            name = name + ".java";
+        }
+        var got = service.create(n, name, fr.epita.assistants.myide.domain.entity.Node.Types.FILE);
+        gui.openNode(got);
+        cancelAction(null);
     }
 
     public void cancelAction(ActionEvent actionEvent) {
@@ -46,6 +60,7 @@ public class NewFileController {
     public void browseFiles(ActionEvent actionEvent) {
         final var window = ((Node) actionEvent.getSource()).getScene().getWindow();
         var chooser = new DirectoryChooser();
+        chooser.setInitialDirectory(project.getRootNode().getPath().toFile());
         var got = chooser.showDialog(window);
 
         if (got != null) {
@@ -54,7 +69,13 @@ public class NewFileController {
     }
 
     public void updateCreateButton() {
-        var tmp = new File(locationField.getText());
-        createButton.setDisable(!tmp.isDirectory() || nameField.getText().isBlank() || tmp.toPath().resolve(nameField.getText()).toFile().isDirectory());
+        var parent = new File(locationField.getText());
+        var parentPath = parent.toPath();
+        createButton.setDisable(
+                !parent.isDirectory()
+                        || nameField.getText().isBlank()
+                        || !parentPath.startsWith(project.getRootNode().getPath())
+                        || parentPath.resolve(nameField.getText()).toFile().isFile()
+        );
     }
 }
