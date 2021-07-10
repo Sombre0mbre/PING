@@ -144,7 +144,6 @@ public class GuiController {
 
         // add line numbers to the left of area
         text.setParagraphGraphicFactory(LineNumberFactory.get(text));
-        text.setContextMenu(new SyntaxColor.DefaultContextMenu());
 
         text.getVisibleParagraphs().addModificationObserver
                 (
@@ -341,5 +340,8 @@ public class GuiController {
     public void mvnTreeEvent(ActionEvent actionEvent) {
         // TODO
         // showResult(report);
+    }
+
+    public void showDelete(ContextMenuEvent contextMenuEvent) {
     }
 }

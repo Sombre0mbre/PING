@@ -13,8 +13,10 @@ import javafx.scene.control.TextField;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 
+import javax.annotation.RegEx;
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
 public class NewFileController {
@@ -24,6 +26,8 @@ public class NewFileController {
     public TextField nameField;
     private NodeServiceImplementation service = new NodeServiceImplementation();
     private GuiController gui;
+
+    final static String regex = "^.+[.]java$";
 
     Project project;
 
@@ -44,10 +48,14 @@ public class NewFileController {
         var n = service.createDirectories(project.getRootNode(), parent);
 
         var name = nameField.getText();
-        if (!name.matches("[.].+$")) {
+        if (!name.matches(regex)) {
             name = name + ".java";
         }
         var got = service.create(n, name, fr.epita.assistants.myide.domain.entity.Node.Types.FILE);
+        if (name.matches("^.+[.]java$")) {
+            service.setText(got, ("public class " + name.substring(0, (name.length() - ".java".length())) + " {\n}").getBytes(StandardCharsets.UTF_8));
+            System.out.println("set");
+        }
         gui.openNode(got);
         cancelAction(null);
     }
@@ -76,6 +84,7 @@ public class NewFileController {
                         || nameField.getText().isBlank()
                         || !parentPath.startsWith(project.getRootNode().getPath())
                         || parentPath.resolve(nameField.getText()).toFile().isFile()
+                        || (!nameField.getText().matches(regex) && parentPath.resolve(nameField.getText() + ".java").toFile().isFile())
         );
     }
 }
