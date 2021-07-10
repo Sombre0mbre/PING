@@ -3,21 +3,46 @@ package fr.epita.assistants.myide.domain.javafx;
 import fr.epita.assistants.myide.domain.entity.*;
 import fr.epita.assistants.myide.domain.javafx.utils.Icons;
 import fr.epita.assistants.myide.domain.javafx.utils.SceneLoader;
+import fr.epita.assistants.myide.domain.javafx.utils.SyntaxColor;
 import fr.epita.assistants.myide.domain.service.NodeServiceImplementation;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyCodeCombination;
-import javafx.scene.input.KeyCombination;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.input.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.PopupWindow;
 import javafx.stage.Stage;
+import org.fxmisc.flowless.VirtualizedScrollPane;
+import org.fxmisc.richtext.CodeArea;
+import org.fxmisc.richtext.LineNumberFactory;
+
+import java.time.Duration;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Objects;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.scene.Scene;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
+import org.fxmisc.richtext.model.StyleSpans;
+import org.reactfx.Subscription;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class GuiController {
@@ -113,10 +138,52 @@ public class GuiController {
             return;
         }
 
-        var text = new TextArea(service.getContent(node));
-        var tab = new Tab(node.getPath().getFileName().toString(), text);
+        CodeArea text = new CodeArea();
+        var tab = new Tab(node.getPath().getFileName().toString(), new VirtualizedScrollPane<>(text));
 
-        text.textProperty().addListener((observable, oldValue, newValue) -> setEdited(tab, true));
+        // add line numbers to the left of area
+        text.setParagraphGraphicFactory(LineNumberFactory.get(text));
+        text.setContextMenu( new SyntaxColor.DefaultContextMenu() );
+/*
+        // recompute the syntax highlighting for all text, 500 ms after user stops editing area
+        // Note that this shows how it can be done but is not recommended for production with
+        // large files as it does a full scan of ALL the text every time there is a change !
+        Subscription cleanupWhenNoLongerNeedIt = text
+                // plain changes = ignore style changes that are emitted when syntax highlighting is reapplied
+                // multi plain changes = save computation by not rerunning the code multiple times
+                //   when making multiple changes (e.g. renaming a method at multiple parts in file)
+                .multiPlainChanges()
+                // do not emit an event until 500 ms have passed since the last emission of previous stream
+                .successionEnds(Duration.ofMillis(500))
+                // run the following code block when previous stream emits an event
+                .subscribe(ignore -> text.setStyleSpans(0, SyntaxColor.computeHighlighting(text.getText())));
+        // when no longer need syntax highlighting and wish to clean up memory leaks
+        // run: `cleanupWhenNoLongerNeedIt.unsubscribe();`
+*/
+        // recompute syntax highlighting only for visible paragraph changes
+        // Note that this shows how it can be done but is not recommended for production where multi-
+        // line syntax requirements are needed, like comment blocks without a leading * on each line.
+        text.getVisibleParagraphs().addModificationObserver
+                (
+                        new SyntaxColor.VisibleParagraphStyler<>( text, SyntaxColor::computeHighlighting )
+                );
+
+        // auto-indent: insert previous line's indents on enter
+        final Pattern whiteSpace = Pattern.compile( "^\\s+" );
+        text.addEventHandler( KeyEvent.KEY_PRESSED, KE ->
+        {
+            if ( KE.getCode() == KeyCode.ENTER ) {
+                int caretPosition = text.getCaretPosition();
+                int currentParagraph = text.getCurrentParagraph();
+                Matcher m0 = whiteSpace.matcher( text.getParagraph( currentParagraph-1 ).getSegments().get( 0 ) );
+                if ( m0.find() ) Platform.runLater( () -> text.insertText( caretPosition, m0.group() ) );
+            }
+        });
+
+
+        text.replaceText(0, 0, service.getContent(node));
+        //text.textProperty().addListener((observable, oldValue, newValue) -> setEdited(tab, true));
+
 
         tab.setUserData(node);
 

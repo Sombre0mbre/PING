@@ -1,13 +1,14 @@
 package fr.epita.assistants.myide.domain.javafx;
 
+import fr.epita.assistants.myide.domain.javafx.utils.SyntaxColor;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.util.Objects;
-
 
 public class ApplicationMain extends Application {
 
@@ -16,7 +17,7 @@ public class ApplicationMain extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) throws IOException {
 
         // IDE Window
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("fxml/startup.fxml")));
