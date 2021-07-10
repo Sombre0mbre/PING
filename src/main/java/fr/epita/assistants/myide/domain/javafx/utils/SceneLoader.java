@@ -10,9 +10,26 @@ import javafx.stage.Stage;
 import javax.annotation.Nullable;
 import javax.validation.constraints.NotNull;
 import java.io.IOException;
+import java.net.URL;
 import java.util.Objects;
 
 public class SceneLoader {
+
+    private static Parent loadFXML(URL path) {
+        if (path == null)
+            throw new IllegalArgumentException("path is null");
+        var fxmlLoader = new FXMLLoader(path);
+        Parent res;
+        try {
+            res = fxmlLoader.load();
+        } catch (IOException e) {
+            throw new UnsupportedOperationException();
+        }
+        Utils.applyThemeMode(res);
+        return res;
+    }
+
+
 
     public static void loadGui(@NotNull Stage stage, @Nullable Project project) {
         var fxmlLoader = new FXMLLoader(Objects.requireNonNull(SceneLoader.class.getClassLoader().getResource("fxml/gui.fxml")));
@@ -22,6 +39,8 @@ public class SceneLoader {
         } catch (IOException e) {
             throw new UnsupportedOperationException();
         }
+        Utils.applyThemeMode(gui);
+
         Scene scene = new Scene(gui);
         stage.setScene(scene);
         assert project != null;
@@ -32,13 +51,8 @@ public class SceneLoader {
     }
 
     public static void loadNewProjectScene(@NotNull Stage stage) {
-        var fxmlLoader = new FXMLLoader(Objects.requireNonNull(SceneLoader.class.getClassLoader().getResource("fxml/newProject.fxml")));
-        Parent gui;
-        try {
-            gui = fxmlLoader.load();
-        } catch (IOException e) {
-            throw new UnsupportedOperationException();
-        }
+        Parent gui = loadFXML(SceneLoader.class.getClassLoader().getResource("fxml/newProject.fxml")) ;
+
         Scene scene = new Scene(gui);
         stage.setScene(scene);
         stage.setResizable(false);
@@ -46,13 +60,8 @@ public class SceneLoader {
     }
 
     public static void loadStartup(@NotNull Stage stage) {
-        var fxmlLoader = new FXMLLoader(Objects.requireNonNull(SceneLoader.class.getClassLoader().getResource("fxml/startup.fxml")));
-        Parent gui;
-        try {
-            gui = fxmlLoader.load();
-        } catch (IOException e) {
-            throw new UnsupportedOperationException();
-        }
+        Parent gui = loadFXML(SceneLoader.class.getClassLoader().getResource("fxml/startup.fxml")) ;
+
         Scene scene = new Scene(gui);
         stage.setScene(scene);
         stage.setResizable(false);
@@ -63,13 +72,8 @@ public class SceneLoader {
 
     private static Stage window = new Stage();
     public static void loadTutorial() {
-        var fxmlLoader = new FXMLLoader(Objects.requireNonNull(SceneLoader.class.getClassLoader().getResource("fxml/tutorial.fxml")));
-        Parent gui = null;
-        try {
-            gui = fxmlLoader.load();
-        } catch (IOException e) {
-            throw new UnsupportedOperationException();
-        }
+        Parent gui = loadFXML(SceneLoader.class.getClassLoader().getResource("fxml/tutorial.fxml")) ;
+
         Scene scene = new Scene(gui);
 
         window.setTitle("Tutorial");

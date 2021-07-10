@@ -3,9 +3,13 @@ package fr.epita.assistants.myide.domain.javafx;
 import fr.epita.assistants.myide.domain.entity.*;
 import fr.epita.assistants.myide.domain.javafx.utils.Icons;
 import fr.epita.assistants.myide.domain.javafx.utils.SceneLoader;
+import fr.epita.assistants.myide.domain.javafx.utils.Utils;
 import fr.epita.assistants.myide.domain.service.NodeServiceImplementation;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -175,7 +179,8 @@ public class GuiController {
     }
 
     public void changeTheme(ActionEvent actionEvent) {
-        // TODO
+        Utils.setDarkMode(!Utils.isDarkMode());
+        Utils.applyThemeMode(mainAnchor);
     }
 
     public void search(ActionEvent actionEvent) {
@@ -201,19 +206,33 @@ public class GuiController {
     }
 
     private void showResult(Feature.ExecutionReport report) {
-        Alert alert;
-        if (report == null || report.isSuccess()) {
-            alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setHeaderText(null);
-            alert.setContentText("L'action a été exectuée avec succès!");
+        Task<Boolean> task = new Task<>() {
+            @Override
+            public Boolean call() {
+                return report.isSuccess();
+            }
+        };
 
-        } else {
-            alert = new Alert(Alert.AlertType.ERROR);
-
+        var loading = new Alert(Alert.AlertType.INFORMATION, "Veuillez patienter...");
+        loading.setTitle(null);
+        task.setOnRunning((e) -> loading.show());
+        task.setOnSucceeded((e) -> {
+            loading.hide();
+            Alert alert;
+            if (report != null && report.isSuccess()) {
+                alert = new Alert(Alert.AlertType.INFORMATION, "L'action a été exectuée avec succès!");
+            } else {
+                alert = new Alert(Alert.AlertType.ERROR, "Impossible d'effectuer l'action demandée !");
+            }
             alert.setHeaderText(null);
-            alert.setContentText("Impossible d'effectuer l'action demandée !");
-        }
-        alert.showAndWait();
+            alert.showAndWait();
+        });
+        task.setOnFailed((e) -> {
+            loading.hide();
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Impossible d'effectuer l'action demandée !");
+            alert.showAndWait();
+        });
+        new Thread(task).start();
     }
 
 
