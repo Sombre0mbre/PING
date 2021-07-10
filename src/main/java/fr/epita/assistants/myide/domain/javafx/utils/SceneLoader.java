@@ -40,9 +40,8 @@ public class SceneLoader {
             throw new UnsupportedOperationException();
         }
         Utils.applyThemeMode(gui);
-
         Scene scene = new Scene(gui);
-        scene.getStylesheets().add(SyntaxColor.class.getResource("java-keywords.css").toExternalForm());
+
         stage.setScene(scene);
         assert project != null;
         ((GuiController) fxmlLoader.getController()).setup(project);

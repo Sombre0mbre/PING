@@ -21,10 +21,11 @@ public class Utils {
     }
 
     public static void applyThemeMode(Parent parent) {
+        parent.getStylesheets().clear();
         if (darkMode)
-            parent.setStyle(style);
+            parent.getStylesheets().add(SceneLoader.class.getClassLoader().getResource("css/java-keywords_black.css").toExternalForm());
         else
-            parent.setStyle("-fx-base");
+            parent.getStylesheets().add(SceneLoader.class.getClassLoader().getResource("css/java-keywords.css").toExternalForm());
     }
 
     public static Scene newSceneWrapper(Parent parent) {

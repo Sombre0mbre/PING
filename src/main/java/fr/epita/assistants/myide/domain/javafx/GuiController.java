@@ -9,13 +9,15 @@ import javafx.application.Platform;
 import fr.epita.assistants.myide.domain.javafx.utils.Utils;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
+import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.stage.PopupWindow;
 import javafx.stage.Stage;
 import org.fxmisc.flowless.VirtualizedScrollPane;
@@ -38,7 +40,6 @@ import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import org.fxmisc.richtext.model.StyleSpans;
 import org.reactfx.Subscription;
@@ -148,25 +149,7 @@ public class GuiController {
         // add line numbers to the left of area
         text.setParagraphGraphicFactory(LineNumberFactory.get(text));
         text.setContextMenu( new SyntaxColor.DefaultContextMenu() );
-/*
-        // recompute the syntax highlighting for all text, 500 ms after user stops editing area
-        // Note that this shows how it can be done but is not recommended for production with
-        // large files as it does a full scan of ALL the text every time there is a change !
-        Subscription cleanupWhenNoLongerNeedIt = text
-                // plain changes = ignore style changes that are emitted when syntax highlighting is reapplied
-                // multi plain changes = save computation by not rerunning the code multiple times
-                //   when making multiple changes (e.g. renaming a method at multiple parts in file)
-                .multiPlainChanges()
-                // do not emit an event until 500 ms have passed since the last emission of previous stream
-                .successionEnds(Duration.ofMillis(500))
-                // run the following code block when previous stream emits an event
-                .subscribe(ignore -> text.setStyleSpans(0, SyntaxColor.computeHighlighting(text.getText())));
-        // when no longer need syntax highlighting and wish to clean up memory leaks
-        // run: `cleanupWhenNoLongerNeedIt.unsubscribe();`
-*/
-        // recompute syntax highlighting only for visible paragraph changes
-        // Note that this shows how it can be done but is not recommended for production where multi-
-        // line syntax requirements are needed, like comment blocks without a leading * on each line.
+
         text.getVisibleParagraphs().addModificationObserver
                 (
                         new SyntaxColor.VisibleParagraphStyler<>( text, SyntaxColor::computeHighlighting )
@@ -184,13 +167,10 @@ public class GuiController {
             }
         });
 
-
         text.replaceText(0, 0, service.getContent(node));
         text.textProperty().addListener((observable, oldValue, newValue) -> setEdited(tab, true));
-
-
         tab.setUserData(node);
-
+        setTabBG(tab);
         tabPane.getTabs().add(0, tab);
         tabPane.getSelectionModel().select(0);
 
@@ -251,6 +231,18 @@ public class GuiController {
     public void changeTheme(ActionEvent actionEvent) {
         Utils.setDarkMode(!Utils.isDarkMode());
         Utils.applyThemeMode(mainAnchor);
+        for (var tab : tabPane.getTabs()) {
+            setTabBG(tab);
+        }
+    }
+
+    private void setTabBG(Tab t) {
+        var tmp = (VirtualizedScrollPane) t.getContent();
+        var text = (CodeArea) tmp.getContent();
+        if (Utils.isDarkMode())
+            text.setBackground(new Background(new BackgroundFill(Color.DIMGRAY, new CornerRadii(2), Insets.EMPTY)));
+        else
+            text.setBackground(new Background(new BackgroundFill(Color.WHITE, new CornerRadii(2), Insets.EMPTY)));
     }
 
     public void search(ActionEvent actionEvent) {

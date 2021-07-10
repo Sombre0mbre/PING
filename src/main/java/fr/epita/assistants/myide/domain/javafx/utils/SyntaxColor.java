@@ -1,6 +1,7 @@
 package fr.epita.assistants.myide.domain.javafx.utils;
 
 import java.time.Duration;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Objects;
@@ -159,11 +160,11 @@ public class SyntaxColor {
                                                             matcher.group("STRING") != null ? "string" :
                                                                     matcher.group("COMMENT") != null ? "comment" :
                                                                             null; /* never happens */ assert styleClass != null;
-            spansBuilder.add(Collections.emptyList(), matcher.start() - lastKwEnd);
+            spansBuilder.add(Collections.singleton("code"), matcher.start() - lastKwEnd);
             spansBuilder.add(Collections.singleton(styleClass), matcher.end() - matcher.start());
             lastKwEnd = matcher.end();
         }
-        spansBuilder.add(Collections.emptyList(), text.length() - lastKwEnd);
+        spansBuilder.add(Collections.singleton("code"), text.length() - lastKwEnd);
         return spansBuilder.create();
     }
 

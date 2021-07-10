@@ -1,0 +1,37 @@
+.root {
+    -fx-base: rgba(60, 63, 65, 255);
+}
+
+.code {
+    -fx-fill: white;
+}
+
+.keyword {
+    -fx-fill: #ff96ff;
+    -fx-font-weight: bold;
+}
+.semicolon {
+    -fx-font-weight: bold;
+}
+.paren {
+    -fx-fill: #b2ab22;
+    -fx-font-weight: bold;
+}
+.bracket {
+    -fx-fill: #96ff96;
+    -fx-font-weight: bold;
+}
+.brace {
+    -fx-fill: #009a9a;
+    -fx-font-weight: bold;
+}
+.string {
+    -fx-fill: #b3ffa8;
+}
+
+.comment {
+    -fx-fill: #80d5d7;
+}
+
+
+
