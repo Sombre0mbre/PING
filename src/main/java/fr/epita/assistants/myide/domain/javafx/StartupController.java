@@ -8,8 +8,6 @@ import javafx.scene.control.Button;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 
-import java.io.IOException;
-
 public class StartupController {
     public Button newProjectButton;
     public Button openProjectButton;

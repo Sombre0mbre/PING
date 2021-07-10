@@ -19,7 +19,7 @@ import java.util.regex.Pattern;
 
 public class SyntaxColor {
 
-    public static final String[] KEYWORDS = new String[] {
+    public static final String[] KEYWORDS = new String[]{
             "abstract", "assert", "boolean", "break", "byte",
             "case", "catch", "char", "class", "const",
             "continue", "default", "do", "double", "else",
@@ -57,7 +57,7 @@ public class SyntaxColor {
         int lastKwEnd = 0;
         StyleSpansBuilder<Collection<String>> spansBuilder
                 = new StyleSpansBuilder<>();
-        while(matcher.find()) {
+        while (matcher.find()) {
             String styleClass =
                     matcher.group("KEYWORD") != null ? "keyword" :
                             matcher.group("PAREN") != null ? "paren" :
@@ -66,7 +66,8 @@ public class SyntaxColor {
                                                     matcher.group("SEMICOLON") != null ? "semicolon" :
                                                             matcher.group("STRING") != null ? "string" :
                                                                     matcher.group("COMMENT") != null ? "comment" :
-                                                                            null; /* never happens */ assert styleClass != null;
+                                                                            null; /* never happens */
+            assert styleClass != null;
             spansBuilder.add(Collections.singleton("code"), matcher.start() - lastKwEnd);
             spansBuilder.add(Collections.singleton(styleClass), matcher.end() - matcher.start());
             lastKwEnd = matcher.end();
@@ -75,30 +76,25 @@ public class SyntaxColor {
         return spansBuilder.create();
     }
 
-    public static class VisibleParagraphStyler<PS, SEG, S> implements Consumer<ListModification<? extends Paragraph<PS, SEG, S>>>
-    {
+    public static class VisibleParagraphStyler<PS, SEG, S> implements Consumer<ListModification<? extends Paragraph<PS, SEG, S>>> {
         public final GenericStyledArea<PS, SEG, S> area;
-        public final Function<String,StyleSpans<S>> computeStyles;
+        public final Function<String, StyleSpans<S>> computeStyles;
         public int prevParagraph, prevTextLength;
 
-        public VisibleParagraphStyler( GenericStyledArea<PS, SEG, S> area, Function<String,StyleSpans<S>> computeStyles )
-        {
+        public VisibleParagraphStyler(GenericStyledArea<PS, SEG, S> area, Function<String, StyleSpans<S>> computeStyles) {
             this.computeStyles = computeStyles;
             this.area = area;
         }
 
         @Override
-        public void accept( ListModification<? extends Paragraph<PS, SEG, S>> lm )
-        {
-            if ( lm.getAddedSize() > 0 )
-            {
-                int paragraph = Math.min( area.firstVisibleParToAllParIndex() + lm.getFrom(), area.getParagraphs().size()-1 );
-                String text = area.getText( paragraph, 0, paragraph, area.getParagraphLength( paragraph ) );
+        public void accept(ListModification<? extends Paragraph<PS, SEG, S>> lm) {
+            if (lm.getAddedSize() > 0) {
+                int paragraph = Math.min(area.firstVisibleParToAllParIndex() + lm.getFrom(), area.getParagraphs().size() - 1);
+                String text = area.getText(paragraph, 0, paragraph, area.getParagraphLength(paragraph));
 
-                if ( paragraph != prevParagraph || text.length() != prevTextLength )
-                {
-                    int startPos = area.getAbsolutePosition( paragraph, 0 );
-                    Platform.runLater( () -> area.setStyleSpans( startPos, computeStyles.apply( text ) ) );
+                if (paragraph != prevParagraph || text.length() != prevTextLength) {
+                    int startPos = area.getAbsolutePosition(paragraph, 0);
+                    Platform.runLater(() -> area.setStyleSpans(startPos, computeStyles.apply(text)));
                     prevTextLength = text.length();
                     prevParagraph = paragraph;
                 }
@@ -106,22 +102,29 @@ public class SyntaxColor {
         }
     }
 
-    public static class DefaultContextMenu extends ContextMenu
-    {
+    public static class DefaultContextMenu extends ContextMenu {
         public MenuItem fold, unfold, print;
 
-        public DefaultContextMenu()
-        {
-            fold = new MenuItem( "Fold selected text" );
-            fold.setOnAction( AE -> { hide(); fold(); } );
+        public DefaultContextMenu() {
+            fold = new MenuItem("Fold selected text");
+            fold.setOnAction(AE -> {
+                hide();
+                fold();
+            });
 
-            unfold = new MenuItem( "Unfold from cursor" );
-            unfold.setOnAction( AE -> { hide(); unfold(); } );
+            unfold = new MenuItem("Unfold from cursor");
+            unfold.setOnAction(AE -> {
+                hide();
+                unfold();
+            });
 
-            print = new MenuItem( "Print" );
-            print.setOnAction( AE -> { hide(); print(); } );
+            print = new MenuItem("Print");
+            print.setOnAction(AE -> {
+                hide();
+                print();
+            });
 
-            getItems().addAll( fold, unfold, print );
+            getItems().addAll(fold, unfold, print);
         }
 
         /**
@@ -136,11 +139,11 @@ public class SyntaxColor {
          */
         public void unfold() {
             CodeArea area = (CodeArea) getOwnerNode();
-            area.unfoldParagraphs( area.getCurrentParagraph() );
+            area.unfoldParagraphs(area.getCurrentParagraph());
         }
 
         public void print() {
-            System.out.println( ((CodeArea) getOwnerNode()).getText() );
+            System.out.println(((CodeArea) getOwnerNode()).getText());
         }
     }
 }

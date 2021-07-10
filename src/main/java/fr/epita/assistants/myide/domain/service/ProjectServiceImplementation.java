@@ -70,7 +70,8 @@ public class ProjectServiceImplementation implements ProjectService {
                         .findGitDir()
                         .build();
                 aspects.add(new GitAspect(new Git(repository)));
-            } catch (IOException ignored) {}
+            } catch (IOException ignored) {
+            }
         }
 
         var res = new ProjectImplementation(n, aspects);
