@@ -137,7 +137,8 @@ public class GuiController {
         }
 
         CodeArea text = new CodeArea();
-        var tab = new Tab(node.getPath().getFileName().toString(), new VirtualizedScrollPane<>(text));
+        var scroll = new VirtualizedScrollPane<>(text);
+        var tab = new Tab(node.getPath().getFileName().toString(), scroll);
 
         // add line numbers to the left of area
         text.setParagraphGraphicFactory(LineNumberFactory.get(text));
@@ -210,7 +211,7 @@ public class GuiController {
         System.out.println("Saving tab: " + tab.getText());
 
         var node = (NodeImplementation) tab.getUserData();
-        final var text = ((CodeArea) ((VirtualizedScrollPane) tab.getContent()).getContent());
+        final var text = ((VirtualizedScrollPane<CodeArea>) tab.getContent()).getContent();
 
         service.setText(node, text.getText().getBytes(StandardCharsets.UTF_8));
         var feature = project.getFeature(Mandatory.Features.Any.SEARCH);
