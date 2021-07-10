@@ -26,6 +26,11 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.fxmisc.richtext</groupId>
+            <artifactId>richtextfx</artifactId>
+            <version>0.10.6</version>
+        </dependency>
+        <dependency>
             <groupId>fr.epita.java</groupId>
             <artifactId>lang</artifactId>
             <version>${versions.epita.java}</version>
