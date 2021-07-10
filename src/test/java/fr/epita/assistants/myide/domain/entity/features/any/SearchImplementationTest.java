@@ -6,8 +6,6 @@ import fr.epita.assistants.myide.domain.service.ProjectServiceImplementationTest
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.StandardOpenOption;
 
 
 class SearchImplementationTest {

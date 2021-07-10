@@ -5,6 +5,7 @@ import fr.epita.assistants.myide.domain.entity.*;
 import fr.epita.assistants.myide.domain.entity.aspects.AnyAspect;
 import fr.epita.assistants.myide.domain.entity.aspects.GitAspect;
 import fr.epita.assistants.myide.domain.entity.aspects.MavenAspect;
+import fr.epita.assistants.myide.domain.entity.features.any.SearchImplementation;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
@@ -53,20 +54,12 @@ public class ProjectServiceImplementation implements ProjectService {
         var aspects = new HashSet<Aspect>();
         aspects.add(new AnyAspect(configuration));
 
-        // Build cache for search
-        // TODO
+
         // Detect Git and Maven and add it to aspects
         File pom = new File(root.toString(), "pom.xml");
         if (pom.exists())
             aspects.add(new MavenAspect());
-        /*File[] root_contents = root.toFile().listFiles();
-        for (var content : root_contents) {
-            if (content.getName() == "pom.xml") {
-                aspects.add(new MavenAspect());
-                break;
-            }
-        }*/
-        // TODO
+
         File gitFile = root.resolve(".git/").toFile();
         if (gitFile.exists() && gitFile.isDirectory()) {
             FileRepositoryBuilder builder = new FileRepositoryBuilder();
@@ -81,8 +74,13 @@ public class ProjectServiceImplementation implements ProjectService {
             }
         }
 
+        var res = new ProjectImplementation(n, aspects);
+        // Build cache for search
+        var feature = res.getFeature(Mandatory.Features.Any.SEARCH);
 
-        return new ProjectImplementation(n, aspects);
+        feature.ifPresent(value -> ((SearchImplementation) value).updateCache(res));
+
+        return res;
     }
 
     public Project create(Path root) throws IOException {

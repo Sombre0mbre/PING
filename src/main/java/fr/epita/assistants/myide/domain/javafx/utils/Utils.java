@@ -1,14 +1,13 @@
 package fr.epita.assistants.myide.domain.javafx.utils;
 
-import javafx.beans.NamedArg;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 
 public class Utils {
-    private static boolean darkMode = false;
     private static final String style = "-fx-base: rgba(60, 63, 65, 255);";
+    private static boolean darkMode = false;
 
     public static boolean isDarkMode() {
         return darkMode;

@@ -1,51 +1,33 @@
 package fr.epita.assistants.myide.domain.javafx;
 
 import fr.epita.assistants.myide.domain.entity.*;
+import fr.epita.assistants.myide.domain.entity.features.any.SearchImplementation;
 import fr.epita.assistants.myide.domain.javafx.utils.Icons;
 import fr.epita.assistants.myide.domain.javafx.utils.SceneLoader;
 import fr.epita.assistants.myide.domain.javafx.utils.SyntaxColor;
+import fr.epita.assistants.myide.domain.javafx.utils.Utils;
 import fr.epita.assistants.myide.domain.service.NodeServiceImplementation;
 import javafx.application.Platform;
-import fr.epita.assistants.myide.domain.javafx.utils.Utils;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
-import javafx.scene.layout.*;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
-import javafx.stage.PopupWindow;
 import javafx.stage.Stage;
 import org.fxmisc.flowless.VirtualizedScrollPane;
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
 
-import java.time.Duration;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Objects;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import javafx.application.Application;
-import javafx.application.Platform;
-import javafx.scene.Scene;
-import javafx.scene.control.ContextMenu;
-import javafx.scene.control.MenuItem;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
-import javafx.stage.Stage;
-import org.fxmisc.richtext.model.StyleSpans;
-import org.reactfx.Subscription;
-
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.concurrent.CompletableFuture;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -60,7 +42,7 @@ public class GuiController {
     public MenuButton gitButton;
     public MenuButton mavenButton;
     public MenuButton otherButton;
-    Project project;
+    public Project project;
 
     public void initialize() {
         tabPane.getTabs().clear();
@@ -137,6 +119,10 @@ public class GuiController {
         if (node.isFolder())
             return;
 
+        openNode(node);
+    }
+
+    public void openNode(fr.epita.assistants.myide.domain.entity.Node node) {
         var got = tabPane.getTabs().stream().filter((e) -> node.equals(e.getUserData())).findAny();
         if (got.isPresent()) {
             tabPane.getSelectionModel().select(got.get());
@@ -148,22 +134,22 @@ public class GuiController {
 
         // add line numbers to the left of area
         text.setParagraphGraphicFactory(LineNumberFactory.get(text));
-        text.setContextMenu( new SyntaxColor.DefaultContextMenu() );
+        text.setContextMenu(new SyntaxColor.DefaultContextMenu());
 
         text.getVisibleParagraphs().addModificationObserver
                 (
-                        new SyntaxColor.VisibleParagraphStyler<>( text, SyntaxColor::computeHighlighting )
+                        new SyntaxColor.VisibleParagraphStyler<>(text, SyntaxColor::computeHighlighting)
                 );
 
         // auto-indent: insert previous line's indents on enter
-        final Pattern whiteSpace = Pattern.compile( "^\\s+" );
-        text.addEventHandler( KeyEvent.KEY_PRESSED, KE ->
+        final Pattern whiteSpace = Pattern.compile("^\\s+");
+        text.addEventHandler(KeyEvent.KEY_PRESSED, KE ->
         {
-            if ( KE.getCode() == KeyCode.ENTER ) {
+            if (KE.getCode() == KeyCode.ENTER) {
                 int caretPosition = text.getCaretPosition();
                 int currentParagraph = text.getCurrentParagraph();
-                Matcher m0 = whiteSpace.matcher( text.getParagraph( currentParagraph-1 ).getSegments().get( 0 ) );
-                if ( m0.find() ) Platform.runLater( () -> text.insertText( caretPosition, m0.group() ) );
+                Matcher m0 = whiteSpace.matcher(text.getParagraph(currentParagraph - 1).getSegments().get(0));
+                if (m0.find()) Platform.runLater(() -> text.insertText(caretPosition, m0.group()));
             }
         });
 
@@ -173,7 +159,6 @@ public class GuiController {
         setTabBG(tab);
         tabPane.getTabs().add(0, tab);
         tabPane.getSelectionModel().select(0);
-
     }
 
     public void startTutorial(ActionEvent actionEvent) {
@@ -183,7 +168,7 @@ public class GuiController {
 
     public void newFile(ActionEvent actionEvent) {
         // TODO - new window to choose where to create file
-        // Then get parent node
+        // Then get gui node
         // Then
         // service.create(parentNode, filename, fr.epita.assistants.myide.domain.entity.Node.Types.FILE);
         //
@@ -221,6 +206,13 @@ public class GuiController {
         final var text = ((CodeArea) ((VirtualizedScrollPane) tab.getContent()).getContent());
 
         service.setText(node, text.getText().getBytes(StandardCharsets.UTF_8));
+        var feature = project.getFeature(Mandatory.Features.Any.SEARCH);
+        feature.ifPresent(value ->
+                CompletableFuture.supplyAsync(() ->
+                        ((SearchImplementation) value).updateCache(project)
+                )
+        );
+
     }
 
     public void changeProject(ActionEvent actionEvent) throws IOException {
@@ -247,6 +239,7 @@ public class GuiController {
 
     public void search(ActionEvent actionEvent) {
         // TODO
+        SceneLoader.loadSearch((Stage) mainAnchor.getScene().getWindow(), this);
     }
 
     public void cleanup(ActionEvent actionEvent) {

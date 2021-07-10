@@ -78,6 +78,21 @@ public class SearchImplementation implements Feature {
         }
     }
 
+    public boolean updateCache(Project project) {
+        try {
+            var directory = FSDirectory.open(configuration.tempFolder().resolve(project.getRootNode().getPath().getFileName()));
+            var analyzer = new StandardAnalyzer();
+            var config = new IndexWriterConfig(analyzer);
+            var writer = new IndexWriter(directory, config);
+
+            generateIndexes(project.getRootNode(), writer);
+            writer.close();
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
     /**
      * @param project {@link Project} on which the feature is executed.
      * @param params  Parameters given to the features.
@@ -88,10 +103,7 @@ public class SearchImplementation implements Feature {
         try {
             var directory = FSDirectory.open(configuration.tempFolder().resolve(project.getRootNode().getPath().getFileName()));
             var analyzer = new StandardAnalyzer();
-            var config = new IndexWriterConfig(analyzer);
-            var writer = new IndexWriter(directory, config);
 
-            generateIndexes(project.getRootNode(), writer);
 
             String fieldString;
             String queryString;
@@ -105,9 +117,8 @@ public class SearchImplementation implements Feature {
                 return failedSearch;
             }
 
-
             IndexReader indexReader = DirectoryReader
-                    .open(writer);
+                    .open(directory);
             IndexSearcher searcher = new IndexSearcher(indexReader);
 
 
@@ -125,7 +136,6 @@ public class SearchImplementation implements Feature {
                         }
                     }).toList();
 
-            writer.close();
             return new SearchReport() {
                 @Override
                 public List<Document> getResult() {
@@ -151,7 +161,7 @@ public class SearchImplementation implements Feature {
         return Mandatory.Features.Any.SEARCH;
     }
 
-    interface SearchReport extends ExecutionReport {
+    public interface SearchReport extends ExecutionReport {
         List<Document> getResult();
     }
 }
