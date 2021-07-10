@@ -21,11 +21,11 @@
                     <items>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                             <children>
-                                <TreeView fx:id="treeView" onContextMenuRequested="#showDelete" onMouseClicked="#treeOpenEvent" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                <TreeView fx:id="treeView" onMouseClicked="#treeOpenEvent" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <contextMenu>
                               <ContextMenu>
                                 <items>
-                                  <MenuItem mnemonicParsing="false" text="Delete" />
+                                  <MenuItem mnemonicParsing="false" text="Supprimer" onAction="#deleteNode"/>
                                 </items>
                               </ContextMenu>
                            </contextMenu></TreeView>

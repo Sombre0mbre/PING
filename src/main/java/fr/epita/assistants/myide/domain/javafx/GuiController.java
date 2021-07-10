@@ -338,10 +338,19 @@ public class GuiController {
     }
 
     public void mvnTreeEvent(ActionEvent actionEvent) {
-        // TODO
-        // showResult(report);
+        var got = project.getFeature(Mandatory.Features.Maven.TREE);
+        if (got.isEmpty())
+            return;
+        var report = got.get().execute(project);
+
+        showResult(report);
     }
 
-    public void showDelete(ContextMenuEvent contextMenuEvent) {
+    public void deleteNode(ActionEvent actionEvent) {
+        var selected = treeView.getSelectionModel().getSelectedItem();
+        if (selected == null)
+            return;
+        service.delete(selected.getValue());
+        updateTree();
     }
 }

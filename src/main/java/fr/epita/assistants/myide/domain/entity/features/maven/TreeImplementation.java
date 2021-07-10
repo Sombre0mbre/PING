@@ -17,7 +17,8 @@ public class TreeImplementation implements ProcessFeature {
      */
     @Override
     public ExecutionReport execute(Project project, Object... params) {
-        var param = new ArrayList<>(List.of("mvn", "dependency:tree"));
+        System.out.println("tree");
+        var param = new ArrayList<>(List.of("mvn", "dependency:tree", "-DoutputFile=" + project.getRootNode().getPath().resolve("tree.log")));
 
         Arrays.stream(params).forEach((e) -> param.add(e.toString()));
         return this.executeProcess(project, param);
