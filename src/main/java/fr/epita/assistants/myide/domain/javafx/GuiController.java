@@ -127,6 +127,15 @@ public class GuiController {
             return;
         }
 
+        String content;
+        try {
+            content = service.getContent(node);
+        } catch (Exception e) {
+            Utils.newAlertWrapper(Alert.AlertType.ERROR, "Impossible d'ouvrir le fichier\n" +
+                    "Veuillez véfifier qu'il s'agisse bien d'un fichier texte").showAndWait();
+            return;
+        }
+
         CodeArea text = new CodeArea();
         var tab = new Tab(node.getPath().getFileName().toString(), new VirtualizedScrollPane<>(text));
 
@@ -151,7 +160,7 @@ public class GuiController {
             }
         });
 
-        text.replaceText(0, 0, service.getContent(node));
+        text.replaceText(0, 0, content);
         text.textProperty().addListener((observable, oldValue, newValue) -> setEdited(tab, true));
         tab.setUserData(node);
         setTabBG(tab);
