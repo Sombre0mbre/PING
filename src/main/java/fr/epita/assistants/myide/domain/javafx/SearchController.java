@@ -46,7 +46,7 @@ public class SearchController {
         var feature = guiController.project.getFeature(Mandatory.Features.Any.SEARCH);
         if (feature.isEmpty())
             throw new UnsupportedOperationException();
-        var exec = (SearchImplementation.SearchReport) feature.get().execute(guiController.project, query, searchBar.getText());
+        var exec = (SearchImplementation.SearchReport) feature.get().execute(guiController.project, query, searchBar.getText() + "*");
         if (!exec.isSuccess())
             return;
 
@@ -89,6 +89,7 @@ public class SearchController {
     public void openAction(ActionEvent actionEvent) {
         if (selected != null) {
             guiController.openNode(selected);
+            guiController.mainAnchor.getScene().getWindow().requestFocus();
         } else {
             openButton.setDisable(true);
         }

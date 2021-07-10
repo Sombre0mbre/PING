@@ -6,10 +6,7 @@ import fr.epita.assistants.myide.domain.entity.NodeImplementation;
 import org.apache.commons.io.FileUtils;
 
 import javax.validation.constraints.NotNull;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -47,11 +44,18 @@ public class NodeServiceImplementation implements NodeService {
     }
 
     public String getContent(Node n) {
-        try {
-            return Files.readString(n.getPath());
-        } catch (IOException e) {
+        StringBuilder contentBuilder = new StringBuilder();
+        try (BufferedReader br = new BufferedReader(new FileReader(n.getPath().toFile())))
+        {
+            String sCurrentLine;
+            while ((sCurrentLine = br.readLine()) != null)
+            {
+                contentBuilder.append(sCurrentLine).append("\n");
+            }
+        }  catch (IOException e) {
             throw new UnsupportedOperationException("Could not read file");
         }
+        return contentBuilder.toString();
     }
 
 

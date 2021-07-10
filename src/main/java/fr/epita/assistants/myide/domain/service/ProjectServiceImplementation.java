@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashSet;
+import java.util.concurrent.CompletableFuture;
 
 public class ProjectServiceImplementation implements ProjectService {
     NodeServiceImplementation nodeService = new NodeServiceImplementation();
@@ -78,7 +79,7 @@ public class ProjectServiceImplementation implements ProjectService {
         // Build cache for search
         var feature = res.getFeature(Mandatory.Features.Any.SEARCH);
 
-        feature.ifPresent(value -> ((SearchImplementation) value).updateCache(res));
+        feature.ifPresent(value -> CompletableFuture.supplyAsync(() -> ((SearchImplementation) value).updateCache(res)));
 
         return res;
     }
