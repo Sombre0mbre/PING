@@ -125,7 +125,7 @@ public class SearchImplementation implements Feature {
             Query query = new QueryParser(fieldString, analyzer)
                     .parse(queryString);
 
-            TopDocs topDocs = searcher.search(query, 1000);
+            TopDocs topDocs = searcher.search(query, 2000);
 
             var res = Arrays.stream(topDocs.scoreDocs)
                     .map(scoreDoc -> {

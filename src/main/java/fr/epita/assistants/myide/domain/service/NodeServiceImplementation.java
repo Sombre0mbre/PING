@@ -10,9 +10,11 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
+import java.util.Base64;
 
 public class NodeServiceImplementation implements NodeService {
     public void generateChildren(@NotNull Node n) {
@@ -48,7 +50,7 @@ public class NodeServiceImplementation implements NodeService {
         try {
             return Files.readString(n.getPath());
         } catch (IOException e) {
-            throw new UnsupportedOperationException("Could not read node");
+            throw new UnsupportedOperationException("Could not read file");
         }
     }
 
