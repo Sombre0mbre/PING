@@ -49,11 +49,11 @@ public class NewFileController {
         var n = service.createDirectories(project.getRootNode(), parent);
 
         var name = nameField.getText();
-        if (!name.matches(regex)) {
+        if (!name.matches("^.+[.].+$")) {
             name = name + ".java";
         }
         var got = service.create(n, name, fr.epita.assistants.myide.domain.entity.Node.Types.FILE);
-        if (name.matches("^.+[.]java$")) {
+        if (name.matches(regex)) {
             service.setText(got, ("public class " + name.substring(0, (name.length() - ".java".length())) + " {\n}").getBytes(StandardCharsets.UTF_8));
             System.out.println("set");
         }
