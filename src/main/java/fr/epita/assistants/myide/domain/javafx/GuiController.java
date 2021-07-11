@@ -250,7 +250,6 @@ public class GuiController {
     }
 
     public void search(ActionEvent actionEvent) {
-        // TODO
         SceneLoader.loadSearch((Stage) mainAnchor.getScene().getWindow(), this);
     }
 
@@ -303,8 +302,8 @@ public class GuiController {
         var got = project.getFeature(Mandatory.Features.Git.ADD);
         if (got.isEmpty())
             return;
-        var report = got.get().execute(project, "./");
-        showResult((Supplier<Feature.ExecutionReport>) report);
+        showResult(() -> got.get().execute(project, "./"));
+
     }
 
     public void gitCommitEvent(ActionEvent actionEvent) {
@@ -316,32 +315,33 @@ public class GuiController {
         var got = project.getFeature(Mandatory.Features.Git.PUSH);
         if (got.isEmpty())
             return;
-        var report = got.get().execute(project);
-        showResult((Supplier<Feature.ExecutionReport>) report);
+        showResult(() -> got.get().execute(project));
+
     }
 
     public void gitPullEvent(ActionEvent actionEvent) {
         var got = project.getFeature(Mandatory.Features.Git.PULL);
         if (got.isEmpty())
             return;
-        var report = got.get().execute(project);
-        showResult((Supplier<Feature.ExecutionReport>) report);
+        showResult(() -> got.get().execute(project));
+
     }
 
     public void mvnPackageEvent(ActionEvent actionEvent) {
         var got = project.getFeature(Mandatory.Features.Maven.PACKAGE);
         if (got.isEmpty())
             return;
-        var report = got.get().execute(project);
-        showResult((Supplier<Feature.ExecutionReport>) report);
+        showResult(() -> got.get().execute(project));
+
     }
 
     public void mvnInstallEvent(ActionEvent actionEvent) {
         var got = project.getFeature(Mandatory.Features.Maven.INSTALL);
         if (got.isEmpty())
             return;
-        var report = got.get().execute(project);
-        showResult((Supplier<Feature.ExecutionReport>) report);
+        showResult(() -> got.get().execute(project));
+
+
     }
 
     public void mvnExecEvent(ActionEvent actionEvent) {
@@ -349,7 +349,6 @@ public class GuiController {
         if (got.isEmpty())
             return;
         var report = got.get().execute(project);
-        showResult((Supplier<Feature.ExecutionReport>) report);
         showResult(() -> got.get().execute(project));
 
     }
@@ -359,7 +358,6 @@ public class GuiController {
         if (got.isEmpty())
             return;
         var report = got.get().execute(project);
-        showResult((Supplier<Feature.ExecutionReport>) report);
         showResult(() -> got.get().execute(project));
     }
 
@@ -368,7 +366,6 @@ public class GuiController {
         if (got.isEmpty())
             return;
         var report = got.get().execute(project);
-        showResult((Supplier<Feature.ExecutionReport>) report);
         showResult(() -> got.get().execute(project));
     }
 
@@ -386,12 +383,8 @@ public class GuiController {
         else
             n = tmp.get();
 
-        showResult(() -> {
-            var res = got.get().execute(project);
-            updateTree();
-            openNode(n);
-            return res;
-        });
+        showResult(() -> got.get().execute(project));
+        updateTree();
     }
 
     private void successWindow(Feature.ExecutionReport report) {
