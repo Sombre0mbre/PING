@@ -10,8 +10,11 @@ import fr.epita.assistants.myide.domain.service.NodeServiceImplementation;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.event.EventType;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
@@ -28,6 +31,10 @@ import org.fxmisc.richtext.LineNumberFactory;
 import java.nio.charset.StandardCharsets;
 import java.util.Comparator;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -249,32 +256,38 @@ public class GuiController {
         var got = project.getFeature(Mandatory.Features.Any.CLEANUP);
         if (got.isEmpty())
             return;
-        var report = got.get().execute(project);
 
-        showResult(report);
+        showResult(() -> got.get().execute(project));
     }
 
     public void dist(ActionEvent actionEvent) {
         var got = project.getFeature(Mandatory.Features.Any.DIST);
         if (got.isEmpty())
             return;
-        var report = got.get().execute(project);
 
-        showResult(report);
+        showResult(() -> got.get().execute(project));
     }
 
-    private void showResult(Feature.ExecutionReport report) {
+    private void showResult(Supplier<Feature.ExecutionReport> supplier) {
+        final Feature.ExecutionReport[] report = {null};
         Task<Boolean> task = new Task<>() {
             @Override
             public Boolean call() {
-                return report.isSuccess();
+                report[0] = supplier.get();
+                if (report[0].isSuccess())
+                    return true;
+                throw new UnsupportedOperationException();
             }
         };
 
         var loading = Utils.newAlertWrapper(Alert.AlertType.INFORMATION, "Veuillez patienter...");
+        var indicator = new ProgressIndicator();
+        indicator.setProgress(ProgressBar.INDETERMINATE_PROGRESS);
+        loading.setGraphic(indicator);
         task.setOnRunning((e) -> loading.show());
         task.setOnSucceeded((e) -> {
-            successWindow(report, loading);
+            loading.hide();
+            successWindow(report[0]);
         });
         task.setOnFailed((e) -> {
             loading.hide();
@@ -283,7 +296,6 @@ public class GuiController {
         });
         new Thread(task).start();
     }
-
 
     public void gitAddEvent(ActionEvent actionEvent) {
         // TODO
@@ -296,13 +308,19 @@ public class GuiController {
     }
 
     public void gitPushEvent(ActionEvent actionEvent) {
-        // TODO
-        // showResult(report);
+        var got = project.getFeature(Mandatory.Features.Git.PULL);
+        if (got.isEmpty())
+            return;
+        showResult(() -> got.get().execute(project));
+
     }
 
     public void gitPullEvent(ActionEvent actionEvent) {
-        // TODO
-        // showResult(report);
+        var got = project.getFeature(Mandatory.Features.Git.PULL);
+        if (got.isEmpty())
+            return;
+        showResult(() -> got.get().execute(project));
+
     }
 
     public void mvnPackageEvent(ActionEvent actionEvent) {
@@ -324,16 +342,16 @@ public class GuiController {
         var got = project.getFeature(Mandatory.Features.Maven.CLEAN);
         if (got.isEmpty())
             return;
-        var report = got.get().execute(project);
-        showResult(report);
+        showResult(() -> got.get().execute(project));
+
     }
 
     public void mvnTestEvent(ActionEvent actionEvent) {
         var got = project.getFeature(Mandatory.Features.Maven.TEST);
         if (got.isEmpty())
             return;
-        var report = got.get().execute(project);
-        showResult(report);
+        showResult(() -> got.get().execute(project));
+
     }
 
     public void mvnTreeEvent(ActionEvent actionEvent) {
@@ -351,38 +369,20 @@ public class GuiController {
         else
             n = tmp.get();
 
-        var report = got.get().execute(project);
-
-
-        Task<Boolean> task = new Task<>() {
-            @Override
-            public Boolean call() {
-                return report.isSuccess();
-            }
-        };
-
-        var loading = Utils.newAlertWrapper(Alert.AlertType.INFORMATION, "Veuillez patienter...");
-        task.setOnRunning((e) -> loading.show());
-        task.setOnSucceeded((e) -> {
-            successWindow(report, loading);
+        showResult(() -> {
+            var res = got.get().execute(project);
             updateTree();
             openNode(n);
+            return res;
         });
-        task.setOnFailed((e) -> {
-            loading.hide();
-            Alert alert = Utils.newAlertWrapper(Alert.AlertType.ERROR, "Impossible d'effectuer l'action demandée !");
-            alert.showAndWait();
-        });
-        new Thread(task).start();
     }
 
-    private void successWindow(Feature.ExecutionReport report, Alert loading) {
-        loading.hide();
+    private void successWindow(Feature.ExecutionReport report) {
         Alert alert;
         if (report != null && report.isSuccess()) {
             alert = Utils.newAlertWrapper(Alert.AlertType.INFORMATION, "L'action a été exectuée avec succès!");
         } else {
-            alert = Utils.newAlertWrapper(Alert.AlertType.ERROR, "Impossible d'effectuer l'action demandée !");
+            alert = Utils.newAlertWrapper(Alert.AlertType.ERROR, "AAAA d'effectuer l'action demandée !");
         }
         alert.showAndWait();
     }

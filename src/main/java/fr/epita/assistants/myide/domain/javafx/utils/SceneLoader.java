@@ -71,6 +71,7 @@ public class SceneLoader {
 
         Scene scene = new Scene(loadReport.gui);
 
+
         searchWindow.setTitle("Rechercher...");
         searchWindow.setScene(scene);
 
@@ -101,14 +102,15 @@ public class SceneLoader {
         ((NewFileController) loadReport.loader.getController()).setup(project, gui);
 
         Scene scene = new Scene(loadReport.gui);
+        var window = new Stage();
 
-        tutorialWindow.setTitle("Nouveau fichier");
-        tutorialWindow.setScene(scene);
+        window.setTitle("Nouveau fichier");
+        window.setScene(scene);
 
         // Set position of second window, related to primary window.
-        tutorialWindow.centerOnScreen();
-        tutorialWindow.setResizable(false);
-        tutorialWindow.showAndWait();
+        window.centerOnScreen();
+        window.setResizable(false);
+        window.showAndWait();
     }
 
     private record LoadReport(Parent gui, FXMLLoader loader) {

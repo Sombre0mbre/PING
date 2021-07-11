@@ -62,6 +62,12 @@
             <artifactId>org.eclipse.jgit</artifactId>
             <version>${versions.jgit}</version>
         </dependency>
+        <dependency>
+            <groupId>org.eclipse.jgit</groupId>
+            <artifactId>org.eclipse.jgit.ssh.jsch</artifactId>
+            <version>5.11.1.202105131744-r</version>
+        </dependency>
+
 
         <dependency>
             <groupId>org.apache.lucene</groupId>
