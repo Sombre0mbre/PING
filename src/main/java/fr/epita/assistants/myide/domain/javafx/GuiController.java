@@ -26,6 +26,7 @@ import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
 
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.Comparator;
 import java.util.concurrent.CompletableFuture;
 import java.util.regex.Matcher;
@@ -341,9 +342,11 @@ public class GuiController {
         var got = project.getFeature(Mandatory.Features.Maven.TREE);
         if (got.isEmpty())
             return;
-        var report = got.get().execute(project);
+        service.create(project.getRootNode(), "tree.log", fr.epita.assistants.myide.domain.entity.Node.Types.FILE);
 
+        var report = got.get().execute(project);
         showResult(report);
+        updateTree();
     }
 
     public void deleteNode(ActionEvent actionEvent) {
