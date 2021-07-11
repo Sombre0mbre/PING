@@ -1,6 +1,7 @@
 package fr.epita.assistants.myide.domain.javafx.utils;
 
 import fr.epita.assistants.myide.domain.entity.Project;
+import fr.epita.assistants.myide.domain.javafx.CommitController;
 import fr.epita.assistants.myide.domain.javafx.GuiController;
 import fr.epita.assistants.myide.domain.javafx.NewFileController;
 import fr.epita.assistants.myide.domain.javafx.SearchController;
@@ -18,6 +19,7 @@ public class SceneLoader {
 
     public static Stage tutorialWindow = new Stage();
     public static Stage searchWindow = new Stage();
+    public static Stage commitWindow = new Stage();
 
     private static LoadReport loadFXML(URL path) {
         if (path == null)
@@ -114,5 +116,19 @@ public class SceneLoader {
     }
 
     private record LoadReport(Parent gui, FXMLLoader loader) {
+    }
+
+    public static void loadCommit(Project project) {
+        var loadReport = loadFXML(SceneLoader.class.getClassLoader().getResource("fxml/commit.fxml"));
+        ((CommitController) loadReport.loader.getController()).setup(project);
+        Scene scene = new Scene(loadReport.gui);
+
+        commitWindow.setTitle("Message de Commit");
+        commitWindow.setScene(scene);
+
+        // Set position of second window, related to primary window.
+        commitWindow.centerOnScreen();
+        commitWindow.setResizable(false);
+        commitWindow.show();
     }
 }

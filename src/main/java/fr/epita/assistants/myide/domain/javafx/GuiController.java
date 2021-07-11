@@ -269,7 +269,7 @@ public class GuiController {
         showResult(() -> got.get().execute(project));
     }
 
-    private void showResult(Supplier<Feature.ExecutionReport> supplier) {
+    public void showResult(Supplier<Feature.ExecutionReport> supplier) {
         final Feature.ExecutionReport[] report = {null};
         Task<Boolean> task = new Task<>() {
             @Override
@@ -307,8 +307,7 @@ public class GuiController {
     }
 
     public void gitCommitEvent(ActionEvent actionEvent) {
-        // TODO
-        // showResult(report);
+        SceneLoader.loadCommit(project);
     }
 
     public void gitPushEvent(ActionEvent actionEvent) {
