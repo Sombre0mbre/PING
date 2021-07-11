@@ -190,6 +190,8 @@ public class GuiController {
 
     public void saveFile(ActionEvent actionEvent) {
         var selected = tabPane.getSelectionModel().getSelectedItem();
+        if (selected == null)
+            return;
         saveTab(selected);
         setEdited(selected, false);
     }
