@@ -5,6 +5,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -18,7 +19,10 @@ public class ApplicationMain extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
-
+        primaryStage.getIcons().add(
+                new Image(
+                        Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("icons/icon.png"))));
         SceneLoader.loadStartup(primaryStage);
+
     }
 }
