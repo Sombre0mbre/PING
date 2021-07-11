@@ -298,8 +298,11 @@ public class GuiController {
     }
 
     public void gitAddEvent(ActionEvent actionEvent) {
-        // TODO
-        // showResult(report);
+        var got = project.getFeature(Mandatory.Features.Git.ADD);
+        if (got.isEmpty())
+            return;
+        var report = got.get().execute(project, "./");
+        showResult((Supplier<Feature.ExecutionReport>) report);
     }
 
     public void gitCommitEvent(ActionEvent actionEvent) {
@@ -308,57 +311,69 @@ public class GuiController {
     }
 
     public void gitPushEvent(ActionEvent actionEvent) {
-        var got = project.getFeature(Mandatory.Features.Git.PULL);
+        var got = project.getFeature(Mandatory.Features.Git.PUSH);
         if (got.isEmpty())
             return;
-        showResult(() -> got.get().execute(project));
-
+        var report = got.get().execute(project);
+        showResult((Supplier<Feature.ExecutionReport>) report);
     }
 
     public void gitPullEvent(ActionEvent actionEvent) {
         var got = project.getFeature(Mandatory.Features.Git.PULL);
         if (got.isEmpty())
             return;
-        showResult(() -> got.get().execute(project));
-
+        var report = got.get().execute(project);
+        showResult((Supplier<Feature.ExecutionReport>) report);
     }
 
     public void mvnPackageEvent(ActionEvent actionEvent) {
-        // Not implemented
-        // showResult(report);
+        var got = project.getFeature(Mandatory.Features.Maven.PACKAGE);
+        if (got.isEmpty())
+            return;
+        var report = got.get().execute(project);
+        showResult((Supplier<Feature.ExecutionReport>) report);
     }
 
     public void mvnInstallEvent(ActionEvent actionEvent) {
-        // Not implemented
-        // showResult(report);
+        var got = project.getFeature(Mandatory.Features.Maven.INSTALL);
+        if (got.isEmpty())
+            return;
+        var report = got.get().execute(project);
+        showResult((Supplier<Feature.ExecutionReport>) report);
     }
 
     public void mvnExecEvent(ActionEvent actionEvent) {
-        // Not implemented
-        // showResult(report);
+        var got = project.getFeature(Mandatory.Features.Maven.EXEC);
+        if (got.isEmpty())
+            return;
+        var report = got.get().execute(project);
+        showResult((Supplier<Feature.ExecutionReport>) report);
+        showResult(() -> got.get().execute(project));
+
     }
 
     public void mvnCleanEvent(ActionEvent actionEvent) {
         var got = project.getFeature(Mandatory.Features.Maven.CLEAN);
         if (got.isEmpty())
             return;
+        var report = got.get().execute(project);
+        showResult((Supplier<Feature.ExecutionReport>) report);
         showResult(() -> got.get().execute(project));
-
     }
 
     public void mvnTestEvent(ActionEvent actionEvent) {
         var got = project.getFeature(Mandatory.Features.Maven.TEST);
         if (got.isEmpty())
             return;
+        var report = got.get().execute(project);
+        showResult((Supplier<Feature.ExecutionReport>) report);
         showResult(() -> got.get().execute(project));
-
     }
 
     public void mvnTreeEvent(ActionEvent actionEvent) {
         var got = project.getFeature(Mandatory.Features.Maven.TREE);
         if (got.isEmpty())
             return;
-
         var tmp = project.getRootNode().getChildren().stream()
                 .filter(fr.epita.assistants.myide.domain.entity.Node::isFile)
                 .filter(a -> a.getPath().getFileName().toString().equals("tree.log"))
