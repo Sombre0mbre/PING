@@ -54,10 +54,15 @@ public class TutorialArrays {
                             ou dossiers générés durant la création (le build) d’un projet.
                             """
             ),
+            /*
             new TutorialElement(
                     "Exec",
-                    "Description 6"
+                    """
+                            La commande Exec permet d’exécuter les programmes et les programmes Java,
+                            soit dans deux process différents, soit dans la même machine virtuelle.
+                            """
             ),
+             */
             new TutorialElement(
                     "Install",
                     """
@@ -102,8 +107,47 @@ public class TutorialArrays {
                             """
             ),
             new TutorialElement(
+                    "Variables",
+                    """
+                            Une variable est une donnée possédant un nom.
+                            Elle pourra être lu et utilisée plus tard dans le programme. 
+                            Le nom d’une variable ne peut pas commencer par un chiffre, 
+                            contenir des espaces ou s’écrire de la même manière qu'un mot réservé.
+                                                        
+                            Déclaration de variables :
+                            Toutes les variables doivent être déclarées pour qu'elles soient utilisables :
+                                TypeDeLaVariable nomDeLaVariable;
+                            
+                            Déclaration de 2 variables possédant le même type :
+                                TypeDeLaVariable nom1, nom2;
+                                
+                            Exexmple concret :
+                             String bonjour;
+                            
+                            Une variable permet de stocker une valeur que nous devons lui assigner. 
+                                nomDeLaVariable = valeur;
+                          
+                            Ici, l’opérateur “=” affecter la valeur à la variable.
+                            
+                            Il est important de noter que la valeur et la variable doivent posséder
+                            des types indentiques.
+                            
+                            Il est également possible d'effectuer l'opération suivante :
+                                TypeDeLaVariable nomDeLaVariable = valeur;
+                            """
+            ),
+            new TutorialElement(
                     "Conditions",
-                    "Description 10"
+                    """
+                            If :
+                            L'instruction if est la structure de test la plus basique, 
+                            on la retrouve dans une majorité des langages (sous différentes syntaxes). 
+                            Elle permet d'exécuter une série d'instructions si jamais une condition est réalisée.
+                            
+                            Else :
+                            Instruction complémentaire à l'if, elle permet d’effectuer des opérations 
+                            lorsque la condition de l'if le précédant n’est pas respectée.
+                            """
             ),
             new TutorialElement(
                     "Boucles",
@@ -119,11 +163,23 @@ public class TutorialArrays {
             ),
             new TutorialElement(
                     "Fonctions",
-                    "Description 12"
-            ),
-            new TutorialElement(
-                    "Classes",
-                    "Description 13"
+                    """
+                            Une fonction est un bout de code que nous pouvons réutiliser à volonté.
+                            On peut lui passer des paramètres et elle peut posséder une valeur de retour.
+                            
+                            La fonction suivante possède prend un entier et ne renvoie pas de valeur (void) :
+                                public void maFonction(int a) {
+                                    System.println(a);
+                                }
+                            La fonction suivante possède prend un entier et renvoie un entier :
+                                public int square(int a) {
+                                    return a * a;
+                                }
+                            Une fonction peut être publique (public, accessible partout), 
+                            privée (private, accessible uniquement par la classe qui définit la fonction)
+                            ou protégée (protected, accessible uniquement par la classe qui définit la fonction 
+                            et ses classes filles).
+                            """
             )
     };
 }
