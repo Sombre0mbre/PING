@@ -45,6 +45,7 @@ public class NewFileController {
 
     public void createNewFile(ActionEvent actionEvent) {
         var parent = new File(locationField.getText()).toPath();
+        service.generateChildren(project.getRootNode());
         var n = service.createDirectories(project.getRootNode(), parent);
 
         var name = nameField.getText();

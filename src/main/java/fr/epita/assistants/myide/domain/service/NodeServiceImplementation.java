@@ -18,6 +18,7 @@ public class NodeServiceImplementation implements NodeService {
     public void generateChildren(@NotNull Node n) {
         if (n.isFile())
             return;
+        n.getChildren().clear();
         var list = n.getPath().toFile().listFiles();
         if (list == null)
             return;
