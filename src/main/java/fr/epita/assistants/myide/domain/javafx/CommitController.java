@@ -13,6 +13,7 @@ import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 
@@ -40,9 +41,16 @@ public class CommitController {
         if (got.isEmpty())
             return;
         var params = commitMessage.getText();
-        System.out.println(params);
         showResult(() -> got.get().execute(project, params));
         ((Node)(event.getSource())).getScene().getWindow().hide();
+    }
+
+    @FXML
+    void DoValidate(KeyEvent event) {
+        if (event.getCode() == KeyCode.ENTER)  {
+            validateButton.fire();
+        }
+
     }
 
     public void showResult(Supplier<Feature.ExecutionReport> supplier) {
