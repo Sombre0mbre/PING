@@ -4,6 +4,7 @@ import javax.validation.constraints.NotNull;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class NodeImplementation implements Node {
     Path path;
@@ -67,5 +68,18 @@ public class NodeImplementation implements Node {
     @Override
     public String toString() {
         return path.getFileName().toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        NodeImplementation that = (NodeImplementation) o;
+        return Objects.equals(path, that.path) && Objects.equals(type, that.type);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(path, type);
     }
 }
