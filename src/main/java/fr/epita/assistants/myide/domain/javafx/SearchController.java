@@ -3,6 +3,8 @@ package fr.epita.assistants.myide.domain.javafx;
 import fr.epita.assistants.myide.domain.entity.Mandatory;
 import fr.epita.assistants.myide.domain.entity.Node;
 import fr.epita.assistants.myide.domain.entity.features.any.SearchImplementation;
+import fr.epita.assistants.myide.domain.service.NodeService;
+import fr.epita.assistants.myide.domain.service.NodeServiceImplementation;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
@@ -23,6 +25,7 @@ public class SearchController {
     public Button openButton;
 
     private GuiController guiController;
+    private NodeServiceImplementation service = new NodeServiceImplementation();
 
     private Node selected = null;
 
@@ -54,36 +57,11 @@ public class SearchController {
         for (var i : exec.getResult()) {
             System.out.println(i.get("path"));
             try {
-                tmp.add(getNodeWithPath(new File(i.get("path")).toPath()));
+                tmp.add(service.getNodeWithPath(guiController.project.getRootNode(), new File(i.get("path")).toPath()));
             } catch (Exception ignored) {
             }
         }
         listView.getItems().addAll(tmp.stream().sorted(Comparator.comparing(Object::toString)).toList());
-    }
-
-    private Node getNodeWithPath(Path path) {
-        final Node rootNode = guiController.project.getRootNode();
-        var nodePath = rootNode.getPath().relativize(path).resolve(path.getFileName());
-        System.out.println(nodePath + "\n");
-        var parentList = new ArrayList<Path>();
-        while (nodePath.getParent() != null) {
-            parentList.add(0, nodePath.getParent().getFileName());
-            nodePath = nodePath.getParent();
-        }
-
-        Node current = rootNode;
-        for (var i : parentList) {
-            current = searchChildren(current, i);
-        }
-        return current;
-    }
-
-    private Node searchChildren(Node current, Path i) {
-        for (var childNode : current.getChildren()) {
-            if (childNode.getPath().getFileName().equals(i))
-                return childNode;
-        }
-        throw new UnsupportedOperationException();
     }
 
     public void openAction(ActionEvent actionEvent) {

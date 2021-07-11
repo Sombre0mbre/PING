@@ -1,17 +1,13 @@
 package fr.epita.assistants.myide.domain.javafx.utils;
 
 import javafx.application.Platform;
-import javafx.scene.control.ContextMenu;
-import javafx.scene.control.MenuItem;
-import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.GenericStyledArea;
 import org.fxmisc.richtext.model.Paragraph;
 import org.fxmisc.richtext.model.StyleSpans;
 import org.fxmisc.richtext.model.StyleSpansBuilder;
 import org.reactfx.collection.ListModification;
 
-import java.util.Collection;
-import java.util.Collections;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.regex.Matcher;
@@ -19,60 +15,51 @@ import java.util.regex.Pattern;
 
 public class SyntaxColor {
 
-    public static final String[] KEYWORDS = new String[]{
-            "abstract", "assert", "boolean", "break", "byte",
-            "case", "catch", "char", "class", "const",
-            "continue", "default", "do", "double", "else",
-            "enum", "extends", "final", "finally", "float",
-            "for", "goto", "if", "implements", "import",
-            "instanceof", "int", "interface", "long", "native",
-            "new", "package", "private", "protected", "public",
-            "return", "short", "static", "strictfp", "super",
-            "switch", "synchronized", "this", "throw", "throws",
-            "transient", "try", "void", "volatile", "while"
+    static final String[] keyWords = new String[]{
+            "abstract", "assert", "boolean", "break", "byte", "case", "catch", "char", "class", "const",
+            "continue", "default", "do", "double", "else", "enum", "extends", "final", "finally", "float",
+            "for", "goto", "if", "implements", "import", "instanceof", "int", "interface", "long", "native",
+            "new", "package", "private", "protected", "public", "return", "short", "static", "strictfp", "super",
+            "switch", "synchronized", "this", "throw", "throws", "transient", "try", "void", "volatile", "while", "var",
+            "true", "false", "record", "non-sealed", "permits", "sealed", "yield", "null"
     };
+    static final String keywordRegex = "\\b(" + String.join("|", keyWords) + ")\\b";
+    static final String parenRegex = "[()]";
+    static final String braceRegex = "[{}]";
+    static final String bracketRegex = "[\\[\\]]";
+    static final String semiColRegex = ";";
+    static final String stringRegex = "\"([^\"\\\\]|\\\\.)*\"";
+    static final String commentRegex = "//[^\n]*" + "|" + "/\\*(.|\\R)*?\\*/" + "|" + "/\\*[^\\v]*" + "|" + "^\\h*\\*([^\\v]*|/)";
 
-    public static final String KEYWORD_PATTERN = "\\b(" + String.join("|", KEYWORDS) + ")\\b";
-    public static final String PAREN_PATTERN = "[()]";
-    public static final String BRACE_PATTERN = "[{}]";
-    public static final String BRACKET_PATTERN = "[\\[\\]]";
-    public static final String SEMICOLON_PATTERN = ";";
-    public static final String STRING_PATTERN = "\"([^\"\\\\]|\\\\.)*\"";
-    public static final String COMMENT_PATTERN = "//[^\n]*" + "|" + "/\\*(.|\\R)*?\\*/"   // for whole text processing (text blocks)
-            + "|" + "/\\*[^\\v]*" + "|" + "^\\h*\\*([^\\v]*|/)";  // for visible paragraph processing (line by line)
-
-    public static final Pattern PATTERN = Pattern.compile(
-            "(?<KEYWORD>" + KEYWORD_PATTERN + ")"
-                    + "|(?<PAREN>" + PAREN_PATTERN + ")"
-                    + "|(?<BRACE>" + BRACE_PATTERN + ")"
-                    + "|(?<BRACKET>" + BRACKET_PATTERN + ")"
-                    + "|(?<SEMICOLON>" + SEMICOLON_PATTERN + ")"
-                    + "|(?<STRING>" + STRING_PATTERN + ")"
-                    + "|(?<COMMENT>" + COMMENT_PATTERN + ")"
+    static final Pattern pattern = Pattern.compile(
+            "(?<KEYWORD>" + keywordRegex + ")"
+                    + "|(?<PAREN>" + parenRegex + ")"
+                    + "|(?<BRACE>" + braceRegex + ")"
+                    + "|(?<BRACKET>" + bracketRegex + ")"
+                    + "|(?<SEMICOLON>" + semiColRegex + ")"
+                    + "|(?<STRING>" + stringRegex + ")"
+                    + "|(?<COMMENT>" + commentRegex + ")"
     );
 
+    static String[] patternNames = new String[]{"KEYWORD", "PAREN", "BRACE", "BRACKET", "SEMICOLON", "STRING", "COMMENT"};
 
     public static StyleSpans<Collection<String>> computeHighlighting(String text) {
-        Matcher matcher = PATTERN.matcher(text);
-        int lastKwEnd = 0;
-        StyleSpansBuilder<Collection<String>> spansBuilder
-                = new StyleSpansBuilder<>();
+        Matcher matcher = pattern.matcher(text);
+        var spansBuilder = new StyleSpansBuilder<Collection<String>>();
+        int lastPosition = 0;
         while (matcher.find()) {
-            String styleClass =
-                    matcher.group("KEYWORD") != null ? "keyword" :
-                            matcher.group("PAREN") != null ? "paren" :
-                                    matcher.group("BRACE") != null ? "brace" :
-                                            matcher.group("BRACKET") != null ? "bracket" :
-                                                    matcher.group("SEMICOLON") != null ? "semicolon" :
-                                                            matcher.group("STRING") != null ? "string" :
-                                                                    matcher.group("COMMENT") != null ? "comment" :
-                                                                            null; /* never happens */
-            assert styleClass != null;
-            spansBuilder.add(Collections.singleton("code"), matcher.start() - lastKwEnd);
+            String styleClass = null;
+            for (var i : patternNames) {
+                if (matcher.group(i) != null) {
+                    styleClass = i.toLowerCase(Locale.ROOT);
+                }
+            }
+
+            spansBuilder.add(Collections.singleton("code"), matcher.start() - lastPosition);
             spansBuilder.add(Collections.singleton(styleClass), matcher.end() - matcher.start());
-            lastKwEnd = matcher.end();
+            lastPosition = matcher.end();
         }
-        spansBuilder.add(Collections.singleton("code"), text.length() - lastKwEnd);
+        spansBuilder.add(Collections.singleton("code"), text.length() - lastPosition);
         return spansBuilder.create();
     }
 
@@ -99,51 +86,6 @@ public class SyntaxColor {
                     prevParagraph = paragraph;
                 }
             }
-        }
-    }
-
-    public static class DefaultContextMenu extends ContextMenu {
-        public MenuItem fold, unfold, print;
-
-        public DefaultContextMenu() {
-            fold = new MenuItem("Fold selected text");
-            fold.setOnAction(AE -> {
-                hide();
-                fold();
-            });
-
-            unfold = new MenuItem("Unfold from cursor");
-            unfold.setOnAction(AE -> {
-                hide();
-                unfold();
-            });
-
-            print = new MenuItem("Print");
-            print.setOnAction(AE -> {
-                hide();
-                print();
-            });
-
-            getItems().addAll(fold, unfold, print);
-        }
-
-        /**
-         * Folds multiple lines of selected text, only showing the first line and hiding the rest.
-         */
-        public void fold() {
-            ((CodeArea) getOwnerNode()).foldSelectedParagraphs();
-        }
-
-        /**
-         * Unfold the CURRENT line/paragraph if it has a fold.
-         */
-        public void unfold() {
-            CodeArea area = (CodeArea) getOwnerNode();
-            area.unfoldParagraphs(area.getCurrentParagraph());
-        }
-
-        public void print() {
-            System.out.println(((CodeArea) getOwnerNode()).getText());
         }
     }
 }

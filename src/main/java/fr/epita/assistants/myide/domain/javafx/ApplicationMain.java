@@ -1,9 +1,11 @@
 package fr.epita.assistants.myide.domain.javafx;
 
+import fr.epita.assistants.myide.domain.javafx.utils.SceneLoader;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -17,15 +19,10 @@ public class ApplicationMain extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
+        primaryStage.getIcons().add(
+                new Image(
+                        Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("icons/icon.png"))));
+        SceneLoader.loadStartup(primaryStage);
 
-        // IDE Window
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("fxml/startup.fxml")));
-        primaryStage.setTitle("MyIDE");
-        Scene scene = new Scene(root);
-        primaryStage.setMinHeight(400);
-        primaryStage.setMinWidth(400);
-        primaryStage.setResizable(false);
-        primaryStage.setScene(scene);
-        primaryStage.show();
     }
 }

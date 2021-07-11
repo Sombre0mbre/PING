@@ -11,6 +11,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
+import java.util.ArrayList;
 import java.util.Base64;
 
 public class NodeServiceImplementation implements NodeService {
@@ -58,6 +59,29 @@ public class NodeServiceImplementation implements NodeService {
         return contentBuilder.toString();
     }
 
+    public Node getNodeWithPath(Node rootNode, Path path) {
+        var nodePath = rootNode.getPath().relativize(path).resolve(path.getFileName());
+        System.out.println(nodePath + "\n");
+        var parentList = new ArrayList<Path>();
+        while (nodePath.getParent() != null) {
+            parentList.add(0, nodePath.getParent().getFileName());
+            nodePath = nodePath.getParent();
+        }
+
+        Node current = rootNode;
+        for (var i : parentList) {
+            current = searchChildren(current, i);
+        }
+        return current;
+    }
+
+    private Node searchChildren(Node current, Path i) {
+        for (var childNode : current.getChildren()) {
+            if (childNode.getPath().getFileName().equals(i))
+                return childNode;
+        }
+        throw new UnsupportedOperationException();
+    }
 
     public Node setText(Node node, byte[] content) {
         if (!node.isFile())
@@ -147,12 +171,34 @@ public class NodeServiceImplementation implements NodeService {
             } else
                 throw new IllegalStateException("Unknown type");
         } catch (Exception e) {
-            throw new UnsupportedOperationException("Could not create node: It could already exists");
+            throw new UnsupportedOperationException("Could not create node: It could already exists:" + name);
         }
         var res = new NodeImplementation(childPath, type, folder);
         if (folder != null)
             folder.getChildren().add(res);
         return res;
+    }
+
+    public Node createDirectories(Node root, Path path) {
+        var nodePath = root.getPath().relativize(path);
+
+        var parentList = new ArrayList<Path>();
+        while (nodePath != null && nodePath.getFileName().toString().length() != 0) {
+            parentList.add(0, nodePath.getFileName());
+            nodePath = nodePath.getParent();
+        }
+
+
+        var current = root;
+        for (var tmp : parentList) {
+            System.out.println("<" + tmp + ">");
+            var found = current.getChildren().stream().filter((a) -> a.getPath().getFileName().equals(tmp)).findAny();
+            if (found.isEmpty())
+                current = this.create(current, tmp.toString(), Node.Types.FOLDER);
+            else
+                current = found.get();
+        }
+        return current;
     }
 
     /**

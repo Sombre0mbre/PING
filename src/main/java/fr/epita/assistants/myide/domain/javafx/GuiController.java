@@ -10,8 +10,11 @@ import fr.epita.assistants.myide.domain.service.NodeServiceImplementation;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.event.EventType;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
@@ -26,7 +29,12 @@ import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Comparator;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -90,6 +98,7 @@ public class GuiController {
                 updateTreeSub(child, childTree);
             }
         }
+        root.getChildren().setAll(root.getChildren().sorted(Comparator.comparing(a -> a.getValue().toString().toLowerCase())));
     }
 
     private Node getIcon(fr.epita.assistants.myide.domain.entity.Node node) {
@@ -137,11 +146,11 @@ public class GuiController {
         }
 
         CodeArea text = new CodeArea();
-        var tab = new Tab(node.getPath().getFileName().toString(), new VirtualizedScrollPane<>(text));
+        var scroll = new VirtualizedScrollPane<>(text);
+        var tab = new Tab(node.getPath().getFileName().toString(), scroll);
 
         // add line numbers to the left of area
         text.setParagraphGraphicFactory(LineNumberFactory.get(text));
-        text.setContextMenu(new SyntaxColor.DefaultContextMenu());
 
         text.getVisibleParagraphs().addModificationObserver
                 (
@@ -174,15 +183,9 @@ public class GuiController {
     }
 
     public void newFile(ActionEvent actionEvent) {
-        // TODO - new window to choose where to create file
-        // Then get parent node
-        // Then
-        // service.create(parentNode, filename, fr.epita.assistants.myide.domain.entity.Node.Types.FILE);
-        //
-        // Add to file:
-        // public class <filename> {
-        //
-        // }
+        SceneLoader.loadNewFile(project, this);
+        updateTree();
+        mainAnchor.getScene().getWindow().requestFocus();
     }
 
     public void saveFile(ActionEvent actionEvent) {
@@ -210,7 +213,7 @@ public class GuiController {
         System.out.println("Saving tab: " + tab.getText());
 
         var node = (NodeImplementation) tab.getUserData();
-        final var text = ((CodeArea) ((VirtualizedScrollPane) tab.getContent()).getContent());
+        final var text = ((VirtualizedScrollPane<CodeArea>) tab.getContent()).getContent();
 
         service.setText(node, text.getText().getBytes(StandardCharsets.UTF_8));
         var feature = project.getFeature(Mandatory.Features.Any.SEARCH);
@@ -253,39 +256,38 @@ public class GuiController {
         var got = project.getFeature(Mandatory.Features.Any.CLEANUP);
         if (got.isEmpty())
             return;
-        var report = got.get().execute(project);
 
-        showResult(report);
+        showResult(() -> got.get().execute(project));
     }
 
     public void dist(ActionEvent actionEvent) {
         var got = project.getFeature(Mandatory.Features.Any.DIST);
         if (got.isEmpty())
             return;
-        var report = got.get().execute(project);
 
-        showResult(report);
+        showResult(() -> got.get().execute(project));
     }
 
-    private void showResult(Feature.ExecutionReport report) {
+    private void showResult(Supplier<Feature.ExecutionReport> supplier) {
+        final Feature.ExecutionReport[] report = {null};
         Task<Boolean> task = new Task<>() {
             @Override
             public Boolean call() {
-                return report.isSuccess();
+                report[0] = supplier.get();
+                if (report[0].isSuccess())
+                    return true;
+                throw new UnsupportedOperationException();
             }
         };
 
         var loading = Utils.newAlertWrapper(Alert.AlertType.INFORMATION, "Veuillez patienter...");
+        var indicator = new ProgressIndicator();
+        indicator.setProgress(ProgressBar.INDETERMINATE_PROGRESS);
+        loading.setGraphic(indicator);
         task.setOnRunning((e) -> loading.show());
         task.setOnSucceeded((e) -> {
             loading.hide();
-            Alert alert;
-            if (report != null && report.isSuccess()) {
-                alert = Utils.newAlertWrapper(Alert.AlertType.INFORMATION, "L'action a été exectuée avec succès!");
-            } else {
-                alert = Utils.newAlertWrapper(Alert.AlertType.ERROR, "Impossible d'effectuer l'action demandée !");
-            }
-            alert.showAndWait();
+            successWindow(report[0]);
         });
         task.setOnFailed((e) -> {
             loading.hide();
@@ -295,13 +297,12 @@ public class GuiController {
         new Thread(task).start();
     }
 
-
     public void gitAddEvent(ActionEvent actionEvent) {
         var got = project.getFeature(Mandatory.Features.Git.ADD);
         if (got.isEmpty())
             return;
         var report = got.get().execute(project, "./");
-        showResult(report);
+        showResult((Supplier<Feature.ExecutionReport>) report);
     }
 
     public void gitCommitEvent(ActionEvent actionEvent) {
@@ -314,7 +315,7 @@ public class GuiController {
         if (got.isEmpty())
             return;
         var report = got.get().execute(project);
-        showResult(report);
+        showResult((Supplier<Feature.ExecutionReport>) report);
     }
 
     public void gitPullEvent(ActionEvent actionEvent) {
@@ -322,7 +323,7 @@ public class GuiController {
         if (got.isEmpty())
             return;
         var report = got.get().execute(project);
-        showResult(report);
+        showResult((Supplier<Feature.ExecutionReport>) report);
     }
 
     public void mvnPackageEvent(ActionEvent actionEvent) {
@@ -330,7 +331,7 @@ public class GuiController {
         if (got.isEmpty())
             return;
         var report = got.get().execute(project);
-        showResult(report);
+        showResult((Supplier<Feature.ExecutionReport>) report);
     }
 
     public void mvnInstallEvent(ActionEvent actionEvent) {
@@ -338,7 +339,7 @@ public class GuiController {
         if (got.isEmpty())
             return;
         var report = got.get().execute(project);
-        showResult(report);
+        showResult((Supplier<Feature.ExecutionReport>) report);
     }
 
     public void mvnExecEvent(ActionEvent actionEvent) {
@@ -346,7 +347,9 @@ public class GuiController {
         if (got.isEmpty())
             return;
         var report = got.get().execute(project);
-        showResult(report);
+        showResult((Supplier<Feature.ExecutionReport>) report);
+        showResult(() -> got.get().execute(project));
+
     }
 
     public void mvnCleanEvent(ActionEvent actionEvent) {
@@ -354,7 +357,8 @@ public class GuiController {
         if (got.isEmpty())
             return;
         var report = got.get().execute(project);
-        showResult(report);
+        showResult((Supplier<Feature.ExecutionReport>) report);
+        showResult(() -> got.get().execute(project));
     }
 
     public void mvnTestEvent(ActionEvent actionEvent) {
@@ -362,14 +366,47 @@ public class GuiController {
         if (got.isEmpty())
             return;
         var report = got.get().execute(project);
-        showResult(report);
+        showResult((Supplier<Feature.ExecutionReport>) report);
+        showResult(() -> got.get().execute(project));
     }
 
     public void mvnTreeEvent(ActionEvent actionEvent) {
         var got = project.getFeature(Mandatory.Features.Maven.TREE);
         if (got.isEmpty())
             return;
-        var report = got.get().execute(project);
-        showResult(report);
+        var tmp = project.getRootNode().getChildren().stream()
+                .filter(fr.epita.assistants.myide.domain.entity.Node::isFile)
+                .filter(a -> a.getPath().getFileName().toString().equals("tree.log"))
+                .findAny();
+        fr.epita.assistants.myide.domain.entity.Node n;
+        if (tmp.isEmpty())
+            n = service.create(project.getRootNode(), "tree.log", fr.epita.assistants.myide.domain.entity.Node.Types.FILE);
+        else
+            n = tmp.get();
+
+        showResult(() -> {
+            var res = got.get().execute(project);
+            updateTree();
+            openNode(n);
+            return res;
+        });
+    }
+
+    private void successWindow(Feature.ExecutionReport report) {
+        Alert alert;
+        if (report != null && report.isSuccess()) {
+            alert = Utils.newAlertWrapper(Alert.AlertType.INFORMATION, "L'action a été exectuée avec succès!");
+        } else {
+            alert = Utils.newAlertWrapper(Alert.AlertType.ERROR, "AAAA d'effectuer l'action demandée !");
+        }
+        alert.showAndWait();
+    }
+
+    public void deleteNode(ActionEvent actionEvent) {
+        var selected = treeView.getSelectionModel().getSelectedItem();
+        if (selected == null)
+            return;
+        service.delete(selected.getValue());
+        updateTree();
     }
 }
