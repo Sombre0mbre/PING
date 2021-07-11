@@ -99,9 +99,9 @@
                                 </MenuButton>
                                 <MenuButton fx:id="mavenButton" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" text="Maven">
                                     <items>
-                                        <MenuItem fx:id="mvnPackage" mnemonicParsing="false" onAction="#mvnPackageEvent" text="Package" visible="false" />
+                                        <MenuItem fx:id="mvnPackage" mnemonicParsing="false" onAction="#mvnPackageEvent" text="Package" />
                                         <MenuItem fx:id="mvnInstall" mnemonicParsing="false" onAction="#mvnInstallEvent" text="Install" visible="false" />
-                                        <MenuItem fx:id="mvnExec" mnemonicParsing="false" onAction="#mvnExecEvent" text="Exec" visible="false" />
+                                        <MenuItem fx:id="mvnExec" mnemonicParsing="false" onAction="#mvnExecEvent" text="Exec" />
                                         <MenuItem fx:id="mvnClean" mnemonicParsing="false" onAction="#mvnCleanEvent" text="Clean" />
                                         <MenuItem fx:id="mvnTest" mnemonicParsing="false" onAction="#mvnTestEvent" text="Test" />
                                         <MenuItem fx:id="mvnTree" mnemonicParsing="false" onAction="#mvnTreeEvent" text="Tree" />

@@ -54,7 +54,6 @@ public class TutorialArrays {
                             ou dossiers générés durant la création (le build) d’un projet.
                             """
             ),
-            /*
             new TutorialElement(
                     "Exec",
                     """
@@ -62,7 +61,6 @@ public class TutorialArrays {
                             soit dans deux process différents, soit dans la même machine virtuelle.
                             """
             ),
-             */
             new TutorialElement(
                     "Install",
                     """
