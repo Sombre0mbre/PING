@@ -314,38 +314,45 @@ public class GuiController {
     }
 
     public void mvnPackageEvent(ActionEvent actionEvent) {
-        // TODO
+        // Not implemented
         // showResult(report);
     }
 
     public void mvnInstallEvent(ActionEvent actionEvent) {
-        // TODO
+        // Not implemented
         // showResult(report);
     }
 
     public void mvnExecEvent(ActionEvent actionEvent) {
-        // TODO
+        // Not implemented
         // showResult(report);
     }
 
     public void mvnCleanEvent(ActionEvent actionEvent) {
-        // TODO
-        // showResult(report);
+        var got = project.getFeature(Mandatory.Features.Maven.CLEAN);
+        if (got.isEmpty())
+            return;
+        var report = got.get().execute(project);
+        showResult(report);
     }
 
     public void mvnTestEvent(ActionEvent actionEvent) {
-        // TODO
-        // showResult(report);
+        var got = project.getFeature(Mandatory.Features.Maven.TEST);
+        if (got.isEmpty())
+            return;
+        var report = got.get().execute(project);
+        showResult(report);
     }
 
     public void mvnTreeEvent(ActionEvent actionEvent) {
         var got = project.getFeature(Mandatory.Features.Maven.TREE);
         if (got.isEmpty())
             return;
-        service.create(project.getRootNode(), "tree.log", fr.epita.assistants.myide.domain.entity.Node.Types.FILE);
+        var n = service.create(project.getRootNode(), "tree.log", fr.epita.assistants.myide.domain.entity.Node.Types.FILE);
 
         var report = got.get().execute(project);
         showResult(report);
+        openNode(n);
         updateTree();
     }
 
