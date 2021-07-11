@@ -26,7 +26,6 @@ import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
 
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.util.Comparator;
 import java.util.concurrent.CompletableFuture;
 import java.util.regex.Matcher;
@@ -275,14 +274,7 @@ public class GuiController {
         var loading = Utils.newAlertWrapper(Alert.AlertType.INFORMATION, "Veuillez patienter...");
         task.setOnRunning((e) -> loading.show());
         task.setOnSucceeded((e) -> {
-            loading.hide();
-            Alert alert;
-            if (report != null && report.isSuccess()) {
-                alert = Utils.newAlertWrapper(Alert.AlertType.INFORMATION, "L'action a été exectuée avec succès!");
-            } else {
-                alert = Utils.newAlertWrapper(Alert.AlertType.ERROR, "Impossible d'effectuer l'action demandée !");
-            }
-            alert.showAndWait();
+            successWindow(report, loading);
         });
         task.setOnFailed((e) -> {
             loading.hide();
@@ -348,12 +340,51 @@ public class GuiController {
         var got = project.getFeature(Mandatory.Features.Maven.TREE);
         if (got.isEmpty())
             return;
-        var n = service.create(project.getRootNode(), "tree.log", fr.epita.assistants.myide.domain.entity.Node.Types.FILE);
+
+        var tmp = project.getRootNode().getChildren().stream()
+                .filter(fr.epita.assistants.myide.domain.entity.Node::isFile)
+                .filter(a -> a.getPath().getFileName().toString().equals("tree.log"))
+                .findAny();
+        fr.epita.assistants.myide.domain.entity.Node n;
+        if (tmp.isEmpty())
+            n = service.create(project.getRootNode(), "tree.log", fr.epita.assistants.myide.domain.entity.Node.Types.FILE);
+        else
+            n = tmp.get();
 
         var report = got.get().execute(project);
-        showResult(report);
-        openNode(n);
-        updateTree();
+
+
+        Task<Boolean> task = new Task<>() {
+            @Override
+            public Boolean call() {
+                return report.isSuccess();
+            }
+        };
+
+        var loading = Utils.newAlertWrapper(Alert.AlertType.INFORMATION, "Veuillez patienter...");
+        task.setOnRunning((e) -> loading.show());
+        task.setOnSucceeded((e) -> {
+            successWindow(report, loading);
+            updateTree();
+            openNode(n);
+        });
+        task.setOnFailed((e) -> {
+            loading.hide();
+            Alert alert = Utils.newAlertWrapper(Alert.AlertType.ERROR, "Impossible d'effectuer l'action demandée !");
+            alert.showAndWait();
+        });
+        new Thread(task).start();
+    }
+
+    private void successWindow(Feature.ExecutionReport report, Alert loading) {
+        loading.hide();
+        Alert alert;
+        if (report != null && report.isSuccess()) {
+            alert = Utils.newAlertWrapper(Alert.AlertType.INFORMATION, "L'action a été exectuée avec succès!");
+        } else {
+            alert = Utils.newAlertWrapper(Alert.AlertType.ERROR, "Impossible d'effectuer l'action demandée !");
+        }
+        alert.showAndWait();
     }
 
     public void deleteNode(ActionEvent actionEvent) {
